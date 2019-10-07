@@ -3513,3 +3513,41 @@ Traceback (most recent call last):
   File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1904/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 586, in validateOptions
     raise ConfigurationException(msg)
 ConfigurationException: [91mError[0m: crab_H3 is not a valid CRAB project directory.
+DEBUG 2019-10-04 17:26:29.228 UTC: 	 Executing command: 'submit'
+DEBUG 2019-10-04 17:26:29.229 UTC: 	 Found CRAB cache file /afs/cern.ch/user/c/chench/.crab3
+DEBUG 2019-10-04 17:26:29.243 UTC: 	 Checking credentials
+DEBUG 2019-10-04 17:26:29.244 UTC: 	 Found proxy file /tmp/x509up_u103584
+DEBUG 2019-10-04 17:26:29.244 UTC: 	 Getting proxy life time left
+DEBUG 2019-10-04 17:26:30.353 UTC: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u103584 -timeleft
+ output : 43179
+
+ error: 
+ retcode : 0
+DEBUG 2019-10-04 17:26:31.269 UTC: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u103584 -actimeleft
+ output : 43178
+
+ error: 
+ retcode : 0
+DEBUG 2019-10-04 17:26:31.270 UTC: 	 Proxy lifetime 43179 secs is different from voms extension lifetime 43178 secs for proxy: /tmp/x509up_u103584
+DEBUG 2019-10-04 17:26:31.270 UTC: 	 Proxy valid for 11:59:38 hours
+INFO 2019-10-04 17:26:31.271 UTC: 	 Will use CRAB configuration file B.py
+DEBUG 2019-10-04 17:26:31.271 UTC: 	 Loading CRAB configuration file.
+DEBUG 2019-10-04 17:26:31.278 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2019-10-04 17:26:31.279 UTC: 	 Working area '/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleData/CMSSW_8_0_26_patch2/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_B' already exists 
+Please change the requestName in the config file
+ERROR 2019-10-04 17:26:31.279 UTC: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1909/bin/crab", line 160, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1909/bin/crab", line 145, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1909/lib/python2.7/site-packages/CRABClient/Commands/submit.py", line 34, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1909/lib/python2.7/site-packages/CRABClient/Commands/SubCommand.py", line 315, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1909/lib/python2.7/site-packages/CRABClient/ClientUtilities.py", line 408, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleData/CMSSW_8_0_26_patch2/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_B' already exists 
+Please change the requestName in the config file

@@ -23,7 +23,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 if runOnMC:
    process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v6'
 elif not(runOnMC):
-   process.GlobalTag.globaltag = '80X_dataRun2_2016SeptRepro_v4'
+   process.GlobalTag.globaltag = '80X_dataRun2_2016SeptRepro_v7'
 
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2015#ETmiss_filters
 # For the RunIISummer15DR74 MC campaing, the process name in PAT.
@@ -347,38 +347,38 @@ if runOnMC:
     ]
 else:
    jecLevelsAK8chs = [
-                                   'Summer16_23Sep2016BCDV3_DATA_L1FastJet_AK8PFchs.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2Relative_AK8PFchs.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L3Absolute_AK8PFchs.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2L3Residual_AK8PFchs.txt'
+                                   'Summer16_23Sep2016BCDV4_DATA_L1FastJet_AK8PFchs.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2Relative_AK8PFchs.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK8PFchs.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK8PFchs.txt'
      ]
    jecLevelsAK8chsGroomed = [
-                                   'Summer16_23Sep2016BCDV3_DATA_L2Relative_AK8PFchs.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L3Absolute_AK8PFchs.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2L3Residual_AK8PFchs.txt'
+                                   'Summer16_23Sep2016BCDV4_DATA_L2Relative_AK8PFchs.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK8PFchs.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK8PFchs.txt'
      ]
    jecLevelsAK8puppi = [
-                                   'Summer16_23Sep2016BCDV3_DATA_L1FastJet_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2Relative_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L3Absolute_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2L3Residual_AK8PFPuppi.txt'
+                                   'Summer16_23Sep2016BCDV4_DATA_L1FastJet_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2Relative_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK8PFPuppi.txt'
      ]
    jecLevelsAK8puppiGroomed = [
-                                   'Summer16_23Sep2016BCDV3_DATA_L2Relative_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L3Absolute_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2L3Residual_AK8PFPuppi.txt'
+                                   'Summer16_23Sep2016BCDV4_DATA_L2Relative_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK8PFPuppi.txt'
      ]
    BjecLevelsAK4chs = [
-                                   'Summer16_23Sep2016BCDV3_DATA_L1FastJet_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2Relative_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L3Absolute_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2L3Residual_AK8PFPuppi.txt'
+                                   'Summer16_23Sep2016BCDV4_DATA_L1FastJet_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2Relative_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK8PFPuppi.txt'
      ]
    jecLevelsAK4chs = [
-                                   'Summer16_23Sep2016BCDV3_DATA_L1FastJet_AK4PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2Relative_AK4PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L3Absolute_AK4PFPuppi.txt',
-                                   'Summer16_23Sep2016BCDV3_DATA_L2L3Residual_AK4PFPuppi.txt'
+                                   'Summer16_23Sep2016BCDV4_DATA_L1FastJet_AK4PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2Relative_AK4PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK4PFPuppi.txt',
+                                   'Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK4PFPuppi.txt'
      ]
 
 process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",

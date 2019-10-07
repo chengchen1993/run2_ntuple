@@ -405,7 +405,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   vetomuonToken_    = (consumes<edm::View<pat::Muon> > (iConfig.getParameter<edm::InputTag>("vetoMuonSrc")));
   ak4jetsSrc_      = consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>( "ak4jetsSrc") ) ;
   hadronicVSrc_ = consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("hadronicVSrc") ) ;
-  hadronicVSoftDropSrc_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("hadronicVSoftDropSrc") ) ;
+  hadronicVSoftDropSrc_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("hadronicVSoftDropSrc") ) ; //80X
   jetToken_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"));
   puppijetToken_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("puppijets"));
   fatjetToken_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"));
@@ -2545,7 +2545,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        nLooseEle = looseels->size();
        nVetoMu = vetomus->size();
        nVetoEle = vetoels->size();
-
        edm::Handle<reco::VertexCollection> vertices;
        iEvent.getByToken(vtxToken_, vertices);
      //  cout<<"lllllllll"<<nLooseMu<<" "<<nLooseEle<<" "<<nVetoMu<<" "<<nVetoEle<<endl;
@@ -2662,7 +2661,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                                     }
 //cout<<"isHEEP:"<<isHEEP<<endl;
 ////////////////////////JEC for AK8/////////////////////////////////
-
         reco::Candidate::LorentzVector uncorrPrunedJet;
         bool doPuppi  = iEvent.getByToken(puppijetInputToken_, puppijets_ );
         if( doPuppi ){//1
@@ -3122,7 +3120,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                if (fabs(jetAK8puppi_eta_8)<=1.3){jetAK8puppi_sdcorr_8=jetAK8puppi_sd_8*gencorrect*recocorrect_0eta1p3;}
                else if (fabs(jetAK8puppi_eta_8)<2.5 && fabs(jetAK8puppi_eta_8)>1.3){jetAK8puppi_sdcorr_8=jetAK8puppi_sd_8*gencorrect*recocorrect_1p3eta2p5;}
            }
-
 	int nak4 = 0;
         double tj1=-10.0, tj2=-10.0; 
         for (size_t ik=0; ik<ak4jets->size();ik++)
@@ -3243,7 +3240,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     if (tmpdrak8jet3<drak8jetmatch3) {drak8jetmatch3=tmpdrak8jet3; ijetAK8_j3=ijetAK8;}
                                        }  
             }
-
            auto const & sdSubjetsPuppi_1 = ijetAK8_j1->subjets("SoftDropPuppi");
            Int_t nsj1=0;
            for ( auto const & puppiSDSJ_1 : sdSubjetsPuppi_1 ) {

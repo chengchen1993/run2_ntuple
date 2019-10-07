@@ -49,7 +49,6 @@ process.ApplyBaselineHBHEIsoNoiseFilter = cms.EDFilter('BooleanFlagFilter',
 )
 ######### read JSON file for data ##########                                                                                                 
 '''if not(runOnMC) and useJSON:
-
   import FWCore.PythonUtilities.LumiList as LumiList
   import FWCore.ParameterSet.Types as CfgTypes
   process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
@@ -175,7 +174,6 @@ from RecoBTag.Configuration.RecoBTag_cff import *
 #from RecoBTag.DeepFlavour.DeepFlavourJetTagsProducer_cfi import deepFlavourJetTags
 #from RecoBTag.DeepFlavour.deepFlavour_cff import *
 from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
-
 updateJetCollection(
    process,
    labelName = 'DeepFlavour',
@@ -186,7 +184,6 @@ updateJetCollection(
    btagDiscriminators =      ['deepFlavourJetTags:probb',     'deepFlavourJetTags:probbb','deepFlavourJetTags:probc','deepFlavourJetTags:probudsg','deepFlavourJetTags:probcc'],
    postfix='NewDFTraining'
 )
-
 #process.selectedUpdatedPatJetsDeepFlavourNewDFTraining.userData.userFloats.src =[]
 '''
 '''
@@ -195,12 +192,12 @@ process.patjets = cms.EDAnalyzer('EDBRTreeMaker',
    PTMin = cms.double(-1),
    BTag = cms.string("deepFlavourJetTags:probb"),
 )
-'''
+#80X
 process.selectedPatJetsAK8SoftDropPacked = cms.EDProducer("BoostedJetMerger",
     jetSrc = cms.InputTag("selectedPatJetsAK8Softdrop"),
     subjetSrc = cms.InputTag("selectedPatJetsAK8SoftDropSubjets")
 )
-
+'''
 # set up TransientTrackBuilder
 process.TransientTrackBuilderESProducer = cms.ESProducer("TransientTrackBuilderESProducer",
     ComponentName=cms.string('TransientTrackBuilder')
@@ -413,17 +410,18 @@ process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",
 
                                     metSrc = cms.InputTag("slimmedMETs"),
                                     mets = cms.InputTag(METS),
-                                    #ak4jetsSrc = cms.InputTag("cleanAK4Jets"), 
-                                    ak4jetsSrc = cms.InputTag("selectedUpdatedPatJetsDeepFlavourNewDFTraining"),
+                                    #ak4jetsSrc = cms.InputTag("cleanAK4Jets"),
+                                    ak4jetsSrc = cms.InputTag("cleanPuppiAK4"),
                                     hadronicVSrc = cms.InputTag("hadronicV"),
                                     hadronicVSrc_raw = cms.InputTag("slimmedJetsAK8"),
-                                    hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),
+                                    #hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),#80X
 				    jets = cms.InputTag("slimmedJets"),
                                     ak8JetSrc = cms.InputTag(jetsAK8),
                                     fatjets = cms.InputTag(jetsAK8),
                                     prunedjets = cms.InputTag(jetsAK8pruned),
                                     softdropjets = cms.InputTag(jetsAK8softdrop),
-                                    puppijets = cms.InputTag(jetsAK8puppi),
+                                    #puppijets = cms.InputTag(jetsAK8puppi),#80X
+                                    puppijets = cms.InputTag(jetsAK8),#94X
 				    jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
 				    jecAK8chsPayloadNamesGroomed = cms.vstring( jecLevelsAK8chsGroomed ),
 				    jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
@@ -464,7 +462,6 @@ process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",
                                     noiseFilterSelection_badChargedHadron = cms.InputTag('BadChargedCandidateFilter'),
                                     )
 
-
 if option=='GEN':
     process.treeDumper.metSrc = 'genMetTrue'
     process.treeDumper.isGen  = True
@@ -488,13 +485,8 @@ if option=='RECO':
 
 process.load("ExoDiBosonResonances.EDBRCommon.data.RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8")
 process.source.fileNames = [
-#"/eos/user/o/ocerri/BPhysics/data/cmsMC_private/BPH_Tag-B0_MuNuDmst-pD0bar-kp_13TeV-pythia8_SoftQCD_PTFilter5_0p0-evtgen_HQET2_central_PU35_10-2-3_v0/jobs_out/*MINIAODSIM*.root"
-#"/store/mc/RunIISummer16MiniAODv2/WJetsToQQ_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/FCBB5A31-97BE-E611-AC77-FA163E01D47B.root"
-#"/store/mc/RunIISummer16MiniAODv2/QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/60000/E271D06A-35B7-E611-9FA2-002590AC4C76.root"
-#"/store/mc/RunIISummer16MiniAODv2/QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/FEE43BCA-ACBD-E611-979E-00266CFFCCC8.root"
-#"/store/mc/RunIISummer16MiniAODv2/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/FC9713B8-00B7-E611-9CCD-ECF4BBE0ED58.root"
-"/store/mc/RunIIFall17MiniAODv2/ST_s-channel_4f_hadronicDecays_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/240000/FEF82970-D17A-E911-9627-0025905B85AE.root"
-#"/store/mc/RunIISummer16MiniAODv2/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/80000/FA34DAFF-6FC1-E611-A7AF-0CC47A7C35F4.root"
+#"/store/mc/RunIIFall17MiniAODv2/ST_s-channel_4f_hadronicDecays_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/240000/FEF82970-D17A-E911-9627-0025905B85AE.root"
+"/store/mc/RunIIFall17MiniAODv2/QCD_Pt_800to1000_TuneCP5_13TeV_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/70000/0CB37C8E-866A-E811-9CB3-0CC47A7C35B2.root"
 ]
 
 process.maxEvents.input = 2000

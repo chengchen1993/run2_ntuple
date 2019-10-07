@@ -192,12 +192,12 @@ process.patjets = cms.EDAnalyzer('EDBRTreeMaker',
    PTMin = cms.double(-1),
    BTag = cms.string("deepFlavourJetTags:probb"),
 )
-'''
+#80X
 process.selectedPatJetsAK8SoftDropPacked = cms.EDProducer("BoostedJetMerger",
     jetSrc = cms.InputTag("selectedPatJetsAK8Softdrop"),
     subjetSrc = cms.InputTag("selectedPatJetsAK8SoftDropSubjets")
 )
-
+'''
 # set up TransientTrackBuilder
 process.TransientTrackBuilderESProducer = cms.ESProducer("TransientTrackBuilderESProducer",
     ComponentName=cms.string('TransientTrackBuilder')
@@ -411,16 +411,16 @@ process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",
                                     metSrc = cms.InputTag("slimmedMETs"),
                                     mets = cms.InputTag(METS),
                                     #ak4jetsSrc = cms.InputTag("cleanAK4Jets"), 
-                                    ak4jetsSrc = cms.InputTag("selectedUpdatedPatJetsDeepFlavourNewDFTraining"),
+                                    ak4jetsSrc = cms.InputTag("cleanPuppiAK4"),
                                     hadronicVSrc = cms.InputTag("hadronicV"),
                                     hadronicVSrc_raw = cms.InputTag("slimmedJetsAK8"),
-                                    hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),
+                                    #hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),
 				    jets = cms.InputTag("slimmedJets"),
                                     ak8JetSrc = cms.InputTag(jetsAK8),
                                     fatjets = cms.InputTag(jetsAK8),
                                     prunedjets = cms.InputTag(jetsAK8pruned),
                                     softdropjets = cms.InputTag(jetsAK8softdrop),
-                                    puppijets = cms.InputTag(jetsAK8puppi),
+                                    puppijets = cms.InputTag(jetsAK8),
 				    jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
 				    jecAK8chsPayloadNamesGroomed = cms.vstring( jecLevelsAK8chsGroomed ),
 				    jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
@@ -485,7 +485,8 @@ if option=='RECO':
 
 process.load("ExoDiBosonResonances.EDBRCommon.data.RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8")
 process.source.fileNames = [
-"/store/data/Run2016E/JetHT/MINIAOD/23Sep2016-v1/50000/483CEE4F-FB86-E611-94C8-0CC47A7C3572.root"
+"/store/data/Run2017B/JetHT/MINIAOD/31Mar2018-v1/00000/0205C4D3-463A-E811-86BD-0CC47A4C8E2A.root"
+#"/store/data/Run2016E/JetHT/MINIAOD/23Sep2016-v1/50000/483CEE4F-FB86-E611-94C8-0CC47A7C3572.root"
 ]
 
 process.maxEvents.input = 2000

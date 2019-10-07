@@ -348,7 +348,7 @@ private:
 
   edm::EDGetTokenT<edm::View<reco::Candidate>> leptonicVSrc_;
   edm::EDGetTokenT<edm::View<pat::Jet>> hadronicVSrc_;
-  edm::EDGetTokenT<pat::JetCollection> hadronicVSoftDropSrc_;
+//  edm::EDGetTokenT<pat::JetCollection> hadronicVSoftDropSrc_;
   edm::EDGetTokenT<edm::View<pat::Jet>> ak4jetsSrc_;
   edm::EDGetTokenT<edm::View<pat::Electron> > looseelectronToken_ ;
   edm::EDGetTokenT<edm::View<pat::Muon>> loosemuonToken_;
@@ -405,7 +405,8 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   vetomuonToken_    = (consumes<edm::View<pat::Muon> > (iConfig.getParameter<edm::InputTag>("vetoMuonSrc")));
   ak4jetsSrc_      = consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>( "ak4jetsSrc") ) ;
   hadronicVSrc_ = consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("hadronicVSrc") ) ;
-  hadronicVSoftDropSrc_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("hadronicVSoftDropSrc") ) ;
+  //hadronicVSoftDropSrc_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("hadronicVSoftDropSrc") ) ; //80X
+
   jetToken_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"));
   puppijetToken_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("puppijets"));
   fatjetToken_ = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"));
@@ -1339,6 +1340,7 @@ EDBRTreeMaker::~EDBRTreeMaker()
 bool
 EDBRTreeMaker::looseJetID( const pat::Jet& j ) {
 // refer to https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
+        if(j.pt()>170.){
 	double NHF = j.neutralHadronEnergyFraction();
 	double NEMF = j.neutralEmEnergyFraction();
 	double CHF = j.chargedHadronEnergyFraction();
@@ -1348,12 +1350,16 @@ EDBRTreeMaker::looseJetID( const pat::Jet& j ) {
 	int CHM = j.chargedMultiplicity(); 
 	double eta = j.eta();
           return ((  (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(eta)>2.4) && abs(eta)<=2.7 ) || (NHF<0.98 && NEMF>0.01 && NumNeutralParticle>2 && abs(eta)>2.7 && abs(eta)<=3.0 ) || (NEMF<0.90 && NumNeutralParticle>10 && abs(eta)>3.0) ) ;
-
+}
+else{
+return (1);
+    }
 }
 
 bool
 EDBRTreeMaker::tightJetID( const pat::Jet& j ) {
 // refer to https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
+        if(j.pt()>170.){
         double NHF = j.neutralHadronEnergyFraction();
         double NEMF = j.neutralEmEnergyFraction();
         double CHF = j.chargedHadronEnergyFraction();
@@ -1363,6 +1369,10 @@ EDBRTreeMaker::tightJetID( const pat::Jet& j ) {
         int CHM = j.chargedMultiplicity();
         double eta = j.eta();
         return ( (NHF<0.90 && NEMF<0.90 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(eta)>2.4) && abs(eta)<=3.0 ) || (NEMF<0.90 && NumNeutralParticle>10 && abs(eta)>3.0 )  ;
+}
+else{
+return (1);
+    }
 }
 
 float
@@ -1688,8 +1698,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    edm::Handle<edm::View<pat::Jet> > hadronicVs;
    iEvent.getByToken(hadronicVSrc_, hadronicVs);
-   edm::Handle<pat::JetCollection> hadronicVSoftDrop;
-   iEvent.getByToken(hadronicVSoftDropSrc_, hadronicVSoftDrop);
+   //edm::Handle<pat::JetCollection> hadronicVSoftDrop;
+   //iEvent.getByToken(hadronicVSoftDropSrc_, hadronicVSoftDrop);
    edm::Handle<edm::View<reco::Candidate> > leptonicVs;
    iEvent.getByToken(leptonicVSrc_, leptonicVs);
    edm::Handle<double> rho;
@@ -2545,7 +2555,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        nLooseEle = looseels->size();
        nVetoMu = vetomus->size();
        nVetoEle = vetoels->size();
-
        edm::Handle<reco::VertexCollection> vertices;
        iEvent.getByToken(vtxToken_, vertices);
      //  cout<<"lllllllll"<<nLooseMu<<" "<<nLooseEle<<" "<<nVetoMu<<" "<<nVetoEle<<endl;
@@ -2651,7 +2660,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                                 isoCut = 2.5+0.03*(et-50.) + 0.28*fastJetRho;
                         if( el1->ecalDriven() == 1 && dEtaInSeed( el1 ) < 0.006 && el1->deltaPhiSuperClusterTrackAtVtx() < 0.06 &&
                          el1->hadronicOverEm() < (5./el1->superCluster()->energy()+0.05) && el1->full5x5_sigmaIetaIeta() < 0.03 &&
-                         el1->dr03TkSumPt() < 5. && el1->gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&//numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+                         el1->dr03TkSumPt() < 5. && el1->gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&//numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
                          iso < isoCut && fabs(d01) < 0.05 ) isHEEP = true;
                      }
         }
@@ -2662,7 +2671,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                                     }
 //cout<<"isHEEP:"<<isHEEP<<endl;
 ////////////////////////JEC for AK8/////////////////////////////////
-
         reco::Candidate::LorentzVector uncorrPrunedJet;
         bool doPuppi  = iEvent.getByToken(puppijetInputToken_, puppijets_ );
         if( doPuppi ){//1
@@ -2702,6 +2710,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
          int numvhad = puppijets_->size();
          for( int inum = 0; inum< numvhad; inum++){
            const pat::Jet& Vpuppi = puppijets_->at(inum);
+      //cout<<looseJetID(Vpuppi)<<endl;
+      //     continue; 
            if(looseJetID(Vpuppi)<1) continue;     
            if(jetAK8puppi_pt1[inum] > pt_larger && fabs(jetAK8puppi_eta1[inum])<2.4 && inum<8) {pt_larger = jetAK8puppi_pt1[inum]; usenumber3 = inum; continue;}
         }
@@ -2709,7 +2719,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         const pat::Jet& hadronicVpuppi = puppijets_->at(usenumber3);
                 // Decorrelated DeepAK8
                 JetHelper jet_helper(&hadronicVpuppi);
-                jet_helper.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
+                //jet_helper.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8, only for 80X 
                 const auto& nnpreds = fatjetNN_->predict(jet_helper);
                 FatJetNNHelper nn(nnpreds);
                 jetAK8puppi_dnnTop       = nn.get_binarized_score_top();
@@ -2745,19 +2755,18 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 jetAK8puppi_dnnDecorrzbb         = md.get_raw_score_zbb();
                 jetAK8puppi_dnnDecorrhbb         = md.get_raw_score_hbb();
                 jetAK8puppi_dnnDecorrh4q         = md.get_raw_score_h4q();
-
                 IDLoose = looseJetID(hadronicVpuppi);
                 IDTight = tightJetID(hadronicVpuppi);
                 jetAK8puppi_ptJEC       = jetAK8puppi_pt1[usenumber3]; // unpruned corrected jet pt
                 jetAK8puppi_eta     = jetAK8puppi_eta1[usenumber3]; // unpruned (w/o jec) jet eta
                 jetAK8puppi_phi      = hadronicVpuppi.phi(); // unpruned (w/o jec) jet phi
-                jetAK8puppi_tau1         = hadronicVpuppi.userFloat("NjettinessAK8:tau1");
-                jetAK8puppi_tau2         = hadronicVpuppi.userFloat("NjettinessAK8:tau2");
-                jetAK8puppi_tau3         = hadronicVpuppi.userFloat("NjettinessAK8:tau3");
+                jetAK8puppi_tau1         = hadronicVpuppi.userFloat("NjettinessAK8Puppi:tau1");
+                jetAK8puppi_tau2         = hadronicVpuppi.userFloat("NjettinessAK8Puppi:tau2");
+                jetAK8puppi_tau3         = hadronicVpuppi.userFloat("NjettinessAK8Puppi:tau3");
                 jetAK8puppi_tau21        = jetAK8puppi_tau2/jetAK8puppi_tau1;
-                jetAK8puppi_tau4         = hadronicVpuppi.userFloat("NjettinessAK8:tau4");
+                jetAK8puppi_tau4         = hadronicVpuppi.userFloat("NjettinessAK8Puppi:tau4");
                 jetAK8puppi_tau42        = jetAK8puppi_tau4/jetAK8puppi_tau2;
-                jetAK8puppi_sd       =  hadronicVpuppi.userFloat("ak8PFJetsCHSSoftDropMass"); // uncorrected pruned mass
+                jetAK8puppi_sd       =  hadronicVpuppi.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
                 jetAK8puppi_sdJEC  =corr_AK8puppiSD[usenumber3]*jetAK8puppi_sd;
                 Double_t gencorrect=1.0;
                 Double_t recocorrect_0eta1p3=1.0;
@@ -2767,7 +2776,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 recocorrect_1p3eta2p5=1.272-5.72e-04*jetAK8puppi_ptJEC+8.37e-07*pow(jetAK8puppi_ptJEC,2)-5.204e-10*pow(jetAK8puppi_ptJEC,3)+1.454e-13*pow(jetAK8puppi_ptJEC,4)-1.504e-17*pow(jetAK8puppi_ptJEC,5);
                 if (fabs(jetAK8puppi_eta)<=1.3){jetAK8puppi_sdcorr=jetAK8puppi_sd*gencorrect*recocorrect_0eta1p3;}
                 else if (fabs(jetAK8puppi_eta)<2.5 && fabs(jetAK8puppi_eta)>1.3){jetAK8puppi_sdcorr=jetAK8puppi_sd*gencorrect*recocorrect_1p3eta2p5;}
-           
            int usenumber2 = -1; double pt_larger2=0;
            for( int inum = 0; inum< numvhad; inum++){
                const pat::Jet& Vpuppi = puppijets_->at(inum);
@@ -2775,12 +2783,11 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                if(jetAK8puppi_pt1[inum] > pt_larger2 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber3 && inum<8) {pt_larger2 = jetAK8puppi_pt1[inum]; usenumber2 = inum; continue;}
            }
            
-           
           if(usenumber2>-1)  {
                const pat::Jet& hadronicVpuppi_2 = puppijets_->at(usenumber2);
                 // DeepAK8
                 JetHelper jet_helper_2(&hadronicVpuppi_2);
-                jet_helper_2.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
+                // jet_helper_2.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
                 const auto& nnpreds_2 = fatjetNN_->predict(jet_helper_2);
                 FatJetNNHelper nn_2(nnpreds_2);
                 jetAK8puppi_dnnTop_2       = nn_2.get_binarized_score_top();
@@ -2822,14 +2829,14 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                jetAK8puppi_ptJEC_2       = jetAK8puppi_pt1[usenumber2]; // unpruned corrected jet pt
                jetAK8puppi_eta_2     = jetAK8puppi_eta1[usenumber2]; // unpruned (w/o jec) jet eta
                jetAK8puppi_phi_2      = hadronicVpuppi_2.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_2         = hadronicVpuppi_2.userFloat("NjettinessAK8:tau1");
-               jetAK8puppi_tau2_2         = hadronicVpuppi_2.userFloat("NjettinessAK8:tau2");
-               jetAK8puppi_tau3_2         = hadronicVpuppi_2.userFloat("NjettinessAK8:tau3");
+               jetAK8puppi_tau1_2         = hadronicVpuppi_2.userFloat("NjettinessAK8Puppi:tau1");
+               jetAK8puppi_tau2_2         = hadronicVpuppi_2.userFloat("NjettinessAK8Puppi:tau2");
+               jetAK8puppi_tau3_2         = hadronicVpuppi_2.userFloat("NjettinessAK8Puppi:tau3");
                jetAK8puppi_tau21_2        = jetAK8puppi_tau2_2/jetAK8puppi_tau1_2;
-               jetAK8puppi_tau4_2         = hadronicVpuppi_2.userFloat("NjettinessAK8:tau4");
+               jetAK8puppi_tau4_2         = hadronicVpuppi_2.userFloat("NjettinessAK8Puppi:tau4");
                jetAK8puppi_tau42_2        = jetAK8puppi_tau4_2/jetAK8puppi_tau2_2;
                
-               jetAK8puppi_sd_2       =  hadronicVpuppi_2.userFloat("ak8PFJetsCHSSoftDropMass"); // uncorrected pruned mass
+               jetAK8puppi_sd_2       =  hadronicVpuppi_2.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
                jetAK8puppi_sdJEC_2  =corr_AK8puppiSD[usenumber2]*jetAK8puppi_sd_2;
                Double_t gencorrect=1.0;
                Double_t recocorrect_0eta1p3=1.0;
@@ -2855,7 +2862,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                const pat::Jet& hadronicVpuppi_3 = puppijets_->at(usenumber1);
                 // DeepAK8
                 JetHelper jet_helper_3(&hadronicVpuppi_3);
-                jet_helper_3.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
+                // jet_helper_3.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
                 const auto& nnpreds_3 = fatjetNN_->predict(jet_helper_3);
                 FatJetNNHelper nn_3(nnpreds_3);
                 jetAK8puppi_dnnTop_3       = nn_3.get_binarized_score_top();
@@ -2897,14 +2904,14 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                jetAK8puppi_ptJEC_3       = jetAK8puppi_pt1[usenumber1]; // unpruned corrected jet pt
                jetAK8puppi_eta_3     = jetAK8puppi_eta1[usenumber1]; // unpruned (w/o jec) jet eta
                jetAK8puppi_phi_3      = hadronicVpuppi_3.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_3         = hadronicVpuppi_3.userFloat("NjettinessAK8:tau1");
-               jetAK8puppi_tau2_3         = hadronicVpuppi_3.userFloat("NjettinessAK8:tau2");
-               jetAK8puppi_tau3_3         = hadronicVpuppi_3.userFloat("NjettinessAK8:tau3");
+               jetAK8puppi_tau1_3         = hadronicVpuppi_3.userFloat("NjettinessAK8Puppi:tau1");
+               jetAK8puppi_tau2_3         = hadronicVpuppi_3.userFloat("NjettinessAK8Puppi:tau2");
+               jetAK8puppi_tau3_3         = hadronicVpuppi_3.userFloat("NjettinessAK8Puppi:tau3");
                jetAK8puppi_tau21_3        = jetAK8puppi_tau2_3/jetAK8puppi_tau1_3;
-               jetAK8puppi_tau4_3         = hadronicVpuppi_3.userFloat("NjettinessAK8:tau4");
+               jetAK8puppi_tau4_3         = hadronicVpuppi_3.userFloat("NjettinessAK8Puppi:tau4");
                jetAK8puppi_tau42_3        = jetAK8puppi_tau4_3/jetAK8puppi_tau2_3;
                
-               jetAK8puppi_sd_3       =  hadronicVpuppi_3.userFloat("ak8PFJetsCHSSoftDropMass"); // uncorrected pruned mass
+               jetAK8puppi_sd_3       =  hadronicVpuppi_3.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
                jetAK8puppi_sdJEC_3  =corr_AK8puppiSD[usenumber1]*jetAK8puppi_sd_3;
                Double_t gencorrect=1.0;
                Double_t recocorrect_0eta1p3=1.0;
@@ -2926,10 +2933,10 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
           if(usenumber4>-1)  {
-               const pat::Jet& hadronicVpuppi_4 = puppijets_->at(usenumber4);
+                const pat::Jet& hadronicVpuppi_4 = puppijets_->at(usenumber4);
                 // DeepAK8
                 JetHelper jet_helper_4(&hadronicVpuppi_4);
-                jet_helper_4.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
+                //  jet_helper_4.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
                 const auto& nnpreds_4 = fatjetNN_->predict(jet_helper_4);
                 FatJetNNHelper nn_4(nnpreds_4);
                 jetAK8puppi_dnnTop_4       = nn_4.get_binarized_score_top();
@@ -2971,14 +2978,14 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                jetAK8puppi_ptJEC_4       = jetAK8puppi_pt1[usenumber4]; // unpruned corrected jet pt
                jetAK8puppi_eta_4     = jetAK8puppi_eta1[usenumber4]; // unpruned (w/o jec) jet eta
                jetAK8puppi_phi_4      = hadronicVpuppi_4.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_4         = hadronicVpuppi_4.userFloat("NjettinessAK8:tau1");
-               jetAK8puppi_tau2_4         = hadronicVpuppi_4.userFloat("NjettinessAK8:tau2");
-               jetAK8puppi_tau3_4         = hadronicVpuppi_4.userFloat("NjettinessAK8:tau3");
+               jetAK8puppi_tau1_4         = hadronicVpuppi_4.userFloat("NjettinessAK8Puppi:tau1");
+               jetAK8puppi_tau2_4         = hadronicVpuppi_4.userFloat("NjettinessAK8Puppi:tau2");
+               jetAK8puppi_tau3_4         = hadronicVpuppi_4.userFloat("NjettinessAK8Puppi:tau3");
                jetAK8puppi_tau21_4        = jetAK8puppi_tau2_4/jetAK8puppi_tau1_4;
-               jetAK8puppi_tau4_4         = hadronicVpuppi_4.userFloat("NjettinessAK8:tau4");
+               jetAK8puppi_tau4_4         = hadronicVpuppi_4.userFloat("NjettinessAK8Puppi:tau4");
                jetAK8puppi_tau42_4        = jetAK8puppi_tau4_4/jetAK8puppi_tau2_4;
 
-               jetAK8puppi_sd_4       =  hadronicVpuppi_4.userFloat("ak8PFJetsCHSSoftDropMass"); // uncorrected pruned mass
+               jetAK8puppi_sd_4       =  hadronicVpuppi_4.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
                jetAK8puppi_sdJEC_4  =corr_AK8puppiSD[usenumber4]*jetAK8puppi_sd_4;
                Double_t gencorrect=1.0;
                Double_t recocorrect_0eta1p3=1.0;
@@ -3004,14 +3011,14 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                jetAK8puppi_ptJEC_5       = jetAK8puppi_pt1[usenumber5]; // unpruned corrected jet pt
                jetAK8puppi_eta_5     = jetAK8puppi_eta1[usenumber5]; // unpruned (w/o jec) jet eta
                jetAK8puppi_phi_5      = hadronicVpuppi_5.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_5         = hadronicVpuppi_5.userFloat("NjettinessAK8:tau1");
-               jetAK8puppi_tau2_5         = hadronicVpuppi_5.userFloat("NjettinessAK8:tau2");
-               jetAK8puppi_tau3_5         = hadronicVpuppi_5.userFloat("NjettinessAK8:tau3");
+               jetAK8puppi_tau1_5         = hadronicVpuppi_5.userFloat("NjettinessAK8Puppi:tau1");
+               jetAK8puppi_tau2_5         = hadronicVpuppi_5.userFloat("NjettinessAK8Puppi:tau2");
+               jetAK8puppi_tau3_5         = hadronicVpuppi_5.userFloat("NjettinessAK8Puppi:tau3");
                jetAK8puppi_tau21_5        = jetAK8puppi_tau2_5/jetAK8puppi_tau1_5;
-               jetAK8puppi_tau4_5         = hadronicVpuppi_5.userFloat("NjettinessAK8:tau4");
+               jetAK8puppi_tau4_5         = hadronicVpuppi_5.userFloat("NjettinessAK8Puppi:tau4");
                jetAK8puppi_tau42_5        = jetAK8puppi_tau4_5/jetAK8puppi_tau2_5;
 
-               jetAK8puppi_sd_5       =  hadronicVpuppi_5.userFloat("ak8PFJetsCHSSoftDropMass"); // uncorrected pruned mass
+               jetAK8puppi_sd_5       =  hadronicVpuppi_5.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
                jetAK8puppi_sdJEC_5  =corr_AK8puppiSD[usenumber5]*jetAK8puppi_sd_5;
                Double_t gencorrect=1.0;
                Double_t recocorrect_0eta1p3=1.0;
@@ -3038,14 +3045,14 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                jetAK8puppi_ptJEC_6       = jetAK8puppi_pt1[usenumber6]; // unpruned corrected jet pt
                jetAK8puppi_eta_6     = jetAK8puppi_eta1[usenumber6]; // unpruned (w/o jec) jet eta
                jetAK8puppi_phi_6      = hadronicVpuppi_6.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_6         = hadronicVpuppi_6.userFloat("NjettinessAK8:tau1");
-               jetAK8puppi_tau2_6         = hadronicVpuppi_6.userFloat("NjettinessAK8:tau2");
-               jetAK8puppi_tau3_6         = hadronicVpuppi_6.userFloat("NjettinessAK8:tau3");
+               jetAK8puppi_tau1_6         = hadronicVpuppi_6.userFloat("NjettinessAK8Puppi:tau1");
+               jetAK8puppi_tau2_6         = hadronicVpuppi_6.userFloat("NjettinessAK8Puppi:tau2");
+               jetAK8puppi_tau3_6         = hadronicVpuppi_6.userFloat("NjettinessAK8Puppi:tau3");
                jetAK8puppi_tau21_6        = jetAK8puppi_tau2_6/jetAK8puppi_tau1_6;
-               jetAK8puppi_tau4_6         = hadronicVpuppi_6.userFloat("NjettinessAK8:tau4");
+               jetAK8puppi_tau4_6         = hadronicVpuppi_6.userFloat("NjettinessAK8Puppi:tau4");
                jetAK8puppi_tau42_6        = jetAK8puppi_tau4_6/jetAK8puppi_tau2_6;
 
-               jetAK8puppi_sd_6       =  hadronicVpuppi_6.userFloat("ak8PFJetsCHSSoftDropMass"); // uncorrected pruned mass
+               jetAK8puppi_sd_6       =  hadronicVpuppi_6.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
                jetAK8puppi_sdJEC_6  =corr_AK8puppiSD[usenumber6]*jetAK8puppi_sd_6;
                Double_t gencorrect=1.0;
                Double_t recocorrect_0eta1p3=1.0;
@@ -3071,14 +3078,14 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                jetAK8puppi_ptJEC_7       = jetAK8puppi_pt1[usenumber7]; // unpruned corrected jet pt
                jetAK8puppi_eta_7     = jetAK8puppi_eta1[usenumber7]; // unpruned (w/o jec) jet eta
                jetAK8puppi_phi_7      = hadronicVpuppi_7.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_7         = hadronicVpuppi_7.userFloat("NjettinessAK8:tau1");
-               jetAK8puppi_tau2_7         = hadronicVpuppi_7.userFloat("NjettinessAK8:tau2");
-               jetAK8puppi_tau3_7         = hadronicVpuppi_7.userFloat("NjettinessAK8:tau3");
+               jetAK8puppi_tau1_7         = hadronicVpuppi_7.userFloat("NjettinessAK8Puppi:tau1");
+               jetAK8puppi_tau2_7         = hadronicVpuppi_7.userFloat("NjettinessAK8Puppi:tau2");
+               jetAK8puppi_tau3_7         = hadronicVpuppi_7.userFloat("NjettinessAK8Puppi:tau3");
                jetAK8puppi_tau21_7        = jetAK8puppi_tau2_7/jetAK8puppi_tau1_7;
-               jetAK8puppi_tau4_7         = hadronicVpuppi_7.userFloat("NjettinessAK8:tau4");
+               jetAK8puppi_tau4_7         = hadronicVpuppi_7.userFloat("NjettinessAK8Puppi:tau4");
                jetAK8puppi_tau42_7        = jetAK8puppi_tau4_7/jetAK8puppi_tau2_7;
 
-               jetAK8puppi_sd_7       =  hadronicVpuppi_7.userFloat("ak8PFJetsCHSSoftDropMass"); // uncorrected pruned mass
+               jetAK8puppi_sd_7       =  hadronicVpuppi_7.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
                jetAK8puppi_sdJEC_7  =corr_AK8puppiSD[usenumber7]*jetAK8puppi_sd_7;
                Double_t gencorrect=1.0;
                Double_t recocorrect_0eta1p3=1.0;
@@ -3104,14 +3111,14 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                jetAK8puppi_ptJEC_8       = jetAK8puppi_pt1[usenumber8]; // unpruned corrected jet pt
                jetAK8puppi_eta_8     = jetAK8puppi_eta1[usenumber8]; // unpruned (w/o jec) jet eta
                jetAK8puppi_phi_8      = hadronicVpuppi_8.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_8         = hadronicVpuppi_8.userFloat("NjettinessAK8:tau1");
-               jetAK8puppi_tau2_8         = hadronicVpuppi_8.userFloat("NjettinessAK8:tau2");
-               jetAK8puppi_tau3_8         = hadronicVpuppi_8.userFloat("NjettinessAK8:tau3");
+               jetAK8puppi_tau1_8         = hadronicVpuppi_8.userFloat("NjettinessAK8Puppi:tau1");
+               jetAK8puppi_tau2_8         = hadronicVpuppi_8.userFloat("NjettinessAK8Puppi:tau2");
+               jetAK8puppi_tau3_8         = hadronicVpuppi_8.userFloat("NjettinessAK8Puppi:tau3");
                jetAK8puppi_tau21_8        = jetAK8puppi_tau2_8/jetAK8puppi_tau1_8;
-               jetAK8puppi_tau4_8         = hadronicVpuppi_8.userFloat("NjettinessAK8:tau4");
+               jetAK8puppi_tau4_8         = hadronicVpuppi_8.userFloat("NjettinessAK8Puppi:tau4");
                jetAK8puppi_tau42_8        = jetAK8puppi_tau4_8/jetAK8puppi_tau2_8;
 
-               jetAK8puppi_sd_8       =  hadronicVpuppi_8.userFloat("ak8PFJetsCHSSoftDropMass"); // uncorrected pruned mass
+               jetAK8puppi_sd_8       =  hadronicVpuppi_8.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
                jetAK8puppi_sdJEC_8  =corr_AK8puppiSD[usenumber8]*jetAK8puppi_sd_8;
                Double_t gencorrect=1.0;
                Double_t recocorrect_0eta1p3=1.0;
@@ -3122,7 +3129,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                if (fabs(jetAK8puppi_eta_8)<=1.3){jetAK8puppi_sdcorr_8=jetAK8puppi_sd_8*gencorrect*recocorrect_0eta1p3;}
                else if (fabs(jetAK8puppi_eta_8)<2.5 && fabs(jetAK8puppi_eta_8)>1.3){jetAK8puppi_sdcorr_8=jetAK8puppi_sd_8*gencorrect*recocorrect_1p3eta2p5;}
            }
-
 	int nak4 = 0;
         double tj1=-10.0, tj2=-10.0; 
         for (size_t ik=0; ik<ak4jets->size();ik++)
@@ -3139,7 +3145,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
               jecAK4_->setJetA ( (*ak4jets)[ik].jetArea() );
               corr = jecAK4_->getCorrection();
 	    } else {uncorrJet = (*ak4jets)[ik].p4();}
-
             if( (corr*uncorrJet.pt())>20 && (fabs((*ak4jets)[ik].eta()) < 5.0) && looseJetID((*ak4jets)[ik])>0 && nak4<8){
                 ak4jet_hf[nak4]=(*ak4jets)[ik].hadronFlavour();
                 ak4jet_pf[nak4]=(*ak4jets)[ik].partonFlavour();
@@ -3185,7 +3190,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 vbfj2.SetPtEtaPhiE(ak4jet_pt[nj2], ak4jet_eta[nj2], ak4jet_phi[nj2], ak4jet_e[nj2]);
                 vbfmjj=(vbfj1+vbfj2).Mag();
             }
-
             if(vbfeta>4.0 && vbfmjj>400) {vbftag=1;}
 
                 TLorentzVector ghadronicVpuppi, gravitonpuppiJEC,ghadronicVpuppi_2, gravitonpuppiJEC_2, ghadronicVpuppi_3, gravitonpuppiJEC_3;
@@ -3229,7 +3233,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             edm::View<pat::Jet>::const_iterator beginAK8 = jetsAK8->begin();
             edm::View<pat::Jet>::const_iterator endAK8 = jetsAK8->end();
             edm::View<pat::Jet>::const_iterator ijetAK8 = beginAK8;
-       
            edm::View<pat::Jet>::const_iterator ijetAK8_j1,ijetAK8_j2,ijetAK8_j3;
            double drak8jetmatch1=10000.,drak8jetmatch2=10000.,drak8jetmatch3=10000.;
          
@@ -3243,7 +3246,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     if (tmpdrak8jet3<drak8jetmatch3) {drak8jetmatch3=tmpdrak8jet3; ijetAK8_j3=ijetAK8;}
                                        }  
             }
-
            auto const & sdSubjetsPuppi_1 = ijetAK8_j1->subjets("SoftDropPuppi");
            Int_t nsj1=0;
            for ( auto const & puppiSDSJ_1 : sdSubjetsPuppi_1 ) {

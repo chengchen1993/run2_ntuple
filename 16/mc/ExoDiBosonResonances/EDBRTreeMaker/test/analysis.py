@@ -318,32 +318,32 @@ jetsAK8puppi = "cleanPuppi"
  
 if runOnMC:
    jecLevelsAK8chs = [
-                                   'Summer16_23Sep2016V3_MC_L1FastJet_AK8PFchs.txt',
-                                   'Summer16_23Sep2016V3_MC_L2Relative_AK8PFchs.txt',
-                                   'Summer16_23Sep2016V3_MC_L3Absolute_AK8PFchs.txt'
+                                   'Summer16_23Sep2016V4_MC_L1FastJet_AK8PFchs.txt',
+                                   'Summer16_23Sep2016V4_MC_L2Relative_AK8PFchs.txt',
+                                   'Summer16_23Sep2016V4_MC_L3Absolute_AK8PFchs.txt'
      ]
    jecLevelsAK8chsGroomed = [
-                                   'Summer16_23Sep2016V3_MC_L2Relative_AK8PFchs.txt',
-                                   'Summer16_23Sep2016V3_MC_L3Absolute_AK8PFchs.txt'
+                                   'Summer16_23Sep2016V4_MC_L2Relative_AK8PFchs.txt',
+                                   'Summer16_23Sep2016V4_MC_L3Absolute_AK8PFchs.txt'
      ]
    jecLevelsAK8puppi = [
-                                   'Summer16_23Sep2016V3_MC_L1FastJet_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016V3_MC_L2Relative_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016V3_MC_L3Absolute_AK8PFPuppi.txt'
+                                   'Summer16_23Sep2016V4_MC_L1FastJet_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016V4_MC_L2Relative_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016V4_MC_L3Absolute_AK8PFPuppi.txt'
      ]
    jecLevelsAK8puppiGroomed = [
-                                   'Summer16_23Sep2016V3_MC_L2Relative_AK8PFPuppi.txt',
-                                   'Summer16_23Sep2016V3_MC_L3Absolute_AK8PFPuppi.txt'
+                                   'Summer16_23Sep2016V4_MC_L2Relative_AK8PFPuppi.txt',
+                                   'Summer16_23Sep2016V4_MC_L3Absolute_AK8PFPuppi.txt'
      ]
    BjecLevelsAK4chs = [
-                                   'Summer16_23Sep2016V3_MC_L1FastJet_AK4PFPuppi.txt',
-                                   'Summer16_23Sep2016V3_MC_L2Relative_AK4PFPuppi.txt',
-                                   'Summer16_23Sep2016V3_MC_L3Absolute_AK4PFPuppi.txt'
+                                   'Summer16_23Sep2016V4_MC_L1FastJet_AK4PFPuppi.txt',
+                                   'Summer16_23Sep2016V4_MC_L2Relative_AK4PFPuppi.txt',
+                                   'Summer16_23Sep2016V4_MC_L3Absolute_AK4PFPuppi.txt'
      ]
    jecLevelsAK4chs = [
-          'Summer16_23Sep2016V3_MC_L1FastJet_AK4PFchs.txt',
-          'Summer16_23Sep2016V3_MC_L2Relative_AK4PFchs.txt',
-          'Summer16_23Sep2016V3_MC_L3Absolute_AK4PFchs.txt'
+          'Summer16_23Sep2016V4_MC_L1FastJet_AK4PFchs.txt',
+          'Summer16_23Sep2016V4_MC_L2Relative_AK4PFchs.txt',
+          'Summer16_23Sep2016V4_MC_L3Absolute_AK4PFchs.txt'
     ]
 else:
    jecLevelsAK8chs = [

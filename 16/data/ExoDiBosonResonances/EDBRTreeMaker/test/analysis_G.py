@@ -8,7 +8,7 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True),allo
 filterMode = False # True                
  
 ######## Sequence settings ##########
-corrJetsOnTheFly = True
+corrJetsOnTheFly = False
 runOnMC = False
 runOnSig = False
 DOHLTFILTERS = True

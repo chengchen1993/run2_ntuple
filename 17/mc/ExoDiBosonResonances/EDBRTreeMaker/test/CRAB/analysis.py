@@ -1,17 +1,17 @@
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process( "TEST" )
-process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
+#process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
+process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True),allowUnscheduled=cms.untracked.bool(True))
 #,
 #				     SkipEvent = cms.untracked.vstring('ProductNotFound'))
 filterMode = False # True                
  
 ######## Sequence settings ##########
-corrJetsOnTheFly = True
+corrJetsOnTheFly = False
 runOnMC = True
+runOnSig = False
 DOHLTFILTERS = True
-#useJSON = not (runOnMC)
-#JSONfile = 'Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt'
 #****************************************************************************************************#
 
 #process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
@@ -19,9 +19,9 @@ process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_condDBv2_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
 if runOnMC:
-   process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v6'
+   process.GlobalTag.globaltag = '94X_mc2017_realistic_v14'
 elif not(runOnMC):
-   process.GlobalTag.globaltag = '80X_dataRun2_2016SeptRepro_v4'
+   process.GlobalTag.globaltag = '94X_dataRun2_ReReco_EOY17_v6'
 
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2015#ETmiss_filters
 # For the RunIISummer15DR74 MC campaing, the process name in PAT.
@@ -47,7 +47,6 @@ process.ApplyBaselineHBHEIsoNoiseFilter = cms.EDFilter('BooleanFlagFilter',
 )
 ######### read JSON file for data ##########                                                                                                 
 '''if not(runOnMC) and useJSON:
-
   import FWCore.PythonUtilities.LumiList as LumiList
   import FWCore.ParameterSet.Types as CfgTypes
   process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
@@ -167,12 +166,12 @@ addJetCollection(
 #process.load("RecoBTag.DeepFlavour.DeepFlavourJetTagsProducer_cfi")
 #process.load("RecoBTag.DeepFlavour.deepFlavour_cff")
 #'''
+'''
 from RecoBTag.Configuration.RecoBTag_EventContent_cff import *
 from RecoBTag.Configuration.RecoBTag_cff import *
-from RecoBTag.DeepFlavour.DeepFlavourJetTagsProducer_cfi import deepFlavourJetTags
-from RecoBTag.DeepFlavour.deepFlavour_cff import *
+#from RecoBTag.DeepFlavour.DeepFlavourJetTagsProducer_cfi import deepFlavourJetTags
+#from RecoBTag.DeepFlavour.deepFlavour_cff import *
 from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
-
 updateJetCollection(
    process,
    labelName = 'DeepFlavour',
@@ -183,21 +182,24 @@ updateJetCollection(
    btagDiscriminators =      ['deepFlavourJetTags:probb',     'deepFlavourJetTags:probbb','deepFlavourJetTags:probc','deepFlavourJetTags:probudsg','deepFlavourJetTags:probcc'],
    postfix='NewDFTraining'
 )
-
 #process.selectedUpdatedPatJetsDeepFlavourNewDFTraining.userData.userFloats.src =[]
-#'''
+'''
 '''
 process.patjets = cms.EDAnalyzer('EDBRTreeMaker',
    PatJets = cms.InputTag("selectedUpdatedPatJets"),
    PTMin = cms.double(-1),
    BTag = cms.string("deepFlavourJetTags:probb"),
 )
-'''
+#80X
 process.selectedPatJetsAK8SoftDropPacked = cms.EDProducer("BoostedJetMerger",
     jetSrc = cms.InputTag("selectedPatJetsAK8Softdrop"),
     subjetSrc = cms.InputTag("selectedPatJetsAK8SoftDropSubjets")
 )
-
+'''
+# set up TransientTrackBuilder
+process.TransientTrackBuilderESProducer = cms.ESProducer("TransientTrackBuilderESProducer",
+    ComponentName=cms.string('TransientTrackBuilder')
+)
 
 process.redoSoftDropPatJets+=process.patJetCorrFactorsAK8Softdrop
 process.redoSoftDropPatJets+=process.patJetsAK8Softdrop
@@ -406,17 +408,18 @@ process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",
 
                                     metSrc = cms.InputTag("slimmedMETs"),
                                     mets = cms.InputTag(METS),
-                                    #ak4jetsSrc = cms.InputTag("cleanAK4Jets"), 
-                                    ak4jetsSrc = cms.InputTag("selectedUpdatedPatJetsDeepFlavourNewDFTraining"),
+                                    #ak4jetsSrc = cms.InputTag("cleanAK4Jets"),
+                                    ak4jetsSrc = cms.InputTag("cleanPuppiAK4"),
                                     hadronicVSrc = cms.InputTag("hadronicV"),
                                     hadronicVSrc_raw = cms.InputTag("slimmedJetsAK8"),
-hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),
+                                    #hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),#80X
 				    jets = cms.InputTag("slimmedJets"),
                                     ak8JetSrc = cms.InputTag(jetsAK8),
                                     fatjets = cms.InputTag(jetsAK8),
                                     prunedjets = cms.InputTag(jetsAK8pruned),
                                     softdropjets = cms.InputTag(jetsAK8softdrop),
-                                    puppijets = cms.InputTag(jetsAK8puppi),
+                                    #puppijets = cms.InputTag(jetsAK8puppi),#80X
+                                    puppijets = cms.InputTag(jetsAK8),#94X
 				    jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
 				    jecAK8chsPayloadNamesGroomed = cms.vstring( jecLevelsAK8chsGroomed ),
 				    jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
@@ -430,7 +433,7 @@ hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),
 				    vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
                                     hltToken    = cms.InputTag("TriggerResults","","HLT"),
                                     muPaths1     = cms.vstring("HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v*"),
-                                    muPaths2     = cms.vstring("HLT_PFHT800_v*"),
+                                    muPaths2     = cms.vstring("HLT_PFHT800_v*"),  //
                                     muPaths3     = cms.vstring("HLT_PFHT900_v*"),
                                     muPaths4     = cms.vstring("HLT_PFJet450_v*"),
                                     muPaths5     = cms.vstring("HLT_PFJet500_v*"),
@@ -457,7 +460,6 @@ hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),
                                     noiseFilterSelection_badChargedHadron = cms.InputTag('BadChargedCandidateFilter'),
                                     )
 
-
 if option=='GEN':
     process.treeDumper.metSrc = 'genMetTrue'
     process.treeDumper.isGen  = True
@@ -481,8 +483,8 @@ if option=='RECO':
 
 process.load("ExoDiBosonResonances.EDBRCommon.data.RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8")
 process.source.fileNames = [
-#"/store/mc/RunIISummer16MiniAODv2/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/80000/6E5C595E-9ABE-E611-ADF3-F45214938700.root"
-"/store/mc/RunIISummer16MiniAODv2/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/80000/FA34DAFF-6FC1-E611-A7AF-0CC47A7C35F4.root"
+#"/store/mc/RunIIFall17MiniAODv2/ST_s-channel_4f_hadronicDecays_TuneCP5_13TeV-amcatnlo-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/240000/FEF82970-D17A-E911-9627-0025905B85AE.root"
+"/store/mc/RunIIFall17MiniAODv2/QCD_Pt_800to1000_TuneCP5_13TeV_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/70000/0CB37C8E-866A-E811-9CB3-0CC47A7C35B2.root"
 ]
 
 process.maxEvents.input = 2000

@@ -383,6 +383,17 @@ else:
                                    'Fall17_17Nov2017B_V6_DATA_L2L3Residual_AK4PFPuppi.txt'
      ]
 
+# L1 prefiring
+process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
+                                 #ThePhotons = cms.InputTag("slimmedPhotons"),
+                                 TheJets = cms.InputTag(jetsAK8),
+                                 L1Maps = cms.string("L1PrefiringMaps_new.root"), # update this line with the location of this file
+                                 #L1Maps = cms.string("CMSSW_8_0_32/src/L1Prefiring/EventWeightProducer/data/L1PrefiringMaps_new.root"),
+                                 DataEra = cms.string("2017BtoF"), #Use 2016BtoH for 2016
+                                 UseJetEMPt = cms.bool(False), #can be set to true to use jet prefiring maps parametrized vs pt(em) instead of pt
+                                 PrefiringRateSystematicUncty = cms.double(0.2) #Minimum relative prefiring uncty per object
+                                 )
+
 process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",
                                     originalNEvents = cms.int32(1),
                                     crossSectionPb = cms.double(1),
@@ -411,7 +422,8 @@ process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",
                                     metSrc = cms.InputTag("slimmedMETs"),
                                     mets = cms.InputTag(METS),
                                     #ak4jetsSrc = cms.InputTag("cleanAK4Jets"), 
-                                    ak4jetsSrc = cms.InputTag("cleanPuppiAK4"),
+                                    #ak4jetsSrc = cms.InputTag("cleanPuppiAK4"),
+                                    ak4jetsSrc = cms.InputTag("slimmedJetPuppi"),
                                     hadronicVSrc = cms.InputTag("hadronicV"),
                                     hadronicVSrc_raw = cms.InputTag("slimmedJetsAK8"),
                                     #hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),
@@ -433,15 +445,16 @@ process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",
 				    muons = cms.InputTag("slimmedMuons"),
 				    vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
                                     hltToken    = cms.InputTag("TriggerResults","","HLT"),
-                                    muPaths1     = cms.vstring("HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v*"),
-                                    muPaths2     = cms.vstring("HLT_PFHT800_v*"),
-                                    muPaths3     = cms.vstring("HLT_PFHT900_v*"),
-                                    muPaths4     = cms.vstring("HLT_PFJet450_v*"),
-                                    muPaths5     = cms.vstring("HLT_PFJet500_v*"),
-                                    muPaths6     = cms.vstring("HLT_AK8PFJet450_v*"),
-                                    muPaths7     = cms.vstring("HLT_AK8PFJet500_v*"),
-                                    muPaths8     = cms.vstring("HLT_AK8PFJet360_TrimMass30_v*"),
-                                    muPaths9     = cms.vstring("HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v*"),
+                                    muPaths1     = cms.vstring("HLT_PFHT1050_v*"),
+                                    muPaths2     = cms.vstring("HLT_AK8PFJet500_v*"),
+                                    muPaths3     = cms.vstring("HLT_AK8PFJet360_TrimMass30_v*"),
+                                    muPaths4     = cms.vstring("HLT_AK8PFJet380_TrimMass30_v*"),
+                                    muPaths5     = cms.vstring("HLT_AK8PFJet400_TrimMass30_v*"),
+                                    muPaths6     = cms.vstring("HLT_AK8PFJet420_TrimMass30_v*"),
+                                    muPaths7     = cms.vstring("HLT_AK8PFHT750_TrimMass50_v*"),
+                                    muPaths8     = cms.vstring("HLT_AK8PFHT800_TrimMass50_v*"),
+                                    muPaths9     = cms.vstring("HLT_AK8PFHT850_TrimMass50_v*"),
+                                    muPaths10     = cms.vstring("HLT_AK8PFHT900_TrimMass50_v*"),
                                     el1     = cms.vstring("HLT_Ele45_WPLoose_Gsf_v*"),
                                     el2     = cms.vstring("HLT_Ele115_CaloIdVT_GsfTrkIdT_v*"),#("HLT_Ele35_WPLoose_Gsf_v*"),
                                     el3     = cms.vstring("HLT_Ele27_WPTight_Gsf_v*"),
@@ -478,7 +491,7 @@ process.analysis = cms.Path(process.leptonSequence +
                             process.jetSequence +
                             process.metfilterSequence +
                             process.gravitonSequence +
-                            process.treeDumper)
+                            process.prefiringweight*process.treeDumper)
 
 if option=='RECO':
     process.analysis.replace(process.leptonSequence, process.goodOfflinePrimaryVertex + process.leptonSequence)

@@ -329,11 +329,11 @@ private:
   //High Level Trigger
   HLTConfigProvider hltConfig;
   edm::EDGetTokenT<edm::TriggerResults> hltToken_;
-  std::vector<std::string> muPaths1_, muPaths2_, muPaths3_, muPaths4_, muPaths5_, muPaths6_, muPaths7_, muPaths8_, muPaths9_;
-  std::vector<std::string> muPaths1, muPaths2, muPaths3, muPaths4, muPaths5, muPaths6, muPaths7, muPaths8, muPaths9;
+  std::vector<std::string> muPaths1_, muPaths2_, muPaths3_, muPaths4_, muPaths5_, muPaths6_, muPaths7_, muPaths8_, muPaths9_, muPaths10_;
+  std::vector<std::string> muPaths1, muPaths2, muPaths3, muPaths4, muPaths5, muPaths6, muPaths7, muPaths8, muPaths9, muPaths10;
   std::vector<std::string> el1_, el2_, el3_, mu1_, mu2_, mu3_, mu4_;
   std::vector<std::string> el1, el2, el3, mu1, mu2, mu3, mu4;
-  int  HLT_Mu1, HLT_Mu2, HLT_Mu3, HLT_Mu4, HLT_Mu5, HLT_Mu6, HLT_Mu7, HLT_Mu8, HLT_Mu9, HLT_Mu10, HLT_Mu11, HLT_Mu12, HLT_Mu13, HLT_Mu14, HLT_Mu15, HLT_Mu16;
+  int  HLT_Mu1, HLT_Mu2, HLT_Mu3, HLT_Mu4, HLT_Mu5, HLT_Mu6, HLT_Mu7, HLT_Mu8, HLT_Mu9, HLT_Mu10, HLT_Mu11, HLT_Mu12, HLT_Mu13, HLT_Mu14, HLT_Mu15, HLT_Mu16, HLT_Mu17;
   bool IDLoose, IDTight, IDLoose_2, IDTight_2, IDLoose_3, IDTight_3, IDLoose_4, IDTight_4;
           
 // filter
@@ -378,7 +378,8 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   muPaths6_(iConfig.getParameter<std::vector<std::string>>("muPaths6")),
   muPaths7_(iConfig.getParameter<std::vector<std::string>>("muPaths7")),
   muPaths8_(iConfig.getParameter<std::vector<std::string>>("muPaths8")),
-  muPaths9_(iConfig.getParameter<std::vector<std::string>>("muPaths9")),//  noiseFilterToken_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter")))
+  muPaths9_(iConfig.getParameter<std::vector<std::string>>("muPaths9")),
+  muPaths10_(iConfig.getParameter<std::vector<std::string>>("muPaths10")),//  noiseFilterToken_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter")))
   el1_(iConfig.getParameter<std::vector<std::string>>("el1")),
   el2_(iConfig.getParameter<std::vector<std::string>>("el2")),
   el3_(iConfig.getParameter<std::vector<std::string>>("el3")),
@@ -884,6 +885,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("HLT_Mu14"   ,&HLT_Mu14  ,"HLT_Mu14/I"  );
   outTree_->Branch("HLT_Mu15"   ,&HLT_Mu15  ,"HLT_Mu15/I"  );
   outTree_->Branch("HLT_Mu16"   ,&HLT_Mu16  ,"HLT_Mu16/I"  );
+  outTree_->Branch("HLT_Mu17"   ,&HLT_Mu17  ,"HLT_Mu17/I"  );
 // filter
   outTree_->Branch("passFilter_HBHE"                 ,&passFilter_HBHE_                ,"passFilter_HBHE_/O");
   outTree_->Branch("passFilter_HBHEIso"                 ,&passFilter_HBHEIso_                ,"passFilter_HBHEIso_/O");
@@ -907,11 +909,11 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("ak4jet_icsv"        , ak4jet_icsv       ,"ak4jet_icsv[8]/D"       );
   outTree_->Branch("ak4jet_IDLoose"        , ak4jet_IDLoose       ,"ak4jet_IDLoose[8]/D"       );
   outTree_->Branch("ak4jet_IDTight"        , ak4jet_IDTight       ,"ak4jet_IDTight[8]/D"       );
-   outTree_->Branch("ak4jet_deepcsvudsg"        , ak4jet_deepcsvudsg       ,"ak4jet_deepcsvudsg[8]/D"       );
-    outTree_->Branch("ak4jet_deepcsvb"        , ak4jet_deepcsvb       ,"ak4jet_deepcsvb[8]/D"       );
-    outTree_->Branch("ak4jet_deepcsvc"        , ak4jet_deepcsvc       ,"ak4jet_deepcsvc[8]/D"       );
-    outTree_->Branch("ak4jet_deepcsvbb"        , ak4jet_deepcsvbb       ,"ak4jet_deepcsvbb[8]/D"       );
-    outTree_->Branch("ak4jet_deepcsvcc"        , ak4jet_deepcsvcc       ,"ak4jet_deepcsvcc[8]/D"       );
+  outTree_->Branch("ak4jet_deepcsvudsg"        , ak4jet_deepcsvudsg       ,"ak4jet_deepcsvudsg[8]/D"       );
+  outTree_->Branch("ak4jet_deepcsvb"        , ak4jet_deepcsvb       ,"ak4jet_deepcsvb[8]/D"       );
+  outTree_->Branch("ak4jet_deepcsvc"        , ak4jet_deepcsvc       ,"ak4jet_deepcsvc[8]/D"       );
+  outTree_->Branch("ak4jet_deepcsvbb"        , ak4jet_deepcsvbb       ,"ak4jet_deepcsvbb[8]/D"       );
+  outTree_->Branch("ak4jet_deepcsvcc"        , ak4jet_deepcsvcc       ,"ak4jet_deepcsvcc[8]/D"       );
 
   /// Gen Level quantities
   /*
@@ -1336,7 +1338,6 @@ EDBRTreeMaker::~EDBRTreeMaker()
    // (e.g. close files, deallocate resources etc.)
 }
 
-
 bool
 EDBRTreeMaker::looseJetID( const pat::Jet& j ) {
 // refer to https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
@@ -1352,28 +1353,29 @@ EDBRTreeMaker::looseJetID( const pat::Jet& j ) {
           return ((  (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(eta)>2.4) && abs(eta)<=2.7 ) || (NHF<0.98 && NEMF>0.01 && NumNeutralParticle>2 && abs(eta)>2.7 && abs(eta)<=3.0 ) || (NEMF<0.90 && NumNeutralParticle>10 && abs(eta)>3.0) ) ;
 }
 else{
-return (1);
+return (0);
     }
 }
 
 bool
 EDBRTreeMaker::tightJetID( const pat::Jet& j ) {
 // refer to https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
-        if(j.pt()>170.){
-        double NHF = j.neutralHadronEnergyFraction();
-        double NEMF = j.neutralEmEnergyFraction();
-        double CHF = j.chargedHadronEnergyFraction();
-        double CEMF = j.chargedEmEnergyFraction();
-        int NumConst = j.chargedMultiplicity()+j.neutralMultiplicity();
-        int NumNeutralParticle =j.neutralMultiplicity();
-        int CHM = j.chargedMultiplicity();
-        double eta = j.eta();
-        return ( (NHF<0.90 && NEMF<0.90 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(eta)>2.4) && abs(eta)<=3.0 ) || (NEMF<0.90 && NumNeutralParticle>10 && abs(eta)>3.0 )  ;
-}
-else{
-return (1);
-    }
-}
+         if(j.pt()>170.){
+                 double NHF = j.neutralHadronEnergyFraction();
+                 double NEMF = j.neutralEmEnergyFraction();
+                 double CHF = j.chargedHadronEnergyFraction();
+                 double MUF  = j.muonEnergyFraction();
+                 double CEMF = j.chargedEmEnergyFraction();
+                 int NumConst = j.chargedMultiplicity()+j.neutralMultiplicity();
+                 int NumNeutralParticle =j.neutralMultiplicity();
+                 int CHM = j.chargedMultiplicity();
+                 double eta = j.eta();
+                 return ( (abs(eta)<=2.4 && NHF<0.9 && NEMF<0.9 && NumConst>1 && MUF<0.8 && CHF>0 && CHM>0 && CEMF<0.8) || (abs(eta)>2.4 && abs(eta)<=2.7 && NHF<0.9 && NEMF<0.9 && NumConst>1 && MUF<0.8) || (abs(eta)>2.7 && abs(eta)<=3.0 && NEMF<0.99) || (abs(eta)>3.0 && NEMF<0.90 && NHF>0.02 && NumNeutralParticle>2 && NumNeutralParticle<15) );
+                        }
+         else{
+                 return (0);
+             }
+                                               }
 
 float
 EDBRTreeMaker::dEtaInSeed( const pat::Electron*  ele ){
@@ -1654,6 +1656,11 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    for (size_t i=0; i<muPaths9.size();i++) {
       mtemp9 = (int)trigRes->accept(hltConfig.triggerIndex(muPaths9[i]));
       if(HLT_Mu9<mtemp9) HLT_Mu9=mtemp9;
+   }
+   int mtemp17=0;
+   for (size_t i=0; i<muPaths10.size();i++) {
+      mtemp17 = (int)trigRes->accept(hltConfig.triggerIndex(muPaths10[i]));
+      if(HLT_Mu17<mtemp17) HLT_Mu17=mtemp17;
    }
    int mtemp10=0;
    for (size_t i=0; i<el1.size();i++) {
@@ -2580,32 +2587,36 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
            // ************************* MET ********************** //
               iEvent.getByToken(metInputToken_ , METs_ );
-                addTypeICorr(iEvent);
+               // addTypeICorr(iEvent);
                 for (const pat::MET &met : *METs_) {
-                        const float rawPt	 = met.uncorPt();
-		    const float rawPhi   = met.uncorPhi();
-		    const float rawSumEt = met.uncorSumEt();
+                    const float rawPt        = met.corPt();
+                    const float rawPhi   = met.corPhi();
+                    //  const float rawSumEt = met.uncorSumEt();
                         TVector2 rawMET_;
                         rawMET_.SetMagPhi (rawPt, rawPhi );
                         Double_t rawPx = rawMET_.Px();
                         Double_t rawPy = rawMET_.Py();
                         Double_t rawEt = std::hypot(rawPx,rawPy);
-            	    METraw_et = rawEt;
-        	   	    METraw_phi = rawPhi;
-        	        	    METraw_sumEt = rawSumEt;
+                        MET_et = rawEt;
+                    /*  METraw_phi = rawPhi;
+                        METraw_sumEt = rawSumEt;
                         double pxcorr = rawPx+TypeICorrMap_["corrEx"];
                         double pycorr = rawPy+TypeICorrMap_["corrEy"];
                         double et     = std::hypot(pxcorr,pycorr);
                         double sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
                         TLorentzVector corrmet; corrmet.SetPxPyPzE(pxcorr,pycorr,0.,et);
-            	    useless = sumEtcorr;
-            	    useless = rawEt;
-            	    MET_et = et;
-            	    MET_phi = corrmet.Phi();
-            	    MET_sumEt = sumEtcorr;
-            	    MET_corrPx = TypeICorrMap_["corrEx"];
-            	    MET_corrPy = TypeICorrMap_["corrEy"]; 
+                    useless = sumEtcorr;
+                    useless = rawEt;
+                    MET_et = et;
+                    */
+                    MET_phi = corrmet.Phi();
+                    //MET_sumEt = sumEtcorr;
+                    /*
+                    MET_corrPx = TypeICorrMap_["corrEx"];
+                    MET_corrPy = TypeICorrMap_["corrEy"];
+                    */
                 }
+
            // ***************************************************************** //  
  
        /// For the time being, set these to 1
@@ -2710,9 +2721,9 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
          int numvhad = puppijets_->size();
          for( int inum = 0; inum< numvhad; inum++){
            const pat::Jet& Vpuppi = puppijets_->at(inum);
-      //cout<<looseJetID(Vpuppi)<<endl;
+      //ctightlooseJetID(Vpuppi)<<endl;
       //     continue; 
-           if(looseJetID(Vpuppi)<1) continue;     
+           if(tightJetID(Vpuppi)<1) continue;     
            if(jetAK8puppi_pt1[inum] > pt_larger && fabs(jetAK8puppi_eta1[inum])<2.4 && inum<8) {pt_larger = jetAK8puppi_pt1[inum]; usenumber3 = inum; continue;}
         }
        if (usenumber3>-1) {//2
@@ -2779,7 +2790,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
            int usenumber2 = -1; double pt_larger2=0;
            for( int inum = 0; inum< numvhad; inum++){
                const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(looseJetID(Vpuppi)<1) continue;
+               if(tightJetID(Vpuppi)<1) continue;
                if(jetAK8puppi_pt1[inum] > pt_larger2 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber3 && inum<8) {pt_larger2 = jetAK8puppi_pt1[inum]; usenumber2 = inum; continue;}
            }
            
@@ -2853,7 +2864,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
            int usenumber1 = -1; double pt_larger3=0;
            for( int inum = 0; inum< numvhad; inum++){
                const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(looseJetID(Vpuppi)<1) continue;
+               if(tightJetID(Vpuppi)<1) continue;
                if(jetAK8puppi_pt1[inum] > pt_larger3 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber3 && inum != usenumber2 && inum<8) {pt_larger3 = jetAK8puppi_pt1[inum]; usenumber1 = inum; continue;}
            }
            
@@ -2927,7 +2938,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
            int usenumber4 = -1; double pt_larger4=0;
            for( int inum = 0; inum< numvhad; inum++){
                const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(looseJetID(Vpuppi)<1) continue;
+               if(tightJetID(Vpuppi)<1) continue;
                if(jetAK8puppi_pt1[inum] > pt_larger4 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber3 && inum != usenumber2 && inum != usenumber1 && inum<8) {pt_larger4 = jetAK8puppi_pt1[inum]; usenumber4 = inum; continue;}
            }
 
@@ -3001,7 +3012,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
            int usenumber5 = -1; double pt_larger5=0;
            for( int inum = 0; inum< numvhad; inum++){
                const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(looseJetID(Vpuppi)<1) continue;
+               if(tightJetID(Vpuppi)<1) continue;
                if(jetAK8puppi_pt1[inum] > pt_larger5 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber4 && inum != usenumber3 && inum != usenumber2 && inum != usenumber1 && inum<8) {pt_larger5 = jetAK8puppi_pt1[inum]; usenumber5 = inum; continue;}
            }
 
@@ -3035,7 +3046,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
            int usenumber6 = -1; double pt_larger6=0;
            for( int inum = 0; inum< numvhad; inum++){
                const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(looseJetID(Vpuppi)<1) continue;
+               if(tightJetID(Vpuppi)<1) continue;
                if(jetAK8puppi_pt1[inum] > pt_larger6 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber5 && inum != usenumber4 && inum != usenumber3 && inum != usenumber2 && inum != usenumber1 && inum<8) {pt_larger6 = jetAK8puppi_pt1[inum]; usenumber6 = inum; continue;}
            }
 
@@ -3068,7 +3079,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
            int usenumber7 = -1; double pt_larger7=0;
            for( int inum = 0; inum< numvhad; inum++){
                const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(looseJetID(Vpuppi)<1) continue;
+               if(tightJetID(Vpuppi)<1) continue;
                if(jetAK8puppi_pt1[inum] > pt_larger7 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber6 && inum != usenumber5 && inum != usenumber4 && inum != usenumber3 && inum != usenumber2 && inum != usenumber1 && inum<8) {pt_larger7 = jetAK8puppi_pt1[inum]; usenumber7 = inum; continue;}
            }
 
@@ -3101,7 +3112,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
            int usenumber8 = -1; double pt_larger8=0;
            for( int inum = 0; inum< numvhad; inum++){
                const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(looseJetID(Vpuppi)<1) continue;
+               if(tightJetID(Vpuppi)<1) continue;
                if(jetAK8puppi_pt1[inum] > pt_larger8 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber7 && inum != usenumber6 && inum != usenumber5 && inum != usenumber4 && inum != usenumber3 && inum != usenumber2 && inum != usenumber1 && inum<8) {pt_larger8 = jetAK8puppi_pt1[inum]; usenumber8 = inum; continue;}
            }
 
@@ -3145,7 +3156,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
               jecAK4_->setJetA ( (*ak4jets)[ik].jetArea() );
               corr = jecAK4_->getCorrection();
 	    } else {uncorrJet = (*ak4jets)[ik].p4();}
-            if( (corr*uncorrJet.pt())>20 && (fabs((*ak4jets)[ik].eta()) < 5.0) && looseJetID((*ak4jets)[ik])>0 && nak4<8){
+            if( (corr*uncorrJet.pt())>20 && (fabs((*ak4jets)[ik].eta()) < 5.0) && tightJetID((*ak4jets)[ik])>0 && nak4<8){
                 ak4jet_hf[nak4]=(*ak4jets)[ik].hadronFlavour();
                 ak4jet_pf[nak4]=(*ak4jets)[ik].partonFlavour();
                 ak4jet_pt[nak4] =  corr*uncorrJet.pt();
@@ -3331,7 +3342,7 @@ MJJJJ=(AK81+AK82+AK83+AK84).M();
          if(RunOnMC_){
               passFilter_EEBadSc_=true;//Only used for Data
                      }
-         if(nVetoEle==0&&nVetoMu==0&&((Nj8==2&&MJJ>-1000&&IDLoose>0&&IDLoose_2>0)||(Nj8==3&&MJJJ>-1000&&IDLoose>0&&IDLoose_2>0&&IDLoose_3>0&&fabs(jetAK8puppi_eta_3)<2.4)||(Nj8==4&&MJJJJ>-1000&&IDLoose>0&&IDLoose_2>0&&IDLoose_3>0&&IDLoose_4>0&&fabs(jetAK8puppi_eta_4)<2.4)) && jetAK8puppi_ptJEC>400 && jetAK8puppi_ptJEC_2>200 && jetAK8puppi_sdcorr>40 && jetAK8puppi_sdcorr_2>40&& (HLT_Mu1>0 || HLT_Mu2>0 || HLT_Mu3>0 || HLT_Mu4>0 || HLT_Mu5>0 || HLT_Mu6>0 || HLT_Mu7>0 || HLT_Mu8>0 || HLT_Mu9>0) && fabs(jetAK8puppi_eta)<2.4&& fabs(jetAK8puppi_eta_2)<2.4 && passFilter_HBHE_>0 && passFilter_GlobalHalo_>0 && passFilter_HBHEIso_>0 && passFilter_ECALDeadCell_>0 && passFilter_GoodVtx_>0 && passFilter_badMuon_>0 && passFilter_EEBadSc_>0){
+         if(nVetoEle==0&&nVetoMu==0&&((Nj8==2&&MJJ>-1000&&IDTight>0&&IDTight_2>0)||(Nj8==3&&MJJJ>-1000&&IDTight>0&&IDTight_2>0&&IDTight_3>0&&fabs(jetAK8puppi_eta_3)<2.4)||(Nj8==4&&MJJJJ>-1000&&IDTight>0&&IDTight_2>0&&IDTight_3>0&&IDTight_4>0&&fabs(jetAK8puppi_eta_4)<2.4)) && jetAK8puppi_ptJEC>400 && jetAK8puppi_ptJEC_2>200 && jetAK8puppi_sdcorr>40 && jetAK8puppi_sdcorr_2>40&& (HLT_Mu1>0 || HLT_Mu2>0 || HLT_Mu3>0 || HLT_Mu4>0 || HLT_Mu5>0 || HLT_Mu6>0 || HLT_Mu7>0 || HLT_Mu8>0 || HLT_Mu9>0 || HLT_Mu17>0) && fabs(jetAK8puppi_eta)<2.4&& fabs(jetAK8puppi_eta_2)<2.4 && passFilter_HBHE_>0 && passFilter_GlobalHalo_>0 && passFilter_HBHEIso_>0 && passFilter_ECALDeadCell_>0 && passFilter_GoodVtx_>0 && passFilter_badMuon_>0 && passFilter_EEBadSc_>0){
               outTree_->Fill();
                      }
        outTreew_->Fill();
@@ -3846,6 +3857,7 @@ void EDBRTreeMaker::setDummyValues() {
      HLT_Mu14=-99;
      HLT_Mu15=-99;
      HLT_Mu16=-99;
+     HLT_Mu17=-99;
 
      theWeight = -99;
      //nump = 0;
@@ -3879,6 +3891,7 @@ void EDBRTreeMaker::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup
   muPaths7.clear();
   muPaths8.clear();
   muPaths9.clear();
+  muPaths10.clear();
   el1.clear();
   el2.clear();
   el3.clear();
@@ -4077,7 +4090,16 @@ void EDBRTreeMaker::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup
    for (size_t i=0; i < mu4.size(); i++) std::cout << "\n HLT paths-16:   " << i<<"  "<<mu4[i].c_str() <<"\t"<< std::endl;
    std::cout<<"\n*********************************************\n\n";
 
-
+   for (size_t i = 0; i < muPaths10_.size(); i++) {
+         std::vector<std::string> foundPaths17 = hltConfig.matched( hltConfig.triggerNames(), muPaths10_[i] );
+         while ( !foundPaths17.empty() ){
+               muPaths10.push_back( foundPaths17.back() );
+               foundPaths17.pop_back();
+                                      }
+                                                }
+   std::cout<<"\n************** HLT-17 Information **************\n";
+   for (size_t i=0; i < muPaths10.size(); i++) std::cout << "\n Muon paths-10:   " << i<<"  "<<muPaths10[i].c_str() <<"\t"<< std::endl;
+   std::cout<<"\n*********************************************\n\n";
 
 }
 

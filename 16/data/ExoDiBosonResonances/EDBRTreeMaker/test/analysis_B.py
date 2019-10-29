@@ -383,8 +383,8 @@ else:
 
 # L1 prefiring
 process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
-                                 #ThePhotons = cms.InputTag("slimmedPhotons"),
-                                 TheJets = cms.InputTag(jetsAK8puppi),
+                                 ThePhotons = cms.InputTag("slimmedPhotons"),
+                                 TheJets = cms.InputTag("slimmedJets"),
                                  L1Maps = cms.string("L1PrefiringMaps_new.root"), # update this line with the location of this file
                                  #L1Maps = cms.string("CMSSW_8_0_32/src/L1Prefiring/EventWeightProducer/data/L1PrefiringMaps_new.root"),
                                  DataEra = cms.string("2016BtoH"), #Use 2016BtoH for 2016
@@ -420,8 +420,8 @@ process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",
                                     metSrc = cms.InputTag("slimmedMETs"),
                                     mets = cms.InputTag(METS),
                                     #ak4jetsSrc = cms.InputTag("cleanAK4Jets"), 
-                                    #ak4jetsSrc = cms.InputTag("selectedUpdatedPatJetsDeepFlavourNewDFTraining"),
-                                    ak4jetsSrc = cms.InputTag("slimmedJetPuppi"),
+                                    ak4jetsSrc = cms.InputTag("selectedUpdatedPatJetsDeepFlavourNewDFTraining"),
+                                    #ak4jetsSrc = cms.InputTag("slimmedJetPuppi"),
                                     hadronicVSrc = cms.InputTag("hadronicV"),
                                     hadronicVSrc_raw = cms.InputTag("slimmedJetsAK8"),
                                     hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),

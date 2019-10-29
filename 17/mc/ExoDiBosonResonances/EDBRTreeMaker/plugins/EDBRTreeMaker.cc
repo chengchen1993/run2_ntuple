@@ -2589,8 +2589,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
               iEvent.getByToken(metInputToken_ , METs_ );
                // addTypeICorr(iEvent);
                 for (const pat::MET &met : *METs_) {
-                    const float rawPt        = met.Pt();
-                    const float rawPhi   = met.Phi();
+                    const float rawPt        = met.corPt();
+                    const float rawPhi   = met.corPhi();
                     //  const float rawSumEt = met.uncorSumEt();
                         TVector2 rawMET_;
                         rawMET_.SetMagPhi (rawPt, rawPhi );

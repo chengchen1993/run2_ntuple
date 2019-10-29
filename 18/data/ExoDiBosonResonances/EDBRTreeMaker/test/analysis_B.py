@@ -224,7 +224,7 @@ if option == 'RECO':
 #    process.goodJets.src = "selectedPatJetsAK8"
     process.Wtoenu.MET  = "slimmedMETs"
     process.Wtomunu.MET = "slimmedMETs"
-    process.goodPuppi.src = "selectedPatJetsAK8"
+    process.goodPuppi.src = "slimmedJetsAK8"
 
 process.goodOfflinePrimaryVertex = cms.EDFilter("VertexSelector",
                                        src = cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -410,8 +410,8 @@ process.treeDumper = cms.EDAnalyzer("EDBRTreeMaker",
 
                                     metSrc = cms.InputTag("slimmedMETs"),
                                     mets = cms.InputTag(METS),
-                                    #ak4jetsSrc = cms.InputTag("cleanAK4Jets"), 
-                                    ak4jetsSrc = cms.InputTag("slimmedJetPuppi"),
+                                    ak4jetsSrc = cms.InputTag("cleanAK4Jets"), 
+                                    #ak4jetsSrc = cms.InputTag("slimmedJetPuppi"),
                                     hadronicVSrc = cms.InputTag("hadronicV"),
                                     hadronicVSrc_raw = cms.InputTag("slimmedJetsAK8"),
                                     #hadronicVSoftDropSrc = cms.InputTag("selectedPatJetsAK8SoftDropPacked"),

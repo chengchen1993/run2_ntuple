@@ -1,0 +1,9 @@
+crab status crab_M2000_R0-4_off
+crab status crab_M2000_R0-9_off
+crab status crab_M2500_R0-7_off
+crab status crab_M2500_R0-9_off
+crab status crab_M3000_R0-1_off
+crab status crab_M3000_R0-3_off
+crab status crab_M3500_R0-06_off
+crab status crab_M4000_R0-7_off
+crab status crab_M4000_R0-9_off

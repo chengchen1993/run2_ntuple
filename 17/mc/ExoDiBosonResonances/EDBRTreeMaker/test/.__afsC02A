@@ -1,0 +1,20 @@
+CRAB project directory:		/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_ST_tW_top_5f_inclusiveDecays
+Task name:			200313_002620:chench_crab_ST_tW_top_5f_inclusiveDecays
+Grid scheduler - Task Worker:	crab3@vocms0196.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/200313_002620%3Achench_crab_ST_tW_top_5f_inclusiveDecays
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=chench&var-task=200313_002620%3Achench_crab_ST_tW_top_5f_inclusiveDecays
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	COMPLETED
+
+Jobs status:                    finished     		100.0% (26/26)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Summary of run jobs:
+ * Memory: 1404MB min, 2643MB max, 1297MB ave
+ * Runtime: 15:29:34 min, 20:44:25 max, 18:45:55 ave
+ * CPU eff: 81% min, 99% max, 95% ave
+ * Waste: 442041:45:46 (100% of total)
+
+Log file is /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_ST_tW_top_5f_inclusiveDecays/crab.log

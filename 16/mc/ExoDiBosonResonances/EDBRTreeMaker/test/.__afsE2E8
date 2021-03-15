@@ -1,0 +1,20 @@
+CRAB project directory:		/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/16/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_WW_TuneCUETP8M1
+Task name:			200416_122951:chench_crab_WW_TuneCUETP8M1
+Grid scheduler - Task Worker:	crab3@vocms0198.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/200416_122951%3Achench_crab_WW_TuneCUETP8M1
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=chench&var-task=200416_122951%3Achench_crab_WW_TuneCUETP8M1
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	COMPLETED
+
+Jobs status:                    finished     		100.0% (4/4)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Summary of run jobs:
+ * Memory: 1429MB min, 1429MB max, 1412MB ave
+ * Runtime: 5:38:30 min, 10:57:53 max, 9:13:30 ave
+ * CPU eff: 98% min, 99% max, 99% ave
+ * Waste: 0:01:57 (0% of total)
+
+Log file is /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/16/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_WW_TuneCUETP8M1/crab.log

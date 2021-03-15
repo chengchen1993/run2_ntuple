@@ -11,9 +11,9 @@
 <use name="DataFormats/HepMCCandidate"/>
 <use name="CondFormats/JetMETObjects"/>
 <use name="JetMETCorrections/Objects"/>
+<use name="JetMETCorrections/Algorithms"/>
+<use name="JetMETCorrections/Modules"/>
 <use name="HLTrigger/HLTcore"/>
-<use name="NNKit/FatJetNN"/>
-<use name="boost"/>
 <use name="PhysicsTools/PatUtils"/>
 <use name="PhysicsTools/PatExamples"/>
 <use name="PhysicsTools/PatAlgos"/>

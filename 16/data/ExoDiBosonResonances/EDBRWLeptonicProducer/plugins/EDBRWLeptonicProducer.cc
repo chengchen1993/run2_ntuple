@@ -4,9 +4,7 @@
 // Class:      EDBRWLeptonicProducer
 // 
 /**\class EDBRWLeptonicProducer EDBRWLeptonicProducer.cc ExoDiBosonResonances/EDBRWLeptonicProducer/plugins/EDBRWLeptonicProducer.cc
-
  Description: [one line class summary]
-
  Implementation:
      [Notes on implementation]
 */
@@ -119,7 +117,7 @@ EDBRWLeptonicProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
    const reco::Candidate& METcand = MET_h->at(0);
    reco::CandidateBaseRef METBaseRef = MET_h->refAt(0);
 
-   std::auto_ptr<reco::CompositeCandidateCollection> outCollection(new reco::CompositeCandidateCollection);
+   std::unique_ptr<reco::CompositeCandidateCollection> outCollection(new reco::CompositeCandidateCollection);
 
    /// Loop on the leptons and combine them with the MET
    for(size_t i = 0; i != lepton_h->size(); ++i) {
@@ -135,7 +133,7 @@ EDBRWLeptonicProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
      if(pass) outCollection->push_back(WLeptonic);
    }
 
-   iEvent.put(outCollection);
+   iEvent.put(std::move(outCollection));
 }
 
 // ------------ method called once each job just before starting event loop  ------------
@@ -267,17 +265,13 @@ EDBRWLeptonicProducer::getNeutrinoP4(const reco::Candidate& met, const reco::Can
       TVector3 p3w, p3mu;
       p3w.SetXYZ(pxl+px, pyl+py, pzl+ tmpsol1);
       p3mu.SetXYZ(pxl, pyl, pzl );
-
       double sinthcm1 = 2.*(p3mu.Perp(p3w))/MW_;
       p3w.SetXYZ(pxl+px, pyl+py, pzl+ tmpsol2);
       double sinthcm2 = 2.*(p3mu.Perp(p3w))/MW_;
-
       double costhcm1 = sqrt(1. - sinthcm1*sinthcm1);
       double costhcm2 = sqrt(1. - sinthcm2*sinthcm2);
-
       if ( costhcm1 > costhcm2 ) { pz = tmpsol1; otherSol_ = tmpsol2; }
       else { pz = tmpsol2;otherSol_ = tmpsol1; }
-
       }*///end of type3
 
   }//endl of if real root

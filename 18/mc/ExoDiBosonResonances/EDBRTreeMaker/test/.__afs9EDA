@@ -1,0 +1,20 @@
+CRAB project directory:		/afs/cern.ch/work/h/huangh/VVV_had18/MC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_ST_tW_top_5f_inclusiveDecays
+Task name:			200314_015044:huangh_crab_ST_tW_top_5f_inclusiveDecays
+Grid scheduler - Task Worker:	crab3@vocms0144.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/200314_015044%3Ahuangh_crab_ST_tW_top_5f_inclusiveDecays
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=huangh&var-task=200314_015044%3Ahuangh_crab_ST_tW_top_5f_inclusiveDecays
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	COMPLETED
+
+Jobs status:                    finished     		100.0% (35/35)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Summary of run jobs:
+ * Memory: 1328MB min, 1696MB max, 1415MB ave
+ * Runtime: 10:39:31 min, 20:41:09 max, 17:27:06 ave
+ * CPU eff: 93% min, 99% max, 98% ave
+ * Waste: 1405:12:11 (70% of total)
+
+Log file is /afs/cern.ch/work/h/huangh/VVV_had18/MC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_ST_tW_top_5f_inclusiveDecays/crab.log

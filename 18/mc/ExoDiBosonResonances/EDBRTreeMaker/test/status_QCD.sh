@@ -1,0 +1,3 @@
+crab status crab_QCD1000to1500
+crab status crab_QCD1500to2000
+crab status crab_QCD2000toInf

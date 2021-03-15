@@ -9,10 +9,10 @@ crab resubmit crab_QCDHT2000toInfext
 #crab resubmit crab_QCDHT200to300ext
 #crab resubmit crab_QCDHT300to500
 #crab resubmit crab_QCDHT300to500ext
-crab resubmit crab_QCDHT500to700
-crab resubmit crab_QCDHT500to700ext2
-crab resubmit crab_QCDHT700to1000
-crab resubmit crab_QCDHT700to1000ext
+#crab resubmit crab_QCDHT500to700
+#crab resubmit crab_QCDHT500to700ext2
+#crab resubmit crab_QCDHT700to1000
+#crab resubmit crab_QCDHT700to1000ext
 crab resubmit crab_ST_s-channel_4f_InclusiveDecays
 crab resubmit crab_ST_t-channel_antitop_4f_inclusiveDecays
 crab resubmit crab_ST_t-channel_top_4f_inclusiveDecays

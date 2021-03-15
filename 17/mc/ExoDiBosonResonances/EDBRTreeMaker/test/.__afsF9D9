@@ -1,0 +1,22 @@
+CRAB project directory:		/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_9_4_11/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_M5000_R0-9_off
+Task name:			191111_190709:chench_crab_M5000_R0-9_off
+Grid scheduler - Task Worker:	crab3@vocms0194.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/191111_190709%3Achench_crab_M5000_R0-9_off
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=chench&var-task=191111_190709%3Achench_crab_M5000_R0-9_off
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	COMPLETED
+
+Jobs status:                    finished     		100.0% (1/1)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Warning: the max jobs runtime is less than 30% of the task requested value (1250 min), please consider to request a lower value for failed jobs (allowed through crab resubmit) and/or improve the jobs splitting (e.g. config.Data.splitting = 'Automatic') in a new task.
+
+Summary of run jobs:
+ * Memory: 1281MB min, 1281MB max, 1281MB ave
+ * Runtime: 1:40:39 min, 1:40:39 max, 1:40:39 ave
+ * CPU eff: 94% min, 94% max, 94% ave
+ * Waste: 0:00:08 (0% of total)
+
+Log file is /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_9_4_11/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_M5000_R0-9_off/crab.log

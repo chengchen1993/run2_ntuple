@@ -1,0 +1,2623 @@
+-------------------------------------------------------------------
+ Info: To run c tagging on MiniAOD, c-tag-specific IVF secondary
+       vertices will be remade.
+-------------------------------------------------------------------
+|---- jetToolbox: Initializing collection... (with postfix )
+|---- jetToolBox: Adding these btag discriminators: ['pfCombinedInclusiveSecondaryVertexV2BJetTags', 'pfCombinedCvsLJetTags', 'pfCombinedCvsBJetTags'] in the subjet collection.
+|---- jetToolBox: Adding these btag discriminators: ['pfBoostedDoubleSecondaryVertexAK8BJetTags', 'pfMassIndependentDeepDoubleBvLJetTags:probQCD', 'pfMassIndependentDeepDoubleBvLJetTags:probHbb', 'pfMassIndependentDeepDoubleCvLJetTags:probQCD', 'pfMassIndependentDeepDoubleCvLJetTags:probHcc', 'pfMassIndependentDeepDoubleCvBJetTags:probHbb', 'pfMassIndependentDeepDoubleCvBJetTags:probHcc'] in the jet collection.
+|---- jetToolBox: DeepCSV and DeepFlavour btag discriminators were trained for AK4 CHS jets. You are trying to use it in other configuration. Use it at your own risk.
+|---- jetToolBox: JETTOOLBOX RUNNING ON MiniAOD FOR AK8 JETS USING Puppi
+|---- jetToolBox: Applying these corrections: ('AK8PFPuppi', ['L2Relative', 'L3Absolute'], 'None')
+|---- jetToolBox: Creating packedPatJetsAK8PFPuppiSoftDrop collection with SoftDrop subjets.
+|---- jetToolBox: Running ak8PFJetsPuppiSoftDropMass, selectedPatJetsAK8PFPuppiSoftDropPacked:SubJets, NjettinessAK8Puppi.
+|---- jetToolBox: Creating selectedPatJetsAK8PFPuppi collection.
+hh
+25-Feb-2021 09:40:02 CET  Initiating request to open file root://eoscms.cern.ch//eos/cms/store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root
+%MSG-w XrdAdaptorInternal:  file_open 25-Feb-2021 09:40:03 CET pre-events
+Failed to open file at URL root://eoscms.cern.ch:1094//eos/cms/store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root.
+%MSG
+%MSG-w XrdAdaptorInternal:  file_open 25-Feb-2021 09:40:03 CET pre-events
+Failed to open file at URL root://eoscms.cern.ch:1094//eos/cms/store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root?tried=.
+%MSG
+25-Feb-2021 09:40:03 CET  Fallback request to file root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root
+%MSG-w XrdAdaptor:  file_open 25-Feb-2021 09:40:07 CET pre-events
+Data is served from [2620 instead of original site T2_IT_Pisa
+%MSG
+25-Feb-2021 09:40:08 CET  Successfully opened file root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root
+-----begin-----
+
+************** HLT-1 Information **************
+
+ HLT paths-1:   0  HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v8	
+
+*********************************************
+
+
+************** HLT-2 Information **************
+
+ Muon paths-2:   0  HLT_PFHT800_v7	
+
+*********************************************
+
+
+************** HLT-3 Information **************
+
+ Muon paths-3:   0  HLT_PFHT900_v6	
+
+*********************************************
+
+
+************** HLT-4 Information **************
+
+ Muon paths-4:   0  HLT_PFJet450_v9	
+
+*********************************************
+
+
+************** HLT-5 Information **************
+
+ Muon paths-5:   0  HLT_PFJet500_v9	
+
+*********************************************
+
+
+************** HLT-6 Information **************
+
+ Muon paths-6:   0  HLT_AK8PFJet450_v5	
+
+*********************************************
+
+
+************** HLT-7 Information **************
+
+ Muon paths-7:   0  HLT_AK8PFJet500_v5	
+
+*********************************************
+
+
+************** HLT-8 Information **************
+
+ Muon paths-8:   0  HLT_AK8PFJet360_TrimMass30_v7	
+
+*********************************************
+
+
+************** HLT-9 Information **************
+
+ Muon paths-9:   0  HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v8	
+
+*********************************************
+
+
+************** HLT-10 Information **************
+
+ HLT paths-10:   0  HLT_Ele45_WPLoose_Gsf_v7	
+
+*********************************************
+
+
+************** HLT-11 Information **************
+
+ HLT paths-11:   0  HLT_Ele115_CaloIdVT_GsfTrkIdT_v7	
+
+*********************************************
+
+
+************** HLT-12 Information **************
+
+ HLT paths-12:   0  HLT_Ele27_WPTight_Gsf_v7	
+
+*********************************************
+
+
+************** HLT-13 Information **************
+
+ HLT paths-13:   0  HLT_Mu50_v5	
+
+*********************************************
+
+
+************** HLT-14 Information **************
+
+ HLT paths-14:   0  HLT_TkMu50_v3	
+
+*********************************************
+
+
+************** HLT-15 Information **************
+
+ HLT paths-15:   0  HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v7	
+
+*********************************************
+
+
+************** HLT-16 Information **************
+
+ HLT paths-16:   0  HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v7	
+
+*********************************************
+
+
+************** HLT-17 Information **************
+
+ Muon paths-10:   0  HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v8	
+
+*********************************************
+
+Begin processing the 1st record. Run 1, Event 502990, LumiSection 172 on stream 0 at 25-Feb-2021 09:40:33.950 CET
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 0
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 0
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 0
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 09:41:01 CET Run: 1 Event: 503342
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -1.24977e+12-5.92783e+12 1.77561e+12 0.000294489 -0.00140535
+  -5.92783e+12-7.04347e+12 4.03223e+12 0.000359312 -0.00171467
+   1.77561e+12 4.03223e+12 2.22515e+13 0.000128373-0.000611614
+   0.000294489 0.000359312 0.000128373-0.000508671   0.0024337
+   -0.00140535 -0.00171467-0.000611614   0.0024337   -0.011615 ]
+%MSG
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 0
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 0
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 09:41:08 CET Run: 1 Event: 503747
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -1.54098e+15-7.13306e+13-8.48164e+13 -0.00987981  -0.0171306
+  -7.13306e+13  1.9292e+13 2.00286e+13 0.000153618  0.00026628
+  -8.48164e+13 2.00286e+13 2.48187e+14-0.000487106-0.000844786
+   -0.00987981 0.000153618-0.000487106 0.000462042 0.000796642
+    -0.0171306  0.00026628-0.000844786 0.000796642  0.00138546 ]
+%MSG
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 0
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 09:41:08 CET Run: 1 Event: 503799
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -8.30289e+15 6.23266e+15 6.84987e+14 -0.00149216   0.0159148
+   6.23266e+15-4.45687e+15-4.53811e+14  0.00107389  -0.0114575
+   6.84987e+14-4.53811e+14 2.56017e+13 0.000109461 -0.00116795
+   -0.00149216  0.00107389 0.000109461 0.000112963 -0.00125205
+     0.0159148  -0.0114575 -0.00116795 -0.00125205   0.0140105 ]
+%MSG
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 0
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 09:41:11 CET Run: 1 Event: 504058
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -3.97669e+16 1.08068e+16-1.30984e+16   -0.178769   0.0418611
+   1.08068e+16-2.93529e+15  3.5378e+15   0.0489011  -0.0114489
+  -1.30984e+16  3.5378e+15-4.33085e+15  -0.0568156   0.0133133
+     -0.178769   0.0489011  -0.0568156   0.0516596  -0.0118717
+     0.0418611  -0.0114489   0.0133133  -0.0118717  0.00273241 ]
+%MSG
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 09:41:17 CET Run: 1 Event: 504286
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -1.61129e+21 4.06044e+18-3.11486e+18     5.20134     1.85279
+   4.06044e+18-1.02323e+16 7.84937e+15  -0.0131074 -0.00466904
+  -3.11486e+18 7.84937e+15-5.98911e+15   0.0102079  0.00363292
+       5.20134  -0.0131074   0.0102079-0.000354515-0.000119635
+       1.85279 -0.00466904  0.00363292-0.000119635 -3.8688e-05 ]
+%MSG
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+EDBRTreeMaker endJob()... endRun
+25-Feb-2021 09:41:19 CET  Closed file root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root
+++++++++++++++++++++++++++++++++++++++++++++++++++
+goodMuons(MuonIdSelector) SUMMARY:
+nTot=556 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+looseMuons(MuonIdSelector) SUMMARY:
+nTot=556 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+vetoMuons(MuonIdSelector) SUMMARY:
+nTot=556 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+goodElectrons(ElectronIdSelector) SUMMARY:
+nTot=127 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+looseElectrons(ElectronIdSelector) SUMMARY:
+nTot=127 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+vetoElectrons(ElectronIdSelector) SUMMARY:
+nTot=127 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+EDBRTreeMaker endJob()...
+
+TrigReport ---------- Event  Summary ------------
+TrigReport Events total = 100 passed = 100 failed = 0
+
+TrigReport ---------- Path   Summary ------------
+TrigReport  Trig Bit#   Executed     Passed     Failed      Error Name
+TrigReport     1    0        100        100          0          0 analysis
+
+TrigReport -------End-Path   Summary ------------
+TrigReport  Trig Bit#   Executed     Passed     Failed      Error Name
+
+TrigReport ---------- Modules in Path: analysis ------------
+TrigReport  Trig Bit#    Visited     Passed     Failed      Error Name
+TrigReport     1    0        100        100          0          0 JetUserDataak4
+TrigReport     1    1        100        100          0          0 JetUserData
+TrigReport     1    2        100        100          0          0 goodOfflinePrimaryVertex
+TrigReport     1    3        100        100          0          0 goodMuons
+TrigReport     1    4        100        100          0          0 looseMuons
+TrigReport     1    5        100        100          0          0 vetoMuons
+TrigReport     1    6        100        100          0          0 goodElectrons
+TrigReport     1    7        100        100          0          0 looseElectrons
+TrigReport     1    8        100        100          0          0 vetoElectrons
+TrigReport     1    9        100        100          0          0 Wtomunu
+TrigReport     1   10        100        100          0          0 Wtoenu
+TrigReport     1   11        100        100          0          0 leptonicV
+TrigReport     1   12        100        100          0          0 leptonicVSelector
+TrigReport     1   13        100        100          0          0 leptonicVFilter
+TrigReport     1   14        100        100          0          0 HBHENoiseFilterResultProducer
+TrigReport     1   15        100        100          0          0 ApplyBaselineHBHENoiseFilter
+TrigReport     1   16        100        100          0          0 ApplyBaselineHBHEIsoNoiseFilter
+TrigReport     1   17        100        100          0          0 goodJets
+TrigReport     1   18        100        100          0          0 cleanJets
+TrigReport     1   19        100        100          0          0 goodAK4Jets
+TrigReport     1   20        100        100          0          0 cleanAK4Jets
+TrigReport     1   21        100        100          0          0 goodPuppi
+TrigReport     1   22        100        100          0          0 cleanPuppi
+TrigReport     1   23        100        100          0          0 goodPuppiAK4
+TrigReport     1   24        100        100          0          0 cleanPuppiAK4
+TrigReport     1   25        100        100          0          0 hadronicV
+TrigReport     1   26        100        100          0          0 hadronicVFilter
+TrigReport     1   27        100        100          0          0 BadPFMuonFilter
+TrigReport     1   28        100        100          0          0 BadChargedCandidateFilter
+TrigReport     1   29        100        100          0          0 graviton
+TrigReport     1   30        100        100          0          0 gravitonFilter
+TrigReport     1   31        100        100          0          0 ecalBadCalibReducedMINIAODFilter
+TrigReport     1   32        100        100          0          0 prefiringweight
+TrigReport     1   33        100        100          0          0 treeDumper
+
+TrigReport ---------- Module Summary ------------
+TrigReport    Visited   Executed     Passed     Failed      Error Name
+TrigReport        100        100        100          0          0 ApplyBaselineHBHEIsoNoiseFilter
+TrigReport        100        100        100          0          0 ApplyBaselineHBHENoiseFilter
+TrigReport        100        100        100          0          0 BadChargedCandidateFilter
+TrigReport        100        100        100          0          0 BadPFMuonFilter
+TrigReport        100        100        100          0          0 HBHENoiseFilterResultProducer
+TrigReport        100        100        100          0          0 JetUserData
+TrigReport        100        100        100          0          0 JetUserDataak4
+TrigReport        400        100        100          0          0 NjettinessAK8Puppi
+TrigReport        100        100        100          0          0 TriggerResults
+TrigReport        100        100        100          0          0 Wtoenu
+TrigReport        100        100        100          0          0 Wtomunu
+TrigReport        100        100        100          0          0 ak8GenJetsNoNu
+TrigReport        100        100        100          0          0 ak8GenJetsNoNuSoftDrop
+TrigReport        100        100        100          0          0 ak8PFJetsPuppi
+TrigReport        100        100        100          0          0 ak8PFJetsPuppiConstituents
+TrigReport        200        100        100          0          0 ak8PFJetsPuppiSoftDrop
+TrigReport        100        100        100          0          0 ak8PFJetsPuppiSoftDropMass
+TrigReport        100        100        100          0          0 analysis
+TrigReport          0          0          0          0          0 candidateVertexArbitrator
+TrigReport        100        100        100          0          0 candidateVertexArbitratorCvsL
+TrigReport          0          0          0          0          0 candidateVertexArbitratorDefault
+TrigReport          0          0          0          0          0 candidateVertexMerger
+TrigReport        100        100        100          0          0 candidateVertexMergerCvsL
+TrigReport        100        100        100          0          0 cleanAK4Jets
+TrigReport        100        100        100          0          0 cleanJets
+TrigReport        100        100        100          0          0 cleanPuppi
+TrigReport        100        100        100          0          0 cleanPuppiAK4
+TrigReport        100        100        100          0          0 ecalBadCalibReducedMINIAODFilter
+TrigReport        100        100        100          0          0 egmGsfElectronIDs
+TrigReport          0          0          0          0          0 electronMVAValueMapProducer
+TrigReport          0          0          0          0          0 electronMVAVariableHelper
+TrigReport          0          0          0          0          0 electronRegressionValueMapProducer
+TrigReport        100        100        100          0          0 endpath
+TrigReport        100        100        100          0          0 goodAK4Jets
+TrigReport        100        100        100          0          0 goodElectrons
+TrigReport        100        100        100          0          0 goodJets
+TrigReport        100        100        100          0          0 goodMuons
+TrigReport        100        100        100          0          0 goodOfflinePrimaryVertex
+TrigReport        100        100        100          0          0 goodPuppi
+TrigReport        100        100        100          0          0 goodPuppiAK4
+TrigReport        100        100        100          0          0 graviton
+TrigReport        100        100        100          0          0 gravitonFilter
+TrigReport        100        100        100          0          0 hadronicV
+TrigReport        100        100        100          0          0 hadronicVFilter
+TrigReport        100        100        100          0          0 heepIDVarValueMaps
+TrigReport          0          0          0          0          0 inclusiveCandidateSecondaryVertices
+TrigReport          0          0          0          0          0 inclusiveCandidateSecondaryVerticesCvsL
+TrigReport          0          0          0          0          0 inclusiveCandidateVertexFinder
+TrigReport        100        100        100          0          0 inclusiveCandidateVertexFinderCvsL
+TrigReport          0          0          0          0          0 inclusiveCandidateVertexFinderDefault
+TrigReport          0          0          0          0          0 inclusiveSecondaryVertices
+TrigReport          0          0          0          0          0 inclusiveVertexFinder
+TrigReport          0          0          0          0          0 inclusiveVertexFinderDefault
+TrigReport        100        100        100          0          0 leptonicV
+TrigReport        100        100        100          0          0 leptonicVFilter
+TrigReport        100        100        100          0          0 leptonicVSelector
+TrigReport        100        100        100          0          0 looseElectrons
+TrigReport        100        100        100          0          0 looseMuons
+TrigReport        100        100        100          0          0 packedGenParticlesForJetsNoNu
+TrigReport        100        100        100          0          0 packedPatJetsAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetCorrFactorsAK8PFPuppi
+TrigReport        100        100        100          0          0 patJetCorrFactorsAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetCorrFactorsAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 patJetCorrFactorsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 patJetCorrFactorsTransientCorrectedAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 patJetFlavourAssociationAK8PFPuppi
+TrigReport        100        100        100          0          0 patJetFlavourAssociationAK8PFPuppiSoftDropSubjets
+TrigReport          0          0          0          0          0 patJetFlavourAssociationLegacyAK8PFPuppi
+TrigReport          0          0          0          0          0 patJetFlavourAssociationLegacyAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 patJetGenJetMatchAK8PFPuppi
+TrigReport        100        100        100          0          0 patJetGenJetMatchAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetGenJetMatchAK8PFPuppiSoftDropSubjets
+TrigReport          0          0          0          0          0 patJetPartonAssociationLegacyAK8PFPuppi
+TrigReport          0          0          0          0          0 patJetPartonAssociationLegacyAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 patJetPartonMatchAK8PFPuppi
+TrigReport        100        100        100          0          0 patJetPartonMatchAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetPartonMatchAK8PFPuppiSoftDropSubjets
+TrigReport        400        100        100          0          0 patJetPartons
+TrigReport          0          0          0          0          0 patJetPartonsLegacy
+TrigReport        100        100        100          0          0 patJetsAK8PFPuppi
+TrigReport          0          0          0          0          0 patJetsAK8PFPuppiPATJetswithUserData
+TrigReport        100        100        100          0          0 patJetsAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetsAK8PFPuppiSoftDropSubjets
+TrigReport          0          0          0          0          0 patJetsAK8PFPuppilooseJetId
+TrigReport          0          0          0          0          0 patJetsAK8PFPuppitightJetId
+TrigReport          0          0          0          0          0 patJetsAK8PFPuppitightJetIdLepVeto
+TrigReport        100        100        100          0          0 pfBoostedDoubleSVAK8TagInfosAK8PFPuppi
+TrigReport        100        100        100          0          0 pfBoostedDoubleSecondaryVertexAK8BJetTagsAK8PFPuppi
+TrigReport        100        100        100          0          0 pfCombinedCvsBJetTagsAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 pfCombinedCvsLJetTagsAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 pfCombinedInclusiveSecondaryVertexV2BJetTagsAK8PFPuppiSoftDropSubjets
+TrigReport        600        100        100          0          0 pfDeepBoostedDiscriminatorsJetTagsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 pfDeepBoostedJetTagInfosAK8WithPuppiDaughters
+TrigReport       1700        100        100          0          0 pfDeepBoostedJetTagsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 pfDeepDoubleXTagInfosAK8PFPuppi
+TrigReport        100        100        100          0          0 pfImpactParameterAK8TagInfosAK8PFPuppi
+TrigReport        100        100        100          0          0 pfImpactParameterTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 pfInclusiveSecondaryVertexFinderAK8TagInfosAK8PFPuppi
+TrigReport        100        100        100          0          0 pfInclusiveSecondaryVertexFinderCvsLTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 pfInclusiveSecondaryVertexFinderTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport       1000        100        100          0          0 pfMassDecorrelatedDeepBoostedDiscriminatorsJetTagsAK8WithPuppiDaughters
+TrigReport       1700        100        100          0          0 pfMassDecorrelatedDeepBoostedJetTagsAK8WithPuppiDaughters
+TrigReport        200        100        100          0          0 pfMassIndependentDeepDoubleBvLJetTagsAK8PFPuppi
+TrigReport        200        100        100          0          0 pfMassIndependentDeepDoubleCvBJetTagsAK8PFPuppi
+TrigReport        200        100        100          0          0 pfMassIndependentDeepDoubleCvLJetTagsAK8PFPuppi
+TrigReport        100        100        100          0          0 prefiringweight
+TrigReport        100        100        100          0          0 puppi
+TrigReport        100        100        100          0          0 selectedPatJetsAK8PFPuppi
+TrigReport        100        100        100          0          0 selectedPatJetsAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 selectedPatJetsAK8PFPuppiSoftDropPacked
+TrigReport        100        100        100          0          0 selectedPatJetsAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 selectedUpdatedPatJetsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 slimmedSecondaryVerticesCvsL
+TrigReport        100        100        100          0          0 softPFElectronsTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 softPFMuonsTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport          0          0          0          0          0 trackVertexArbitrator
+TrigReport          0          0          0          0          0 trackVertexArbitratorDefault
+TrigReport        100        100        100          0          0 treeDumper
+TrigReport        100        100        100          0          0 updatedPatJetsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 updatedPatJetsTransientCorrectedAK8WithPuppiDaughters
+TrigReport          0          0          0          0          0 vertexMerger
+TrigReport        100        100        100          0          0 vetoElectrons
+TrigReport        100        100        100          0          0 vetoMuons
+
+TimeReport ---------- Event  Summary ---[sec]----
+TimeReport       event loop CPU/event = 0.375063
+TimeReport      event loop Real/event = 0.481877
+TimeReport     sum Streams Real/event = 0.458402
+TimeReport efficiency CPU/Real/thread = 0.778337
+
+TimeReport ---------- Path   Summary ---[Real sec]----
+TimeReport  per event     per exec  Name
+TimeReport   0.452311     0.452311  analysis
+TimeReport  per event     per exec  Name
+
+TimeReport -------End-Path   Summary ---[Real sec]----
+TimeReport  per event     per exec  Name
+TimeReport   0.000000     0.000000  endpath
+TimeReport  per event     per exec  Name
+
+TimeReport ---------- Modules in Path: analysis ---[Real sec]----
+TimeReport  per event    per visit  Name
+TimeReport   0.018300     0.018300  JetUserDataak4
+TimeReport   0.013697     0.013697  JetUserData
+TimeReport   0.000038     0.000038  goodOfflinePrimaryVertex
+TimeReport   0.000020     0.000020  goodMuons
+TimeReport   0.000005     0.000005  looseMuons
+TimeReport   0.000005     0.000005  vetoMuons
+TimeReport   0.000012     0.000012  goodElectrons
+TimeReport   0.000003     0.000003  looseElectrons
+TimeReport   0.000003     0.000003  vetoElectrons
+TimeReport   0.000013     0.000013  Wtomunu
+TimeReport   0.000003     0.000003  Wtoenu
+TimeReport   0.000010     0.000010  leptonicV
+TimeReport   0.000004     0.000004  leptonicVSelector
+TimeReport   0.000003     0.000003  leptonicVFilter
+TimeReport   0.000016     0.000016  HBHENoiseFilterResultProducer
+TimeReport   0.000004     0.000004  ApplyBaselineHBHENoiseFilter
+TimeReport   0.000000     0.000000  ApplyBaselineHBHEIsoNoiseFilter
+TimeReport   0.000429     0.000429  goodJets
+TimeReport   0.000048     0.000048  cleanJets
+TimeReport   0.000236     0.000236  goodAK4Jets
+TimeReport   0.000118     0.000118  cleanAK4Jets
+TimeReport   0.000078     0.000078  goodPuppi
+TimeReport   0.000048     0.000048  cleanPuppi
+TimeReport   0.000168     0.000168  goodPuppiAK4
+TimeReport   0.000110     0.000110  cleanPuppiAK4
+TimeReport   0.000207     0.000207  hadronicV
+TimeReport   0.000002     0.000002  hadronicVFilter
+TimeReport   0.000069     0.000069  BadPFMuonFilter
+TimeReport   0.000043     0.000043  BadChargedCandidateFilter
+TimeReport   0.000011     0.000011  graviton
+TimeReport   0.000001     0.000001  gravitonFilter
+TimeReport   0.000012     0.000012  ecalBadCalibReducedMINIAODFilter
+TimeReport   0.000019     0.000019  prefiringweight
+TimeReport   0.003035     0.003035  treeDumper
+TimeReport  per event    per visit  Name
+
+TimeReport ------ Modules in End-Path: endpath ---[Real sec]----
+TimeReport  per event    per visit  Name
+TimeReport  per event    per visit  Name
+
+TimeReport ---------- Module Summary ---[Real sec]----
+TimeReport  per event     per exec    per visit  Name
+TimeReport   0.000000     0.000000     0.000000  ApplyBaselineHBHEIsoNoiseFilter
+TimeReport   0.000004     0.000004     0.000004  ApplyBaselineHBHENoiseFilter
+TimeReport   0.000043     0.000043     0.000043  BadChargedCandidateFilter
+TimeReport   0.000069     0.000069     0.000069  BadPFMuonFilter
+TimeReport   0.000016     0.000016     0.000016  HBHENoiseFilterResultProducer
+TimeReport   0.013697     0.013697     0.013697  JetUserData
+TimeReport   0.018300     0.018300     0.018300  JetUserDataak4
+TimeReport   0.004984     0.004984     0.004984  NjettinessAK8Puppi
+TimeReport   0.000005     0.000005     0.000005  TriggerResults
+TimeReport   0.000003     0.000003     0.000003  Wtoenu
+TimeReport   0.000013     0.000013     0.000013  Wtomunu
+TimeReport   0.001122     0.001122     0.001122  ak8GenJetsNoNu
+TimeReport   0.001240     0.001240     0.001240  ak8GenJetsNoNuSoftDrop
+TimeReport   0.013842     0.013842     0.013842  ak8PFJetsPuppi
+TimeReport   0.000050     0.000050     0.000050  ak8PFJetsPuppiConstituents
+TimeReport   0.014152     0.014152     0.014152  ak8PFJetsPuppiSoftDrop
+TimeReport   0.000037     0.000037     0.000037  ak8PFJetsPuppiSoftDropMass
+TimeReport   0.000006     0.000006     0.000006  analysis
+TimeReport   0.000000     0.000000     0.000000  candidateVertexArbitrator
+TimeReport   0.023362     0.023362     0.023362  candidateVertexArbitratorCvsL
+TimeReport   0.000000     0.000000     0.000000  candidateVertexArbitratorDefault
+TimeReport   0.000000     0.000000     0.000000  candidateVertexMerger
+TimeReport   0.000366     0.000366     0.000366  candidateVertexMergerCvsL
+TimeReport   0.000118     0.000118     0.000118  cleanAK4Jets
+TimeReport   0.000048     0.000048     0.000048  cleanJets
+TimeReport   0.000048     0.000048     0.000048  cleanPuppi
+TimeReport   0.000110     0.000110     0.000110  cleanPuppiAK4
+TimeReport   0.000012     0.000012     0.000012  ecalBadCalibReducedMINIAODFilter
+TimeReport   0.000172     0.000172     0.000172  egmGsfElectronIDs
+TimeReport   0.000000     0.000000     0.000000  electronMVAValueMapProducer
+TimeReport   0.000000     0.000000     0.000000  electronMVAVariableHelper
+TimeReport   0.000000     0.000000     0.000000  electronRegressionValueMapProducer
+TimeReport   0.000005     0.000005     0.000005  endpath
+TimeReport   0.000236     0.000236     0.000236  goodAK4Jets
+TimeReport   0.000012     0.000012     0.000012  goodElectrons
+TimeReport   0.000429     0.000429     0.000429  goodJets
+TimeReport   0.000020     0.000020     0.000020  goodMuons
+TimeReport   0.000038     0.000038     0.000038  goodOfflinePrimaryVertex
+TimeReport   0.000078     0.000078     0.000078  goodPuppi
+TimeReport   0.000168     0.000168     0.000168  goodPuppiAK4
+TimeReport   0.000011     0.000011     0.000011  graviton
+TimeReport   0.000001     0.000001     0.000001  gravitonFilter
+TimeReport   0.000207     0.000207     0.000207  hadronicV
+TimeReport   0.000002     0.000002     0.000002  hadronicVFilter
+TimeReport   0.012303     0.012303     0.012303  heepIDVarValueMaps
+TimeReport   0.000000     0.000000     0.000000  inclusiveCandidateSecondaryVertices
+TimeReport   0.000000     0.000000     0.000000  inclusiveCandidateSecondaryVerticesCvsL
+TimeReport   0.000000     0.000000     0.000000  inclusiveCandidateVertexFinder
+TimeReport   0.119555     0.119555     0.119555  inclusiveCandidateVertexFinderCvsL
+TimeReport   0.000000     0.000000     0.000000  inclusiveCandidateVertexFinderDefault
+TimeReport   0.000000     0.000000     0.000000  inclusiveSecondaryVertices
+TimeReport   0.000000     0.000000     0.000000  inclusiveVertexFinder
+TimeReport   0.000000     0.000000     0.000000  inclusiveVertexFinderDefault
+TimeReport   0.000010     0.000010     0.000010  leptonicV
+TimeReport   0.000003     0.000003     0.000003  leptonicVFilter
+TimeReport   0.000004     0.000004     0.000004  leptonicVSelector
+TimeReport   0.000003     0.000003     0.000003  looseElectrons
+TimeReport   0.000005     0.000005     0.000005  looseMuons
+TimeReport   0.000555     0.000555     0.000555  packedGenParticlesForJetsNoNu
+TimeReport   0.000036     0.000036     0.000036  packedPatJetsAK8PFPuppiSoftDrop
+TimeReport   0.000188     0.000188     0.000188  patJetCorrFactorsAK8PFPuppi
+TimeReport   0.000063     0.000063     0.000063  patJetCorrFactorsAK8PFPuppiSoftDrop
+TimeReport   0.000130     0.000130     0.000130  patJetCorrFactorsAK8PFPuppiSoftDropSubjets
+TimeReport   0.000019     0.000019     0.000019  patJetCorrFactorsAK8WithPuppiDaughters
+TimeReport   0.000099     0.000099     0.000099  patJetCorrFactorsTransientCorrectedAK8WithPuppiDaughters
+TimeReport   0.000621     0.000621     0.000621  patJetFlavourAssociationAK8PFPuppi
+TimeReport   0.000661     0.000661     0.000661  patJetFlavourAssociationAK8PFPuppiSoftDropSubjets
+TimeReport   0.000000     0.000000     0.000000  patJetFlavourAssociationLegacyAK8PFPuppi
+TimeReport   0.000000     0.000000     0.000000  patJetFlavourAssociationLegacyAK8PFPuppiSoftDropSubjets
+TimeReport   0.000017     0.000017     0.000017  patJetGenJetMatchAK8PFPuppi
+TimeReport   0.000011     0.000011     0.000011  patJetGenJetMatchAK8PFPuppiSoftDrop
+TimeReport   0.000013     0.000013     0.000013  patJetGenJetMatchAK8PFPuppiSoftDropSubjets
+TimeReport   0.000000     0.000000     0.000000  patJetPartonAssociationLegacyAK8PFPuppi
+TimeReport   0.000000     0.000000     0.000000  patJetPartonAssociationLegacyAK8PFPuppiSoftDropSubjets
+TimeReport   0.000071     0.000071     0.000071  patJetPartonMatchAK8PFPuppi
+TimeReport   0.000041     0.000041     0.000041  patJetPartonMatchAK8PFPuppiSoftDrop
+TimeReport   0.000029     0.000029     0.000029  patJetPartonMatchAK8PFPuppiSoftDropSubjets
+TimeReport   0.000095     0.000095     0.000095  patJetPartons
+TimeReport   0.000000     0.000000     0.000000  patJetPartonsLegacy
+TimeReport   0.000309     0.000309     0.000309  patJetsAK8PFPuppi
+TimeReport   0.000000     0.000000     0.000000  patJetsAK8PFPuppiPATJetswithUserData
+TimeReport   0.000117     0.000117     0.000117  patJetsAK8PFPuppiSoftDrop
+TimeReport   0.000136     0.000136     0.000136  patJetsAK8PFPuppiSoftDropSubjets
+TimeReport   0.000000     0.000000     0.000000  patJetsAK8PFPuppilooseJetId
+TimeReport   0.000000     0.000000     0.000000  patJetsAK8PFPuppitightJetId
+TimeReport   0.000000     0.000000     0.000000  patJetsAK8PFPuppitightJetIdLepVeto
+TimeReport   0.002740     0.002740     0.002740  pfBoostedDoubleSVAK8TagInfosAK8PFPuppi
+TimeReport   0.000630     0.000630     0.000630  pfBoostedDoubleSecondaryVertexAK8BJetTagsAK8PFPuppi
+TimeReport   0.005543     0.005543     0.005543  pfCombinedCvsBJetTagsAK8PFPuppiSoftDropSubjets
+TimeReport   0.012065     0.012065     0.012065  pfCombinedCvsLJetTagsAK8PFPuppiSoftDropSubjets
+TimeReport   0.001871     0.001871     0.001871  pfCombinedInclusiveSecondaryVertexV2BJetTagsAK8PFPuppiSoftDropSubjets
+TimeReport   0.000054     0.000054     0.000054  pfDeepBoostedDiscriminatorsJetTagsAK8WithPuppiDaughters
+TimeReport   0.001054     0.001054     0.001054  pfDeepBoostedJetTagInfosAK8WithPuppiDaughters
+TimeReport   0.034779     0.034779     0.034779  pfDeepBoostedJetTagsAK8WithPuppiDaughters
+TimeReport   0.000452     0.000452     0.000452  pfDeepDoubleXTagInfosAK8PFPuppi
+TimeReport   0.001145     0.001145     0.001145  pfImpactParameterAK8TagInfosAK8PFPuppi
+TimeReport   0.002241     0.002241     0.002241  pfImpactParameterTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000268     0.000268     0.000268  pfInclusiveSecondaryVertexFinderAK8TagInfosAK8PFPuppi
+TimeReport   0.000608     0.000608     0.000608  pfInclusiveSecondaryVertexFinderCvsLTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000439     0.000439     0.000439  pfInclusiveSecondaryVertexFinderTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000071     0.000071     0.000071  pfMassDecorrelatedDeepBoostedDiscriminatorsJetTagsAK8WithPuppiDaughters
+TimeReport   0.032810     0.032810     0.032810  pfMassDecorrelatedDeepBoostedJetTagsAK8WithPuppiDaughters
+TimeReport   0.009871     0.009871     0.009871  pfMassIndependentDeepDoubleBvLJetTagsAK8PFPuppi
+TimeReport   0.009760     0.009760     0.009760  pfMassIndependentDeepDoubleCvBJetTagsAK8PFPuppi
+TimeReport   0.010852     0.010852     0.010852  pfMassIndependentDeepDoubleCvLJetTagsAK8PFPuppi
+TimeReport   0.000019     0.000019     0.000019  prefiringweight
+TimeReport   0.042119     0.042119     0.042119  puppi
+TimeReport   0.000066     0.000066     0.000066  selectedPatJetsAK8PFPuppi
+TimeReport   0.000046     0.000046     0.000046  selectedPatJetsAK8PFPuppiSoftDrop
+TimeReport   0.000064     0.000064     0.000064  selectedPatJetsAK8PFPuppiSoftDropPacked
+TimeReport   0.000044     0.000044     0.000044  selectedPatJetsAK8PFPuppiSoftDropSubjets
+TimeReport   0.000091     0.000091     0.000091  selectedUpdatedPatJetsAK8WithPuppiDaughters
+TimeReport   0.000061     0.000061     0.000061  slimmedSecondaryVerticesCvsL
+TimeReport   0.000107     0.000107     0.000107  softPFElectronsTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000027     0.000027     0.000027  softPFMuonsTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000000     0.000000     0.000000  trackVertexArbitrator
+TimeReport   0.000000     0.000000     0.000000  trackVertexArbitratorDefault
+TimeReport   0.003035     0.003035     0.003035  treeDumper
+TimeReport   0.000060     0.000060     0.000060  updatedPatJetsAK8WithPuppiDaughters
+TimeReport   0.000236     0.000236     0.000236  updatedPatJetsTransientCorrectedAK8WithPuppiDaughters
+TimeReport   0.000000     0.000000     0.000000  vertexMerger
+TimeReport   0.000003     0.000003     0.000003  vetoElectrons
+TimeReport   0.000005     0.000005     0.000005  vetoMuons
+TimeReport  per event     per exec    per visit  Name
+
+T---Report end!
+
+
+=============================================
+
+MessageLogger Summary
+
+ type     category        sev    module        subroutine        count    total
+ ---- -------------------- -- ---------------- ----------------  -----    -----
+    1 FreeTrajectoryState  -w InclusiveCandida                       5        5
+    2 XrdAdaptor           -w file_open                              1        1
+    3 XrdAdaptorInternal   -w file_open                              2        2
+    4 fileAction           -s file_close                             1        1
+    5 fileAction           -s file_open                              3        3
+
+ type    category    Examples: run/evt        run/evt          run/evt
+ ---- -------------------- ---------------- ---------------- ----------------
+    1 FreeTrajectoryState  1/503342         1/503747         1/504286
+    2 XrdAdaptor           pre-events                        
+    3 XrdAdaptorInternal   pre-events       pre-events       
+    4 fileAction           PostGlobalEndRun                  
+    5 fileAction           pre-events       pre-events       pre-events
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 8                   8
+System                  4                   4
+
+dropped waiting message count 0
+-------------------------------------------------------------------
+ Info: To run c tagging on MiniAOD, c-tag-specific IVF secondary
+       vertices will be remade.
+-------------------------------------------------------------------
+|---- jetToolbox: Initializing collection... (with postfix )
+|---- jetToolBox: Adding these btag discriminators: ['pfCombinedInclusiveSecondaryVertexV2BJetTags', 'pfCombinedCvsLJetTags', 'pfCombinedCvsBJetTags'] in the subjet collection.
+|---- jetToolBox: Adding these btag discriminators: ['pfBoostedDoubleSecondaryVertexAK8BJetTags', 'pfMassIndependentDeepDoubleBvLJetTags:probQCD', 'pfMassIndependentDeepDoubleBvLJetTags:probHbb', 'pfMassIndependentDeepDoubleCvLJetTags:probQCD', 'pfMassIndependentDeepDoubleCvLJetTags:probHcc', 'pfMassIndependentDeepDoubleCvBJetTags:probHbb', 'pfMassIndependentDeepDoubleCvBJetTags:probHcc'] in the jet collection.
+|---- jetToolBox: DeepCSV and DeepFlavour btag discriminators were trained for AK4 CHS jets. You are trying to use it in other configuration. Use it at your own risk.
+|---- jetToolBox: JETTOOLBOX RUNNING ON MiniAOD FOR AK8 JETS USING Puppi
+|---- jetToolBox: Applying these corrections: ('AK8PFPuppi', ['L2Relative', 'L3Absolute'], 'None')
+|---- jetToolBox: Creating packedPatJetsAK8PFPuppiSoftDrop collection with SoftDrop subjets.
+|---- jetToolBox: Running ak8PFJetsPuppiSoftDropMass, selectedPatJetsAK8PFPuppiSoftDropPacked:SubJets, NjettinessAK8Puppi.
+|---- jetToolBox: Creating selectedPatJetsAK8PFPuppi collection.
+hh
+25-Feb-2021 10:09:06 CET  Initiating request to open file root://eoscms.cern.ch//eos/cms/store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root
+%MSG-w XrdAdaptorInternal:  file_open 25-Feb-2021 10:09:07 CET pre-events
+Failed to open file at URL root://eoscms.cern.ch:1094//eos/cms/store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root.
+%MSG
+%MSG-w XrdAdaptorInternal:  file_open 25-Feb-2021 10:09:07 CET pre-events
+Failed to open file at URL root://eoscms.cern.ch:1094//eos/cms/store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root?tried=.
+%MSG
+25-Feb-2021 10:09:07 CET  Fallback request to file root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root
+%MSG-w XrdAdaptor:  file_open 25-Feb-2021 10:09:18 CET pre-events
+Data is served from [2620 instead of original site T2_FR_GRIF_LLR
+%MSG
+25-Feb-2021 10:09:20 CET  Successfully opened file root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root
+-----begin-----
+
+************** HLT-1 Information **************
+
+ HLT paths-1:   0  HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v8	
+
+*********************************************
+
+
+************** HLT-2 Information **************
+
+ Muon paths-2:   0  HLT_PFHT800_v7	
+
+*********************************************
+
+
+************** HLT-3 Information **************
+
+ Muon paths-3:   0  HLT_PFHT900_v6	
+
+*********************************************
+
+
+************** HLT-4 Information **************
+
+ Muon paths-4:   0  HLT_PFJet450_v9	
+
+*********************************************
+
+
+************** HLT-5 Information **************
+
+ Muon paths-5:   0  HLT_PFJet500_v9	
+
+*********************************************
+
+
+************** HLT-6 Information **************
+
+ Muon paths-6:   0  HLT_AK8PFJet450_v5	
+
+*********************************************
+
+
+************** HLT-7 Information **************
+
+ Muon paths-7:   0  HLT_AK8PFJet500_v5	
+
+*********************************************
+
+
+************** HLT-8 Information **************
+
+ Muon paths-8:   0  HLT_AK8PFJet360_TrimMass30_v7	
+
+*********************************************
+
+
+************** HLT-9 Information **************
+
+ Muon paths-9:   0  HLT_AK8PFHT700_TrimR0p1PT0p03Mass50_v8	
+
+*********************************************
+
+
+************** HLT-10 Information **************
+
+ HLT paths-10:   0  HLT_Ele45_WPLoose_Gsf_v7	
+
+*********************************************
+
+
+************** HLT-11 Information **************
+
+ HLT paths-11:   0  HLT_Ele115_CaloIdVT_GsfTrkIdT_v7	
+
+*********************************************
+
+
+************** HLT-12 Information **************
+
+ HLT paths-12:   0  HLT_Ele27_WPTight_Gsf_v7	
+
+*********************************************
+
+
+************** HLT-13 Information **************
+
+ HLT paths-13:   0  HLT_Mu50_v5	
+
+*********************************************
+
+
+************** HLT-14 Information **************
+
+ HLT paths-14:   0  HLT_TkMu50_v3	
+
+*********************************************
+
+
+************** HLT-15 Information **************
+
+ HLT paths-15:   0  HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v7	
+
+*********************************************
+
+
+************** HLT-16 Information **************
+
+ HLT paths-16:   0  HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v7	
+
+*********************************************
+
+
+************** HLT-17 Information **************
+
+ Muon paths-10:   0  HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v8	
+
+*********************************************
+
+Begin processing the 1st record. Run 1, Event 502990, LumiSection 172 on stream 0 at 25-Feb-2021 10:11:17.663 CET
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q1: 1
+tag_q2: 2
+tag_q4: 2
+tag_q4: 2
+tag_q5: 2
+tag_q5: 2
+tag_g: 2
+tag_g: 1
+tag_q1: 2
+tag_q2: 2
+tag_g: 0
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_q2: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_q4: 2
+tag_q5: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q4: 2
+tag_q4: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_q1: 2
+tag_q2: 2
+tag_q3: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q3: 1
+tag_q4: 2
+tag_q5: 2
+tag_g: 2
+tag_q1: 2
+tag_q2: 2
+tag_q3: 2
+tag_q3: 2
+tag_q3: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 0
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_q3: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q3: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_q1: 2
+tag_q2: 1
+tag_q3: 1
+tag_q3: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_q2: 2
+tag_q3: 2
+tag_q3: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 0
+tag_q2: 2
+tag_q2: 2
+tag_q2: 2
+tag_q2: 2
+tag_q4: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q1: 0
+tag_q2: 2
+tag_q2: 1
+tag_q2: 1
+tag_q2: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_q1: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q1: 1
+tag_q1: 1
+tag_q5: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q1: 1
+tag_q1: 1
+tag_q2: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_q4: 2
+tag_q4: 2
+tag_q4: 2
+tag_q4: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_q2: 1
+tag_q2: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 1
+tag_q2: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_q2: 2
+tag_q5: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_q2: 1
+tag_q2: 1
+tag_q3: 1
+tag_q3: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_q1: 1
+tag_q1: 1
+tag_q2: 2
+tag_q2: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_q5: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_q1: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q5: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q4: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_q2: 2
+tag_q2: 1
+tag_q2: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_q1: 0
+tag_q2: 2
+tag_q2: 0
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q1: 1
+tag_q2: 2
+tag_q2: 1
+tag_q2: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q1: 1
+tag_q2: 1
+tag_q3: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_q1: 1
+tag_q1: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q1: 1
+tag_q3: 1
+tag_q3: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 1
+tag_q5: 2
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 10:12:01 CET Run: 1 Event: 503342
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -1.24977e+12-5.92783e+12 1.77561e+12 0.000294489 -0.00140535
+  -5.92783e+12-7.04347e+12 4.03223e+12 0.000359312 -0.00171467
+   1.77561e+12 4.03223e+12 2.22515e+13 0.000128373-0.000611614
+   0.000294489 0.000359312 0.000128373-0.000508671   0.0024337
+   -0.00140535 -0.00171467-0.000611614   0.0024337   -0.011615 ]
+%MSG
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_q1: 2
+tag_q2: 1
+tag_q2: 0
+tag_q3: 1
+tag_q4: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q1: 1
+tag_q3: 0
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q1: 1
+tag_q2: 2
+tag_q2: 0
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_q2: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_q2: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_q4: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_q2: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_q2: 2
+tag_g: 2
+tag_q1: 2
+tag_q1: 2
+tag_q1: 2
+tag_q2: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_q1: 2
+tag_q1: 1
+tag_q2: 1
+tag_q2: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_q3: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_q2: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 0
+tag_q5: 2
+tag_q5: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q2: 2
+tag_q3: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_q1: 1
+tag_q1: 1
+tag_q1: 1
+tag_q1: 1
+tag_q2: 2
+tag_q2: 1
+tag_q3: 1
+tag_q3: 2
+tag_q3: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_q2: 2
+tag_q3: 2
+tag_q4: 2
+tag_q5: 2
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_q2: 2
+tag_q3: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q5: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 0
+tag_g: 1
+tag_q1: 2
+tag_q2: 2
+tag_q2: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 10:12:09 CET Run: 1 Event: 503747
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -1.54098e+15-7.13306e+13-8.48164e+13 -0.00987981  -0.0171306
+  -7.13306e+13  1.9292e+13 2.00286e+13 0.000153618  0.00026628
+  -8.48164e+13 2.00286e+13 2.48187e+14-0.000487106-0.000844786
+   -0.00987981 0.000153618-0.000487106 0.000462042 0.000796642
+    -0.0171306  0.00026628-0.000844786 0.000796642  0.00138546 ]
+%MSG
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 0
+tag_g: 1
+tag_q1: 2
+tag_q2: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 10:12:10 CET Run: 1 Event: 503799
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -8.30289e+15 6.23266e+15 6.84987e+14 -0.00149216   0.0159148
+   6.23266e+15-4.45687e+15-4.53811e+14  0.00107389  -0.0114575
+   6.84987e+14-4.53811e+14 2.56017e+13 0.000109461 -0.00116795
+   -0.00149216  0.00107389 0.000109461 0.000112963 -0.00125205
+     0.0159148  -0.0114575 -0.00116795 -0.00125205   0.0140105 ]
+%MSG
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q1: 1
+tag_q2: 2
+tag_q2: 2
+tag_q3: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_q1: 2
+tag_q1: 1
+tag_q1: 1
+tag_q1: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 0
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q4: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_q1: 1
+tag_q1: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q4: 2
+tag_q5: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_q4: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_q1: 1
+tag_q1: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_q3: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q1: 1
+tag_q1: 1
+tag_q3: 1
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 10:12:14 CET Run: 1 Event: 504058
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -3.97669e+16 1.08068e+16-1.30984e+16   -0.178769   0.0418611
+   1.08068e+16-2.93529e+15  3.5378e+15   0.0489011  -0.0114489
+  -1.30984e+16  3.5378e+15-4.33085e+15  -0.0568156   0.0133133
+     -0.178769   0.0489011  -0.0568156   0.0516596  -0.0118717
+     0.0418611  -0.0114489   0.0133133  -0.0118717  0.00273241 ]
+%MSG
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 1
+tag_q3: 2
+tag_q3: 1
+tag_q3: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_q2: 2
+tag_q3: 2
+tag_q3: 2
+tag_q3: 2
+tag_q5: 2
+tag_q5: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_q1: 2
+tag_q2: 2
+tag_q3: 2
+tag_q3: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_q2: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_q2: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_q1: 2
+tag_g: 2
+tag_q1: 2
+tag_q1: 2
+tag_q2: 2
+tag_q2: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_q4: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_q1: 2
+tag_q1: 1
+tag_q2: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_q3: 2
+tag_q5: 2
+tag_q5: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_q3: 1
+tag_g: 1
+tag_g: 1
+tag_q2: 2
+tag_q4: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_q1: 1
+tag_q3: 2
+tag_q4: 2
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_q2: 1
+tag_q2: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q1: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_q1: 2
+tag_q1: 1
+tag_q2: 1
+tag_q3: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_q2: 0
+tag_q3: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q3: 0
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_q1: 2
+tag_q3: 1
+tag_q3: 1
+tag_q5: 2
+tag_q5: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 2
+tag_q2: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_q2: 2
+tag_q3: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_q1: 2
+tag_q2: 2
+tag_q2: 1
+%MSG-w FreeTrajectoryState:   InclusiveCandidateVertexFinder:inclusiveCandidateVertexFinderCvsL  25-Feb-2021 10:12:21 CET Run: 1 Event: 504286
+(was exception) FreeTrajectoryState: attempt to access errors when none available
+Curvilinear error valid/values :0
+[ -1.61129e+21 4.06044e+18-3.11486e+18     5.20134     1.85279
+   4.06044e+18-1.02323e+16 7.84937e+15  -0.0131074 -0.00466904
+  -3.11486e+18 7.84937e+15-5.98911e+15   0.0102079  0.00363292
+       5.20134  -0.0131074   0.0102079-0.000354515-0.000119635
+       1.85279 -0.00466904  0.00363292-0.000119635 -3.8688e-05 ]
+%MSG
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_g: 1
+tag_q1: 2
+tag_q1: 1
+tag_q1: 1
+tag_q2: 2
+tag_g: 1
+tag_g: 2
+tag_g: 1
+tag_q2: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_q2: 2
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_g: 1
+tag_q3: 1
+tag_g: 1
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 2
+tag_g: 1
+tag_q1: 2
+tag_q2: 2
+tag_q2: 1
+EDBRTreeMaker endJob()... endRun
+25-Feb-2021 10:12:23 CET  Closed file root://xrootd-cms.infn.it//store/mc/RunIISummer16MiniAODv3/QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/100000/02693A18-FAE9-E811-B1E2-3417EBE65F56.root
+++++++++++++++++++++++++++++++++++++++++++++++++++
+goodMuons(MuonIdSelector) SUMMARY:
+nTot=556 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+looseMuons(MuonIdSelector) SUMMARY:
+nTot=556 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+vetoMuons(MuonIdSelector) SUMMARY:
+nTot=556 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+goodElectrons(ElectronIdSelector) SUMMARY:
+nTot=127 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+looseElectrons(ElectronIdSelector) SUMMARY:
+nTot=127 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++
+vetoElectrons(ElectronIdSelector) SUMMARY:
+nTot=127 nPassed=0 effPassed=0%
+++++++++++++++++++++++++++++++++++++++++++++++++++
+EDBRTreeMaker endJob()...
+
+TrigReport ---------- Event  Summary ------------
+TrigReport Events total = 100 passed = 100 failed = 0
+
+TrigReport ---------- Path   Summary ------------
+TrigReport  Trig Bit#   Executed     Passed     Failed      Error Name
+TrigReport     1    0        100        100          0          0 analysis
+
+TrigReport -------End-Path   Summary ------------
+TrigReport  Trig Bit#   Executed     Passed     Failed      Error Name
+
+TrigReport ---------- Modules in Path: analysis ------------
+TrigReport  Trig Bit#    Visited     Passed     Failed      Error Name
+TrigReport     1    0        100        100          0          0 JetUserDataak4
+TrigReport     1    1        100        100          0          0 JetUserData
+TrigReport     1    2        100        100          0          0 goodOfflinePrimaryVertex
+TrigReport     1    3        100        100          0          0 goodMuons
+TrigReport     1    4        100        100          0          0 looseMuons
+TrigReport     1    5        100        100          0          0 vetoMuons
+TrigReport     1    6        100        100          0          0 goodElectrons
+TrigReport     1    7        100        100          0          0 looseElectrons
+TrigReport     1    8        100        100          0          0 vetoElectrons
+TrigReport     1    9        100        100          0          0 Wtomunu
+TrigReport     1   10        100        100          0          0 Wtoenu
+TrigReport     1   11        100        100          0          0 leptonicV
+TrigReport     1   12        100        100          0          0 leptonicVSelector
+TrigReport     1   13        100        100          0          0 leptonicVFilter
+TrigReport     1   14        100        100          0          0 HBHENoiseFilterResultProducer
+TrigReport     1   15        100        100          0          0 ApplyBaselineHBHENoiseFilter
+TrigReport     1   16        100        100          0          0 ApplyBaselineHBHEIsoNoiseFilter
+TrigReport     1   17        100        100          0          0 goodJets
+TrigReport     1   18        100        100          0          0 cleanJets
+TrigReport     1   19        100        100          0          0 goodAK4Jets
+TrigReport     1   20        100        100          0          0 cleanAK4Jets
+TrigReport     1   21        100        100          0          0 goodPuppi
+TrigReport     1   22        100        100          0          0 cleanPuppi
+TrigReport     1   23        100        100          0          0 goodPuppiAK4
+TrigReport     1   24        100        100          0          0 cleanPuppiAK4
+TrigReport     1   25        100        100          0          0 hadronicV
+TrigReport     1   26        100        100          0          0 hadronicVFilter
+TrigReport     1   27        100        100          0          0 BadPFMuonFilter
+TrigReport     1   28        100        100          0          0 BadChargedCandidateFilter
+TrigReport     1   29        100        100          0          0 graviton
+TrigReport     1   30        100        100          0          0 gravitonFilter
+TrigReport     1   31        100        100          0          0 ecalBadCalibReducedMINIAODFilter
+TrigReport     1   32        100        100          0          0 prefiringweight
+TrigReport     1   33        100        100          0          0 treeDumper
+
+TrigReport ---------- Module Summary ------------
+TrigReport    Visited   Executed     Passed     Failed      Error Name
+TrigReport        100        100        100          0          0 ApplyBaselineHBHEIsoNoiseFilter
+TrigReport        100        100        100          0          0 ApplyBaselineHBHENoiseFilter
+TrigReport        100        100        100          0          0 BadChargedCandidateFilter
+TrigReport        100        100        100          0          0 BadPFMuonFilter
+TrigReport        100        100        100          0          0 HBHENoiseFilterResultProducer
+TrigReport        100        100        100          0          0 JetUserData
+TrigReport        100        100        100          0          0 JetUserDataak4
+TrigReport        400        100        100          0          0 NjettinessAK8Puppi
+TrigReport        100        100        100          0          0 TriggerResults
+TrigReport        100        100        100          0          0 Wtoenu
+TrigReport        100        100        100          0          0 Wtomunu
+TrigReport        100        100        100          0          0 ak8GenJetsNoNu
+TrigReport        100        100        100          0          0 ak8GenJetsNoNuSoftDrop
+TrigReport        100        100        100          0          0 ak8PFJetsPuppi
+TrigReport        100        100        100          0          0 ak8PFJetsPuppiConstituents
+TrigReport        200        100        100          0          0 ak8PFJetsPuppiSoftDrop
+TrigReport        100        100        100          0          0 ak8PFJetsPuppiSoftDropMass
+TrigReport        100        100        100          0          0 analysis
+TrigReport          0          0          0          0          0 candidateVertexArbitrator
+TrigReport        100        100        100          0          0 candidateVertexArbitratorCvsL
+TrigReport          0          0          0          0          0 candidateVertexArbitratorDefault
+TrigReport          0          0          0          0          0 candidateVertexMerger
+TrigReport        100        100        100          0          0 candidateVertexMergerCvsL
+TrigReport        100        100        100          0          0 cleanAK4Jets
+TrigReport        100        100        100          0          0 cleanJets
+TrigReport        100        100        100          0          0 cleanPuppi
+TrigReport        100        100        100          0          0 cleanPuppiAK4
+TrigReport        100        100        100          0          0 ecalBadCalibReducedMINIAODFilter
+TrigReport        100        100        100          0          0 egmGsfElectronIDs
+TrigReport          0          0          0          0          0 electronMVAValueMapProducer
+TrigReport          0          0          0          0          0 electronMVAVariableHelper
+TrigReport          0          0          0          0          0 electronRegressionValueMapProducer
+TrigReport        100        100        100          0          0 endpath
+TrigReport        100        100        100          0          0 goodAK4Jets
+TrigReport        100        100        100          0          0 goodElectrons
+TrigReport        100        100        100          0          0 goodJets
+TrigReport        100        100        100          0          0 goodMuons
+TrigReport        100        100        100          0          0 goodOfflinePrimaryVertex
+TrigReport        100        100        100          0          0 goodPuppi
+TrigReport        100        100        100          0          0 goodPuppiAK4
+TrigReport        100        100        100          0          0 graviton
+TrigReport        100        100        100          0          0 gravitonFilter
+TrigReport        100        100        100          0          0 hadronicV
+TrigReport        100        100        100          0          0 hadronicVFilter
+TrigReport        100        100        100          0          0 heepIDVarValueMaps
+TrigReport          0          0          0          0          0 inclusiveCandidateSecondaryVertices
+TrigReport          0          0          0          0          0 inclusiveCandidateSecondaryVerticesCvsL
+TrigReport          0          0          0          0          0 inclusiveCandidateVertexFinder
+TrigReport        100        100        100          0          0 inclusiveCandidateVertexFinderCvsL
+TrigReport          0          0          0          0          0 inclusiveCandidateVertexFinderDefault
+TrigReport          0          0          0          0          0 inclusiveSecondaryVertices
+TrigReport          0          0          0          0          0 inclusiveVertexFinder
+TrigReport          0          0          0          0          0 inclusiveVertexFinderDefault
+TrigReport        100        100        100          0          0 leptonicV
+TrigReport        100        100        100          0          0 leptonicVFilter
+TrigReport        100        100        100          0          0 leptonicVSelector
+TrigReport        100        100        100          0          0 looseElectrons
+TrigReport        100        100        100          0          0 looseMuons
+TrigReport        100        100        100          0          0 packedGenParticlesForJetsNoNu
+TrigReport        100        100        100          0          0 packedPatJetsAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetCorrFactorsAK8PFPuppi
+TrigReport        100        100        100          0          0 patJetCorrFactorsAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetCorrFactorsAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 patJetCorrFactorsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 patJetCorrFactorsTransientCorrectedAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 patJetFlavourAssociationAK8PFPuppi
+TrigReport        100        100        100          0          0 patJetFlavourAssociationAK8PFPuppiSoftDropSubjets
+TrigReport          0          0          0          0          0 patJetFlavourAssociationLegacyAK8PFPuppi
+TrigReport          0          0          0          0          0 patJetFlavourAssociationLegacyAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 patJetGenJetMatchAK8PFPuppi
+TrigReport        100        100        100          0          0 patJetGenJetMatchAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetGenJetMatchAK8PFPuppiSoftDropSubjets
+TrigReport          0          0          0          0          0 patJetPartonAssociationLegacyAK8PFPuppi
+TrigReport          0          0          0          0          0 patJetPartonAssociationLegacyAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 patJetPartonMatchAK8PFPuppi
+TrigReport        100        100        100          0          0 patJetPartonMatchAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetPartonMatchAK8PFPuppiSoftDropSubjets
+TrigReport        400        100        100          0          0 patJetPartons
+TrigReport          0          0          0          0          0 patJetPartonsLegacy
+TrigReport        100        100        100          0          0 patJetsAK8PFPuppi
+TrigReport          0          0          0          0          0 patJetsAK8PFPuppiPATJetswithUserData
+TrigReport        100        100        100          0          0 patJetsAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 patJetsAK8PFPuppiSoftDropSubjets
+TrigReport          0          0          0          0          0 patJetsAK8PFPuppilooseJetId
+TrigReport          0          0          0          0          0 patJetsAK8PFPuppitightJetId
+TrigReport          0          0          0          0          0 patJetsAK8PFPuppitightJetIdLepVeto
+TrigReport        100        100        100          0          0 pfBoostedDoubleSVAK8TagInfosAK8PFPuppi
+TrigReport        100        100        100          0          0 pfBoostedDoubleSecondaryVertexAK8BJetTagsAK8PFPuppi
+TrigReport        100        100        100          0          0 pfCombinedCvsBJetTagsAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 pfCombinedCvsLJetTagsAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 pfCombinedInclusiveSecondaryVertexV2BJetTagsAK8PFPuppiSoftDropSubjets
+TrigReport        600        100        100          0          0 pfDeepBoostedDiscriminatorsJetTagsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 pfDeepBoostedJetTagInfosAK8WithPuppiDaughters
+TrigReport       1700        100        100          0          0 pfDeepBoostedJetTagsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 pfDeepDoubleXTagInfosAK8PFPuppi
+TrigReport        100        100        100          0          0 pfImpactParameterAK8TagInfosAK8PFPuppi
+TrigReport        100        100        100          0          0 pfImpactParameterTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 pfInclusiveSecondaryVertexFinderAK8TagInfosAK8PFPuppi
+TrigReport        100        100        100          0          0 pfInclusiveSecondaryVertexFinderCvsLTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 pfInclusiveSecondaryVertexFinderTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport       1000        100        100          0          0 pfMassDecorrelatedDeepBoostedDiscriminatorsJetTagsAK8WithPuppiDaughters
+TrigReport       1700        100        100          0          0 pfMassDecorrelatedDeepBoostedJetTagsAK8WithPuppiDaughters
+TrigReport        200        100        100          0          0 pfMassIndependentDeepDoubleBvLJetTagsAK8PFPuppi
+TrigReport        200        100        100          0          0 pfMassIndependentDeepDoubleCvBJetTagsAK8PFPuppi
+TrigReport        200        100        100          0          0 pfMassIndependentDeepDoubleCvLJetTagsAK8PFPuppi
+TrigReport        100        100        100          0          0 prefiringweight
+TrigReport        100        100        100          0          0 puppi
+TrigReport        100        100        100          0          0 selectedPatJetsAK8PFPuppi
+TrigReport        100        100        100          0          0 selectedPatJetsAK8PFPuppiSoftDrop
+TrigReport        100        100        100          0          0 selectedPatJetsAK8PFPuppiSoftDropPacked
+TrigReport        100        100        100          0          0 selectedPatJetsAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 selectedUpdatedPatJetsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 slimmedSecondaryVerticesCvsL
+TrigReport        100        100        100          0          0 softPFElectronsTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport        100        100        100          0          0 softPFMuonsTagInfosAK8PFPuppiSoftDropSubjets
+TrigReport          0          0          0          0          0 trackVertexArbitrator
+TrigReport          0          0          0          0          0 trackVertexArbitratorDefault
+TrigReport        100        100        100          0          0 treeDumper
+TrigReport        100        100        100          0          0 updatedPatJetsAK8WithPuppiDaughters
+TrigReport        100        100        100          0          0 updatedPatJetsTransientCorrectedAK8WithPuppiDaughters
+TrigReport          0          0          0          0          0 vertexMerger
+TrigReport        100        100        100          0          0 vetoElectrons
+TrigReport        100        100        100          0          0 vetoMuons
+
+TimeReport ---------- Event  Summary ---[sec]----
+TimeReport       event loop CPU/event = 0.404192
+TimeReport      event loop Real/event = 0.966908
+TimeReport     sum Streams Real/event = 0.665915
+TimeReport efficiency CPU/Real/thread = 0.418025
+
+TimeReport ---------- Path   Summary ---[Real sec]----
+TimeReport  per event     per exec  Name
+TimeReport   0.657819     0.657819  analysis
+TimeReport  per event     per exec  Name
+
+TimeReport -------End-Path   Summary ---[Real sec]----
+TimeReport  per event     per exec  Name
+TimeReport   0.000000     0.000000  endpath
+TimeReport  per event     per exec  Name
+
+TimeReport ---------- Modules in Path: analysis ---[Real sec]----
+TimeReport  per event    per visit  Name
+TimeReport   0.019908     0.019908  JetUserDataak4
+TimeReport   0.022178     0.022178  JetUserData
+TimeReport   0.000049     0.000049  goodOfflinePrimaryVertex
+TimeReport   0.000036     0.000036  goodMuons
+TimeReport   0.000005     0.000005  looseMuons
+TimeReport   0.000005     0.000005  vetoMuons
+TimeReport   0.000013     0.000013  goodElectrons
+TimeReport   0.000003     0.000003  looseElectrons
+TimeReport   0.000003     0.000003  vetoElectrons
+TimeReport   0.000105     0.000105  Wtomunu
+TimeReport   0.000003     0.000003  Wtoenu
+TimeReport   0.000064     0.000064  leptonicV
+TimeReport   0.000003     0.000003  leptonicVSelector
+TimeReport   0.000002     0.000002  leptonicVFilter
+TimeReport   0.000015     0.000015  HBHENoiseFilterResultProducer
+TimeReport   0.000004     0.000004  ApplyBaselineHBHENoiseFilter
+TimeReport   0.000001     0.000001  ApplyBaselineHBHEIsoNoiseFilter
+TimeReport   0.000457     0.000457  goodJets
+TimeReport   0.000055     0.000055  cleanJets
+TimeReport   0.000234     0.000234  goodAK4Jets
+TimeReport   0.000121     0.000121  cleanAK4Jets
+TimeReport   0.000080     0.000080  goodPuppi
+TimeReport   0.000048     0.000048  cleanPuppi
+TimeReport   0.000170     0.000170  goodPuppiAK4
+TimeReport   0.000111     0.000111  cleanPuppiAK4
+TimeReport   0.000213     0.000213  hadronicV
+TimeReport   0.000003     0.000003  hadronicVFilter
+TimeReport   0.000089     0.000089  BadPFMuonFilter
+TimeReport   0.000057     0.000057  BadChargedCandidateFilter
+TimeReport   0.000012     0.000012  graviton
+TimeReport   0.000001     0.000001  gravitonFilter
+TimeReport   0.000019     0.000019  ecalBadCalibReducedMINIAODFilter
+TimeReport   0.000036     0.000036  prefiringweight
+TimeReport   0.050220     0.050220  treeDumper
+TimeReport  per event    per visit  Name
+
+TimeReport ------ Modules in End-Path: endpath ---[Real sec]----
+TimeReport  per event    per visit  Name
+TimeReport  per event    per visit  Name
+
+TimeReport ---------- Module Summary ---[Real sec]----
+TimeReport  per event     per exec    per visit  Name
+TimeReport   0.000001     0.000001     0.000001  ApplyBaselineHBHEIsoNoiseFilter
+TimeReport   0.000004     0.000004     0.000004  ApplyBaselineHBHENoiseFilter
+TimeReport   0.000057     0.000057     0.000057  BadChargedCandidateFilter
+TimeReport   0.000089     0.000089     0.000089  BadPFMuonFilter
+TimeReport   0.000015     0.000015     0.000015  HBHENoiseFilterResultProducer
+TimeReport   0.022178     0.022178     0.022178  JetUserData
+TimeReport   0.019908     0.019908     0.019908  JetUserDataak4
+TimeReport   0.005168     0.005168     0.005168  NjettinessAK8Puppi
+TimeReport   0.000036     0.000036     0.000036  TriggerResults
+TimeReport   0.000003     0.000003     0.000003  Wtoenu
+TimeReport   0.000105     0.000105     0.000105  Wtomunu
+TimeReport   0.001217     0.001217     0.001217  ak8GenJetsNoNu
+TimeReport   0.001311     0.001311     0.001311  ak8GenJetsNoNuSoftDrop
+TimeReport   0.014382     0.014382     0.014382  ak8PFJetsPuppi
+TimeReport   0.000061     0.000061     0.000061  ak8PFJetsPuppiConstituents
+TimeReport   0.014617     0.014617     0.014617  ak8PFJetsPuppiSoftDrop
+TimeReport   0.000057     0.000057     0.000057  ak8PFJetsPuppiSoftDropMass
+TimeReport   0.000011     0.000011     0.000011  analysis
+TimeReport   0.000000     0.000000     0.000000  candidateVertexArbitrator
+TimeReport   0.023312     0.023312     0.023312  candidateVertexArbitratorCvsL
+TimeReport   0.000000     0.000000     0.000000  candidateVertexArbitratorDefault
+TimeReport   0.000000     0.000000     0.000000  candidateVertexMerger
+TimeReport   0.000396     0.000396     0.000396  candidateVertexMergerCvsL
+TimeReport   0.000121     0.000121     0.000121  cleanAK4Jets
+TimeReport   0.000055     0.000055     0.000055  cleanJets
+TimeReport   0.000048     0.000048     0.000048  cleanPuppi
+TimeReport   0.000111     0.000111     0.000111  cleanPuppiAK4
+TimeReport   0.000019     0.000019     0.000019  ecalBadCalibReducedMINIAODFilter
+TimeReport   0.000298     0.000298     0.000298  egmGsfElectronIDs
+TimeReport   0.000000     0.000000     0.000000  electronMVAValueMapProducer
+TimeReport   0.000000     0.000000     0.000000  electronMVAVariableHelper
+TimeReport   0.000000     0.000000     0.000000  electronRegressionValueMapProducer
+TimeReport   0.000006     0.000006     0.000006  endpath
+TimeReport   0.000234     0.000234     0.000234  goodAK4Jets
+TimeReport   0.000013     0.000013     0.000013  goodElectrons
+TimeReport   0.000457     0.000457     0.000457  goodJets
+TimeReport   0.000036     0.000036     0.000036  goodMuons
+TimeReport   0.000049     0.000049     0.000049  goodOfflinePrimaryVertex
+TimeReport   0.000080     0.000080     0.000080  goodPuppi
+TimeReport   0.000170     0.000170     0.000170  goodPuppiAK4
+TimeReport   0.000012     0.000012     0.000012  graviton
+TimeReport   0.000001     0.000001     0.000001  gravitonFilter
+TimeReport   0.000213     0.000213     0.000213  hadronicV
+TimeReport   0.000003     0.000003     0.000003  hadronicVFilter
+TimeReport   0.017516     0.017516     0.017516  heepIDVarValueMaps
+TimeReport   0.000000     0.000000     0.000000  inclusiveCandidateSecondaryVertices
+TimeReport   0.000000     0.000000     0.000000  inclusiveCandidateSecondaryVerticesCvsL
+TimeReport   0.000000     0.000000     0.000000  inclusiveCandidateVertexFinder
+TimeReport   0.210899     0.210899     0.210899  inclusiveCandidateVertexFinderCvsL
+TimeReport   0.000000     0.000000     0.000000  inclusiveCandidateVertexFinderDefault
+TimeReport   0.000000     0.000000     0.000000  inclusiveSecondaryVertices
+TimeReport   0.000000     0.000000     0.000000  inclusiveVertexFinder
+TimeReport   0.000000     0.000000     0.000000  inclusiveVertexFinderDefault
+TimeReport   0.000064     0.000064     0.000064  leptonicV
+TimeReport   0.000002     0.000002     0.000002  leptonicVFilter
+TimeReport   0.000003     0.000003     0.000003  leptonicVSelector
+TimeReport   0.000003     0.000003     0.000003  looseElectrons
+TimeReport   0.000005     0.000005     0.000005  looseMuons
+TimeReport   0.000641     0.000641     0.000641  packedGenParticlesForJetsNoNu
+TimeReport   0.000048     0.000048     0.000048  packedPatJetsAK8PFPuppiSoftDrop
+TimeReport   0.000203     0.000203     0.000203  patJetCorrFactorsAK8PFPuppi
+TimeReport   0.000076     0.000076     0.000076  patJetCorrFactorsAK8PFPuppiSoftDrop
+TimeReport   0.006671     0.006671     0.006671  patJetCorrFactorsAK8PFPuppiSoftDropSubjets
+TimeReport   0.000022     0.000022     0.000022  patJetCorrFactorsAK8WithPuppiDaughters
+TimeReport   0.000109     0.000109     0.000109  patJetCorrFactorsTransientCorrectedAK8WithPuppiDaughters
+TimeReport   0.000665     0.000665     0.000665  patJetFlavourAssociationAK8PFPuppi
+TimeReport   0.000698     0.000698     0.000698  patJetFlavourAssociationAK8PFPuppiSoftDropSubjets
+TimeReport   0.000000     0.000000     0.000000  patJetFlavourAssociationLegacyAK8PFPuppi
+TimeReport   0.000000     0.000000     0.000000  patJetFlavourAssociationLegacyAK8PFPuppiSoftDropSubjets
+TimeReport   0.000018     0.000018     0.000018  patJetGenJetMatchAK8PFPuppi
+TimeReport   0.000012     0.000012     0.000012  patJetGenJetMatchAK8PFPuppiSoftDrop
+TimeReport   0.000013     0.000013     0.000013  patJetGenJetMatchAK8PFPuppiSoftDropSubjets
+TimeReport   0.000000     0.000000     0.000000  patJetPartonAssociationLegacyAK8PFPuppi
+TimeReport   0.000000     0.000000     0.000000  patJetPartonAssociationLegacyAK8PFPuppiSoftDropSubjets
+TimeReport   0.000086     0.000086     0.000086  patJetPartonMatchAK8PFPuppi
+TimeReport   0.000051     0.000051     0.000051  patJetPartonMatchAK8PFPuppiSoftDrop
+TimeReport   0.000030     0.000030     0.000030  patJetPartonMatchAK8PFPuppiSoftDropSubjets
+TimeReport   0.000114     0.000114     0.000114  patJetPartons
+TimeReport   0.000000     0.000000     0.000000  patJetPartonsLegacy
+TimeReport   0.000345     0.000345     0.000345  patJetsAK8PFPuppi
+TimeReport   0.000000     0.000000     0.000000  patJetsAK8PFPuppiPATJetswithUserData
+TimeReport   0.000127     0.000127     0.000127  patJetsAK8PFPuppiSoftDrop
+TimeReport   0.000192     0.000192     0.000192  patJetsAK8PFPuppiSoftDropSubjets
+TimeReport   0.000000     0.000000     0.000000  patJetsAK8PFPuppilooseJetId
+TimeReport   0.000000     0.000000     0.000000  patJetsAK8PFPuppitightJetId
+TimeReport   0.000000     0.000000     0.000000  patJetsAK8PFPuppitightJetIdLepVeto
+TimeReport   0.002773     0.002773     0.002773  pfBoostedDoubleSVAK8TagInfosAK8PFPuppi
+TimeReport   0.001870     0.001870     0.001870  pfBoostedDoubleSecondaryVertexAK8BJetTagsAK8PFPuppi
+TimeReport   0.012194     0.012194     0.012194  pfCombinedCvsBJetTagsAK8PFPuppiSoftDropSubjets
+TimeReport   0.032198     0.032198     0.032198  pfCombinedCvsLJetTagsAK8PFPuppiSoftDropSubjets
+TimeReport   0.001947     0.001947     0.001947  pfCombinedInclusiveSecondaryVertexV2BJetTagsAK8PFPuppiSoftDropSubjets
+TimeReport   0.000062     0.000062     0.000062  pfDeepBoostedDiscriminatorsJetTagsAK8WithPuppiDaughters
+TimeReport   0.001092     0.001092     0.001092  pfDeepBoostedJetTagInfosAK8WithPuppiDaughters
+TimeReport   0.035087     0.035087     0.035087  pfDeepBoostedJetTagsAK8WithPuppiDaughters
+TimeReport   0.000480     0.000480     0.000480  pfDeepDoubleXTagInfosAK8PFPuppi
+TimeReport   0.001193     0.001193     0.001193  pfImpactParameterAK8TagInfosAK8PFPuppi
+TimeReport   0.002475     0.002475     0.002475  pfImpactParameterTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000282     0.000282     0.000282  pfInclusiveSecondaryVertexFinderAK8TagInfosAK8PFPuppi
+TimeReport   0.000748     0.000748     0.000748  pfInclusiveSecondaryVertexFinderCvsLTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000445     0.000445     0.000445  pfInclusiveSecondaryVertexFinderTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000072     0.000072     0.000072  pfMassDecorrelatedDeepBoostedDiscriminatorsJetTagsAK8WithPuppiDaughters
+TimeReport   0.033423     0.033423     0.033423  pfMassDecorrelatedDeepBoostedJetTagsAK8WithPuppiDaughters
+TimeReport   0.010005     0.010005     0.010005  pfMassIndependentDeepDoubleBvLJetTagsAK8PFPuppi
+TimeReport   0.009938     0.009938     0.009938  pfMassIndependentDeepDoubleCvBJetTagsAK8PFPuppi
+TimeReport   0.012383     0.012383     0.012383  pfMassIndependentDeepDoubleCvLJetTagsAK8PFPuppi
+TimeReport   0.000036     0.000036     0.000036  prefiringweight
+TimeReport   0.042413     0.042413     0.042413  puppi
+TimeReport   0.000077     0.000077     0.000077  selectedPatJetsAK8PFPuppi
+TimeReport   0.000051     0.000051     0.000051  selectedPatJetsAK8PFPuppiSoftDrop
+TimeReport   0.000106     0.000106     0.000106  selectedPatJetsAK8PFPuppiSoftDropPacked
+TimeReport   0.000046     0.000046     0.000046  selectedPatJetsAK8PFPuppiSoftDropSubjets
+TimeReport   0.000110     0.000110     0.000110  selectedUpdatedPatJetsAK8WithPuppiDaughters
+TimeReport   0.000058     0.000058     0.000058  slimmedSecondaryVerticesCvsL
+TimeReport   0.000120     0.000120     0.000120  softPFElectronsTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000048     0.000048     0.000048  softPFMuonsTagInfosAK8PFPuppiSoftDropSubjets
+TimeReport   0.000000     0.000000     0.000000  trackVertexArbitrator
+TimeReport   0.000000     0.000000     0.000000  trackVertexArbitratorDefault
+TimeReport   0.050220     0.050220     0.050220  treeDumper
+TimeReport   0.000061     0.000061     0.000061  updatedPatJetsAK8WithPuppiDaughters
+TimeReport   0.000266     0.000266     0.000266  updatedPatJetsTransientCorrectedAK8WithPuppiDaughters
+TimeReport   0.000000     0.000000     0.000000  vertexMerger
+TimeReport   0.000003     0.000003     0.000003  vetoElectrons
+TimeReport   0.000005     0.000005     0.000005  vetoMuons
+TimeReport  per event     per exec    per visit  Name
+
+T---Report end!
+
+
+=============================================
+
+MessageLogger Summary
+
+ type     category        sev    module        subroutine        count    total
+ ---- -------------------- -- ---------------- ----------------  -----    -----
+    1 FreeTrajectoryState  -w InclusiveCandida                       5        5
+    2 XrdAdaptor           -w file_open                              1        1
+    3 XrdAdaptorInternal   -w file_open                              2        2
+    4 fileAction           -s file_close                             1        1
+    5 fileAction           -s file_open                              3        3
+
+ type    category    Examples: run/evt        run/evt          run/evt
+ ---- -------------------- ---------------- ---------------- ----------------
+    1 FreeTrajectoryState  1/503342         1/503747         1/504286
+    2 XrdAdaptor           pre-events                        
+    3 XrdAdaptorInternal   pre-events       pre-events       
+    4 fileAction           PostGlobalEndRun                  
+    5 fileAction           pre-events       pre-events       pre-events
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Warning                 8                   8
+System                  4                   4
+
+dropped waiting message count 0

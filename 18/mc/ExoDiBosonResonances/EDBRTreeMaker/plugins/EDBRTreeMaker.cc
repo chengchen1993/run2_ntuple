@@ -47,8 +47,6 @@
 #include "CommonTools/Utils/interface/StringCutObjectSelector.h"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 // DeepAK8
-#include "NNKit/FatJetNN/interface/FatJetNN.h"
-#include "NNKit/FatJetNN/interface/FatJetNNHelper.h"
 #include "EDBRChannels.h"
 #include "TMath.h"
 #include "TTree.h"
@@ -56,7 +54,6 @@
 #include <TFormula.h>
 #define Pi 3.141593
 using namespace std;
-using namespace deepntuples; // DeepAK8
 //
 // class declaration
 //
@@ -87,9 +84,14 @@ private:
   virtual const reco::Candidate* findFirstParticle(const reco::Candidate *particle,int IDpdg);
 
   virtual bool tightJetID( const pat::Jet& j);
+  virtual bool looseJetID_ak4( const pat::Jet& j);
+  virtual bool tightJetID_ak4( const pat::Jet& j);
+
   virtual float dEtaInSeed( const pat::Electron* ele) ;
   virtual void initJetCorrFactors( void );
   virtual void addTypeICorr( edm::Event const & event );
+
+  virtual void   addTypeICorr_user(edm::Event const& event);  //---for MET,
   virtual double getJEC( reco::Candidate::LorentzVector& rawJetP4, const pat::Jet& jet, double& jetCorrEtaMax, std::vector<std::string> jecPayloadNames_ );
   virtual double getJECOffset( reco::Candidate::LorentzVector& rawJetP4, const pat::Jet& jet, double& jetCorrEtaMax, std::vector<std::string> jecPayloadNames_ );
   math::XYZTLorentzVector getNeutrinoP4(double& MetPt, double& MetPhi, TLorentzVector& lep, int lepType);
@@ -152,9 +154,13 @@ private:
   std::string EEBadScNoiseFilter_Selector_;
   edm::EDGetTokenT<bool> badMuonNoiseFilter_Selector_;
   edm::EDGetTokenT<bool> badChargedHadronNoiseFilter_Selector_;
-    // DeepAK8
-          deepntuples::FatJetNN* fatjetNN_ = nullptr;
-          deepntuples::FatJetNN* decorrNN_ = nullptr;
+  edm::EDGetTokenT<bool> ecalBadCalibFilterUpdate_token;
+//// L1 prefiring
+
+  edm::EDGetTokenT< double > prefweight_token;
+  edm::EDGetTokenT< double > prefweightup_token;
+  edm::EDGetTokenT< double > prefweightdown_token;
+
   // ----------member data ---------------------------
   TTree* outTree_;
   TTree* outTreew_;
@@ -170,6 +176,7 @@ private:
   double vbfeta, vbfmjj;
   int      vbftag;
   int nj1, nj2;
+  double L1prefiring,L1prefiringup,L1prefiringdown;
   double met, metPhi;
   double jetAK8puppi_ptJEC, jetAK8puppi_eta, jetAK8puppi_phi;
   double jetAK8puppi_tau1,  jetAK8puppi_tau2, jetAK8puppi_tau3, jetAK8puppi_tau4;
@@ -187,22 +194,17 @@ private:
   double jetAK8puppi_tau1_4,  jetAK8puppi_tau2_4, jetAK8puppi_tau3_4, jetAK8puppi_tau4_4;
   double jetAK8puppi_tau21_4, jetAK8puppi_tau42_4;
   double jetAK8puppi_sd_4, jetAK8puppi_sdJEC_4, jetAK8puppi_sdcorr_4;
-  double jetAK8puppi_ptJEC_5, jetAK8puppi_eta_5, jetAK8puppi_phi_5;
-  double jetAK8puppi_tau1_5,  jetAK8puppi_tau2_5, jetAK8puppi_tau3_5, jetAK8puppi_tau4_5;
-  double jetAK8puppi_tau21_5, jetAK8puppi_tau42_5;
-  double jetAK8puppi_sd_5, jetAK8puppi_sdJEC_5, jetAK8puppi_sdcorr_5;
-  double jetAK8puppi_ptJEC_6, jetAK8puppi_eta_6, jetAK8puppi_phi_6;
-  double jetAK8puppi_tau1_6,  jetAK8puppi_tau2_6, jetAK8puppi_tau3_6, jetAK8puppi_tau4_6;
-  double jetAK8puppi_tau21_6, jetAK8puppi_tau42_6;
-  double jetAK8puppi_sd_6, jetAK8puppi_sdJEC_6, jetAK8puppi_sdcorr_6;
-  double jetAK8puppi_ptJEC_7, jetAK8puppi_eta_7, jetAK8puppi_phi_7;
-  double jetAK8puppi_tau1_7,  jetAK8puppi_tau2_7, jetAK8puppi_tau3_7, jetAK8puppi_tau4_7;
-  double jetAK8puppi_tau21_7, jetAK8puppi_tau42_7;
-  double jetAK8puppi_sd_7, jetAK8puppi_sdJEC_7, jetAK8puppi_sdcorr_7;
-  double jetAK8puppi_ptJEC_8, jetAK8puppi_eta_8, jetAK8puppi_phi_8;
-  double jetAK8puppi_tau1_8,  jetAK8puppi_tau2_8, jetAK8puppi_tau3_8, jetAK8puppi_tau4_8;
-  double jetAK8puppi_tau21_8, jetAK8puppi_tau42_8;
-  double jetAK8puppi_sd_8, jetAK8puppi_sdJEC_8, jetAK8puppi_sdcorr_8;
+
+  double jetAK8puppi_ptJEC_new,jetAK8puppi_ptJEC_JEC_up,jetAK8puppi_ptJEC_JEC_down,jetAK8puppi_ptJEC_JER_up,jetAK8puppi_ptJEC_JER_down,jetAK8puppi_ptJEC_newnew,jetAK8puppi_ptJEC_m;
+  double jetAK8puppi_ptJEC_2_new,jetAK8puppi_ptJEC_2_JEC_up,jetAK8puppi_ptJEC_2_JEC_down,jetAK8puppi_ptJEC_2_JER_up,jetAK8puppi_ptJEC_2_JER_down;
+  double jetAK8puppi_ptJEC_3_new,jetAK8puppi_ptJEC_3_JEC_up,jetAK8puppi_ptJEC_3_JEC_down,jetAK8puppi_ptJEC_3_JER_up,jetAK8puppi_ptJEC_3_JER_down;
+  double jetAK8puppi_ptJEC_4_new,jetAK8puppi_ptJEC_4_JEC_up,jetAK8puppi_ptJEC_4_JEC_down,jetAK8puppi_ptJEC_4_JER_up,jetAK8puppi_ptJEC_4_JER_down;    
+
+    double jetAK8puppi_e,jetAK8puppi_e_new,jetAK8puppi_e_JEC_up,jetAK8puppi_e_JEC_down,jetAK8puppi_e_JER_up,jetAK8puppi_e_JER_down;
+    double jetAK8puppi_e_2,jetAK8puppi_e_2_new,jetAK8puppi_e_2_JEC_up,jetAK8puppi_e_2_JEC_down,jetAK8puppi_e_2_JER_up,jetAK8puppi_e_2_JER_down;
+    double jetAK8puppi_e_3,jetAK8puppi_e_3_new,jetAK8puppi_e_3_JEC_up,jetAK8puppi_e_3_JEC_down,jetAK8puppi_e_3_JER_up,jetAK8puppi_e_3_JER_down;
+    double jetAK8puppi_e_4,jetAK8puppi_e_4_new,jetAK8puppi_e_4_JEC_up,jetAK8puppi_e_4_JEC_down,jetAK8puppi_e_4_JER_up,jetAK8puppi_e_4_JER_down;
+
   double triggerWeight, lumiWeight, pileupWeight;
   double ptq11, etaq11, phiq11, massq11;
   double ptq21, etaq21, phiq21, massq21;
@@ -210,11 +212,16 @@ private:
   double ptq12, etaq12, phiq12, massq12;
   double ptq22, etaq22, phiq22, massq22;
   double ptq32, etaq32, phiq32, massq32;
-  double delPhijetmet, delPhijetmet_2, delPhijetmet_3, delPhijetmet_4, delPhijetmet_5, delPhijetmet_6, delPhijetmet_7, delPhijetmet_8;
+  double delPhijetmet, delPhijetmet_2, delPhijetmet_3, delPhijetmet_4;
   double pt_graviton,pt_graviton1;
   double candMasspuppiJEC;
+
+  double candMasspuppiJEC_new,MJJ_new,candMasspuppiJEC_JEC_up,MJJ_JEC_up,candMasspuppiJEC_JEC_down,MJJ_JEC_down,candMasspuppiJEC_JER_up,MJJ_JER_up,candMasspuppiJEC_JER_down,MJJ_JER_down;
+
   double massww[3];
-  double pweight[211];
+  double pweight[2];
+  double psweight[46];
+
     TLorentzVector ak8sj11,ak8sj21,ak8sj31,ak8sj41,ak8sj51;
     TLorentzVector ak8sj12,ak8sj22,ak8sj32,ak8sj42,ak8sj52;
     TLorentzVector ak8sj13,ak8sj23,ak8sj33,ak8sj43,ak8sj53;
@@ -300,16 +307,23 @@ private:
   double jetAK8_pt,jetAK8_mass,jetAK8_jec,jetAK8_e,jetAK8_eta,jetAK8_phi;
   double jetAK8_pt1[8], jetAK8_mass1[8], jetAK8_SF_mass1[8], jetAK8_SF_mass2[8], jetAK8_jec1[8],jetAK8_eta1[8];
   double jetAK8puppi_pt1[8], jetAK8puppi_mass1[8], jetAK8puppi_eta1[8], jetAK8puppi_jec1[8], jetAK8puppiSD_jec1[8];
+  double jetAK8puppi_pt1_new[4],jetAK8puppi_pt1_JEC_up[4],jetAK8puppi_pt1_JEC_down[4],jetAK8puppi_pt1_JER_up[4],jetAK8puppi_pt1_JER_down[4],jetAK8puppi_pt1_newnew[4],jetAK8puppi_pt1_m[4];
+  double jetAK8puppi_e1_new[4],jetAK8puppi_e1_JEC_up[4],jetAK8puppi_e1_JEC_down[4],jetAK8puppi_e1_JER_up[4],jetAK8puppi_e1_JER_down[4];
 
   double corr;
   double METraw_et, METraw_phi, METraw_sumEt;
   double MET_et, MET_phi, MET_sumEt, MET_corrPx, MET_corrPy;
+  double MET_et_new, MET_phi_new, MET_sumEt_new;
+  double MET_et_m,MET_et_old, MET_phi_m, MET_sumEt_m;
+
+    double MET_et_JEC_up, MET_et_JEC_down, MET_et_JER_up, MET_et_JER_down;
+    double MET_phi_JEC_up, MET_phi_JEC_down, MET_phi_JER_up, MET_phi_JER_down;
+    double MET_sumEt_JEC_up, MET_sumEt_JEC_down, MET_sumEt_JER_up, MET_sumEt_JER_down;
   // AK4 Jets
-  int ak4jet_hf[8],ak4jet_pf[8],ak4jet_hf_2[8],ak4jet_pf_2[8];
-  double ak4jet_pt[8],ak4jet_pt_uncorr[8],ak4jet_eta[8],ak4jet_phi[8],ak4jet_e[8], ak4jet_dr[8]; 
-  double ak4jet_csv[8],ak4jet_icsv[8], ak4jet_IDLoose[8], ak4jet_IDTight[8];
-  double ak4jet_deepcsvudsg[8],ak4jet_deepcsvb[8],ak4jet_deepcsvc[8],ak4jet_deepcsvbb[8],ak4jet_deepcsvcc[8];
-    
+  int ak4jet_hf[15],ak4jet_pf[15],ak4jet_hf_2[15],ak4jet_pf_2[15];
+  double ak4jet_pt[15],ak4jet_pt_uncorr[15],ak4jet_eta[15],ak4jet_phi[15],ak4jet_e[15], ak4jet_dr[15]; 
+  double ak4jet_csv[15],ak4jet_icsv[15], ak4jet_IDLoose[15], ak4jet_IDTight[15];
+  double ak4jet_deepcsvudsg[15],ak4jet_deepcsvb[15],ak4jet_deepcsvc[15],ak4jet_deepcsvbb[15],ak4jet_deepcsvcc[15];
 
 
   void setDummyValues();
@@ -324,6 +338,7 @@ private:
   bool RunOnSig_,RunOnMC_;
   std::vector<JetCorrectorParameters> vPar;
   std::map<std::string,double>  TypeICorrMap_;
+  std::map<std::string, double> TypeICorrMap_user_;
   edm::InputTag mets_;
 
   //High Level Trigger
@@ -345,6 +360,7 @@ private:
   bool passFilter_EEBadSc_                ;
   bool passFilter_badMuon_                ;
   bool passFilter_badChargedHadron_       ;
+  bool passFilter_ecalBadCalibReduced_       ;
 
   edm::EDGetTokenT<edm::View<reco::Candidate>> leptonicVSrc_;
   edm::EDGetTokenT<edm::View<pat::Jet>> hadronicVSrc_;
@@ -356,6 +372,7 @@ private:
   edm::EDGetTokenT<edm::View<pat::Muon>> vetomuonToken_;
   edm::EDGetTokenT<edm::View<pat::Muon>> t1muSrc_;
   edm::EDGetTokenT<edm::View<reco::Candidate>> gravitonSrc_;
+  edm::EDGetTokenT<pat::JetCollection> t1jetSrc_userak4_;
   edm::EDGetTokenT<edm::View<reco::Candidate>> metSrc_;
   edm::EDGetTokenT<GenEventInfoProduct> GenToken_;
   edm::EDGetTokenT<edm::View<reco::GenParticle>> genSrc_;
@@ -398,6 +415,10 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   isJEC_           = iConfig.getParameter<bool>("isJEC");
   RunOnSig_        = iConfig.getParameter<bool>("RunOnSig");
   RunOnMC_           = iConfig.getParameter<bool>("RunOnMC");
+  prefweight_token = consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProb"));
+  prefweightup_token = consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbUp"));
+  prefweightdown_token = consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbDown"));
+
   leptonicVSrc_=consumes<edm::View<reco::Candidate> >(iConfig.getParameter<edm::InputTag>( "leptonicVSrc") ) ;
   jetsAK8Label_      = consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>( "ak8JetSrc") ) ;
   looseelectronToken_    = (consumes<edm::View<pat::Electron> > (iConfig.getParameter<edm::InputTag>("looseElectronSrc"))) ;
@@ -418,6 +439,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   GenToken_=consumes<GenEventInfoProduct> (iConfig.getParameter<edm::InputTag>( "generator") ) ;
   genSrc_      = consumes<edm::View<reco::GenParticle>>(iConfig.getParameter<edm::InputTag>( "genSrc") ) ;
   PUToken_=consumes<std::vector<PileupSummaryInfo>>(iConfig.getParameter<edm::InputTag>("pileup") ) ;
+  t1jetSrc_userak4_   = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("t1jetSrc_userak4"));
   metSrc_      = consumes<edm::View<reco::Candidate>>(iConfig.getParameter<edm::InputTag>( "metSrc") ) ;
   gravitonSrc_      = consumes<edm::View<reco::Candidate>>(iConfig.getParameter<edm::InputTag>( "gravitonSrc") ) ;
   metToken_ = consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"));
@@ -431,7 +453,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   EEBadScNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_eeBadScFilter");
   badMuonNoiseFilter_Selector_ = consumes<bool>(iConfig.getParameter<edm::InputTag> ("noiseFilterSelection_badMuon"));
   badChargedHadronNoiseFilter_Selector_  = consumes<bool>(iConfig.getParameter<edm::InputTag> ("noiseFilterSelection_badChargedHadron"));
-
+  ecalBadCalibFilterUpdate_token  = consumes<bool>(edm::InputTag("ecalBadCalibReducedMINIAODFilter"));
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
   std::string tmpString;
   std::vector<std::string> tmpVec = iConfig.getParameter<std::vector<std::string> >("jecAK8chsPayloadNames");
@@ -530,27 +552,15 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
     throw ex;
     }
   
-    // DeepAK8
-    // initialize the FatJetNN class in the constructor
-    auto cc = consumesCollector();
-    fatjetNN_ = new deepntuples::FatJetNN(iConfig, cc, 0.8); // jetR=0.8
-    // load json for input variable transformation
-    fatjetNN_->load_json(edm::FileInPath("NNKit/data/ak8/full/preprocessing.json").fullPath());
-    // load DNN model and parameter files
-    fatjetNN_->load_model(edm::FileInPath("NNKit/data/ak8/full/resnet-symbol.json").fullPath(),                  edm::FileInPath("NNKit/data/ak8/full/resnet.params").fullPath());
-    // -----------
-    
-    // Decorrelated DeepAK8
-    decorrNN_ = new FatJetNN(iConfig, cc, 0.8);
-    decorrNN_->load_json(edm::FileInPath("NNKit/data/ak8/decorrelated/preprocessing.json").fullPath());
-    decorrNN_->load_model(edm::FileInPath("NNKit/data/ak8/decorrelated/resnet-symbol.json").fullPath(),
-    edm::FileInPath("NNKit/data/ak8/decorrelated/resnet.params").fullPath());
-    // -----------
     //now do what ever initialization is needed
     edm::Service<TFileService> fs;
 
     outTree_ = fs->make<TTree>("EDBRCandidates","EDBR Candidates");
     outTreew_ = fs->make<TTree>("EDBRCandidatesw","EDBR Candidates");
+  outTree_->Branch("L1prefiring"           ,&L1prefiring         ,"L1prefiring/D"          );
+  outTree_->Branch("L1prefiringup"           ,&L1prefiringup         ,"L1prefiringup/D"          );
+  outTree_->Branch("L1prefiringdown"           ,&L1prefiringdown         ,"L1prefiringdown/D"          );
+
     outTree_->Branch("vbfeta"    ,&vbfeta   ,"vbfeta/D"   );
     outTree_->Branch("vbfmjj"    ,&vbfmjj   ,"vbfmjj/D"   );
     outTree_->Branch("vbftag"    ,&vbftag   ,"vbftag/I"   );
@@ -714,6 +724,14 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
 //  outTree_->Branch("nVetoEle"       ,&nVetoEle      ,"nVetoEle/I");//
 //  outTree_->Branch("nVetoMu"        ,&nVetoMu       ,"nVetoMu/I");//
   outTree_->Branch("jetAK8puppi_ptJEC"          ,&jetAK8puppi_ptJEC         ,"jetAK8puppi_ptJEC/D"      );
+    outTree_->Branch("jetAK8puppi_ptJEC_new"          ,&jetAK8puppi_ptJEC_new         ,"jetAK8puppi_ptJEC_new/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_m"          ,&jetAK8puppi_ptJEC_m         ,"jetAK8puppi_ptJEC_m/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_newnew"          ,&jetAK8puppi_ptJEC_newnew         ,"jetAK8puppi_ptJEC_newnew/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_JEC_up"          ,&jetAK8puppi_ptJEC_JEC_up         ,"jetAK8puppi_ptJEC_JEC_up/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_JEC_down"          ,&jetAK8puppi_ptJEC_JEC_down         ,"jetAK8puppi_ptJEC_JEC_down/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_JER_down"          ,&jetAK8puppi_ptJEC_JER_down         ,"jetAK8puppi_ptJEC_JER_down/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_JER_up"          ,&jetAK8puppi_ptJEC_JER_up         ,"jetAK8puppi_ptJEC_JER_up/D"         );
+
   outTree_->Branch("jetAK8puppi_eta"          ,&jetAK8puppi_eta         ,"jetAK8puppi_eta/D"         );
   outTree_->Branch("jetAK8puppi_phi"          ,&jetAK8puppi_phi         ,"jetAK8puppi_phi/D"         );
   outTree_->Branch("jetAK8puppi_tau1"          ,&jetAK8puppi_tau1         ,"jetAK8puppi_tau1/D"         );
@@ -727,6 +745,12 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("jetAK8puppi_sdcorr"          ,&jetAK8puppi_sdcorr         ,"jetAK8puppi_sdcorr/D"         );
 
   outTree_->Branch("jetAK8puppi_ptJEC_2"          ,&jetAK8puppi_ptJEC_2         ,"jetAK8puppi_ptJEC_2/D"    );
+   outTree_->Branch("jetAK8puppi_ptJEC_2_new"          ,&jetAK8puppi_ptJEC_2_new         ,"jetAK8puppi_ptJEC_2_new/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_2_JEC_up"          ,&jetAK8puppi_ptJEC_2_JEC_up         ,"jetAK8puppi_ptJEC_2_JEC_up/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_2_JEC_down"          ,&jetAK8puppi_ptJEC_2_JEC_down         ,"jetAK8puppi_ptJEC_2_JEC_down/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_2_JER_down"          ,&jetAK8puppi_ptJEC_2_JER_down         ,"jetAK8puppi_ptJEC_2_JER_down/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_2_JER_up"          ,&jetAK8puppi_ptJEC_2_JER_up         ,"jetAK8puppi_ptJEC_2_JER_up/D"         );
+
   outTree_->Branch("jetAK8puppi_eta_2"          ,&jetAK8puppi_eta_2         ,"jetAK8puppi_eta_2/D"         );
   outTree_->Branch("jetAK8puppi_phi_2"          ,&jetAK8puppi_phi_2         ,"jetAK8puppi_phi_2/D"         );
   outTree_->Branch("jetAK8puppi_tau1_2"          ,&jetAK8puppi_tau1_2         ,"jetAK8puppi_tau1_2/D"         );
@@ -740,6 +764,12 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("jetAK8puppi_sdcorr_2"          ,&jetAK8puppi_sdcorr_2         ,"jetAK8puppi_sdcorr_2/D"  );
 
   outTree_->Branch("jetAK8puppi_ptJEC_3"          ,&jetAK8puppi_ptJEC_3         ,"jetAK8puppi_ptJEC_3/D"    );
+    outTree_->Branch("jetAK8puppi_ptJEC_3_new"          ,&jetAK8puppi_ptJEC_3_new         ,"jetAK8puppi_ptJEC_3_new/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_3_JEC_up"          ,&jetAK8puppi_ptJEC_3_JEC_up         ,"jetAK8puppi_ptJEC_3_JEC_up/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_3_JEC_down"          ,&jetAK8puppi_ptJEC_3_JEC_down         ,"jetAK8puppi_ptJEC_3_JEC_down/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_3_JER_down"          ,&jetAK8puppi_ptJEC_3_JER_down         ,"jetAK8puppi_ptJEC_3_JER_down/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_3_JER_up"          ,&jetAK8puppi_ptJEC_3_JER_up         ,"jetAK8puppi_ptJEC_3_JER_up/D"         );
+    
   outTree_->Branch("jetAK8puppi_eta_3"          ,&jetAK8puppi_eta_3         ,"jetAK8puppi_eta_3/D"         );
   outTree_->Branch("jetAK8puppi_phi_3"          ,&jetAK8puppi_phi_3         ,"jetAK8puppi_phi_3/D"         );
   outTree_->Branch("jetAK8puppi_tau1_3"          ,&jetAK8puppi_tau1_3         ,"jetAK8puppi_tau1_3/D"         );
@@ -753,6 +783,12 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("jetAK8puppi_sdcorr_3"          ,&jetAK8puppi_sdcorr_3         ,"jetAK8puppi_sdcorr_3/D"  );
 
   outTree_->Branch("jetAK8puppi_ptJEC_4"          ,&jetAK8puppi_ptJEC_4         ,"jetAK8puppi_ptJEC_4/D"    );
+   outTree_->Branch("jetAK8puppi_ptJEC_4_new"          ,&jetAK8puppi_ptJEC_4_new         ,"jetAK8puppi_ptJEC_4_new/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_4_JEC_up"          ,&jetAK8puppi_ptJEC_4_JEC_up         ,"jetAK8puppi_ptJEC_4_JEC_up/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_4_JEC_down"          ,&jetAK8puppi_ptJEC_4_JEC_down         ,"jetAK8puppi_ptJEC_4_JEC_down/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_4_JER_down"          ,&jetAK8puppi_ptJEC_4_JER_down         ,"jetAK8puppi_ptJEC_4_JER_down/D"         );
+    outTree_->Branch("jetAK8puppi_ptJEC_4_JER_up"          ,&jetAK8puppi_ptJEC_4_JER_up         ,"jetAK8puppi_ptJEC_4_JER_up/D"         );
+
   outTree_->Branch("jetAK8puppi_eta_4"          ,&jetAK8puppi_eta_4         ,"jetAK8puppi_eta_4/D"         );
   outTree_->Branch("jetAK8puppi_phi_4"          ,&jetAK8puppi_phi_4         ,"jetAK8puppi_phi_4/D"         );
   outTree_->Branch("jetAK8puppi_tau1_4"          ,&jetAK8puppi_tau1_4         ,"jetAK8puppi_tau1_4/D"         );
@@ -765,62 +801,34 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("jetAK8puppi_sdJEC_4"          ,&jetAK8puppi_sdJEC_4         ,"jetAK8puppi_sdJEC_4/D"   );
   outTree_->Branch("jetAK8puppi_sdcorr_4"          ,&jetAK8puppi_sdcorr_4         ,"jetAK8puppi_sdcorr_4/D"  );
 
-/*
-  outTree_->Branch("jetAK8puppi_ptJEC_5"          ,&jetAK8puppi_ptJEC_5         ,"jetAK8puppi_ptJEC_5/D"    );
-  outTree_->Branch("jetAK8puppi_eta_5"          ,&jetAK8puppi_eta_5         ,"jetAK8puppi_eta_5/D"         );
-  outTree_->Branch("jetAK8puppi_phi_5"          ,&jetAK8puppi_phi_5         ,"jetAK8puppi_phi_5/D"         );
-  outTree_->Branch("jetAK8puppi_tau1_5"          ,&jetAK8puppi_tau1_5         ,"jetAK8puppi_tau1_5/D"         );
-  outTree_->Branch("jetAK8puppi_tau2_5"          ,&jetAK8puppi_tau2_5         ,"jetAK8puppi_tau2_5/D"         );
-  outTree_->Branch("jetAK8puppi_tau3_5"          ,&jetAK8puppi_tau3_5         ,"jetAK8puppi_tau3_5/D"         );
-  outTree_->Branch("jetAK8puppi_tau21_5"          ,&jetAK8puppi_tau21_5         ,"jetAK8puppi_tau21_5/D"    );
-  outTree_->Branch("jetAK8puppi_tau4_5"          ,&jetAK8puppi_tau4_5         ,"jetAK8puppi_tau4_5/D"       );
-  outTree_->Branch("jetAK8puppi_tau42_5"          ,&jetAK8puppi_tau42_5         ,"jetAK8puppi_tau42_5/D"  );
-  outTree_->Branch("jetAK8puppi_sd_5"          ,&jetAK8puppi_sd_5         ,"jetAK8puppi_sd_5/D"         );
-  outTree_->Branch("jetAK8puppi_sdJEC_5"          ,&jetAK8puppi_sdJEC_5         ,"jetAK8puppi_sdJEC_5/D"   );
-  outTree_->Branch("jetAK8puppi_sdcorr_5"          ,&jetAK8puppi_sdcorr_5         ,"jetAK8puppi_sdcorr_5/D"  );
 
+    outTree_->Branch("jetAK8puppi_e"          ,&jetAK8puppi_e         ,"jetAK8puppi_e/D"         );
+    outTree_->Branch("jetAK8puppi_e_new"          ,&jetAK8puppi_e_new         ,"jetAK8puppi_e_new/D"         );
+    outTree_->Branch("jetAK8puppi_e_JEC_up"          ,&jetAK8puppi_e_JEC_up         ,"jetAK8puppi_e_JEC_up/D"         );
+    outTree_->Branch("jetAK8puppi_e_JEC_down"          ,&jetAK8puppi_e_JEC_down         ,"jetAK8puppi_e_JEC_down/D"         );
+    outTree_->Branch("jetAK8puppi_e_JER_down"          ,&jetAK8puppi_e_JER_down         ,"jetAK8puppi_e_JER_down/D"         );
+    outTree_->Branch("jetAK8puppi_e_JER_up"          ,&jetAK8puppi_e_JER_up         ,"jetAK8puppi_e_JER_up/D"         );
+    outTree_->Branch("jetAK8puppi_e_2"          ,&jetAK8puppi_e_2         ,"jetAK8puppi_e_2/D"         );
+    outTree_->Branch("jetAK8puppi_e_2_new"          ,&jetAK8puppi_e_2_new         ,"jetAK8puppi_e_2_new/D"         );
+    outTree_->Branch("jetAK8puppi_e_2_JEC_up"          ,&jetAK8puppi_e_2_JEC_up         ,"jetAK8puppi_e_2_JEC_up/D"         );
+    outTree_->Branch("jetAK8puppi_e_2_JEC_down"          ,&jetAK8puppi_e_2_JEC_down         ,"jetAK8puppi_e_2_JEC_down/D"         );
+    outTree_->Branch("jetAK8puppi_e_2_JER_down"          ,&jetAK8puppi_e_2_JER_down         ,"jetAK8puppi_e_2_JER_down/D"         );
+    outTree_->Branch("jetAK8puppi_e_2_JER_up"          ,&jetAK8puppi_e_2_JER_up         ,"jetAK8puppi_e_2_JER_up/D"         );
+    outTree_->Branch("jetAK8puppi_e_3"          ,&jetAK8puppi_e_3         ,"jetAK8puppi_e_3/D"         );
+    outTree_->Branch("jetAK8puppi_e_3_new"          ,&jetAK8puppi_e_3_new         ,"jetAK8puppi_e_3_new/D"         );
+    outTree_->Branch("jetAK8puppi_e_3_JEC_up"          ,&jetAK8puppi_e_3_JEC_up         ,"jetAK8puppi_e_3_JEC_up/D"         );
+    outTree_->Branch("jetAK8puppi_e_3_JEC_down"          ,&jetAK8puppi_e_3_JEC_down         ,"jetAK8puppi_e_3_JEC_down/D"         );
+    outTree_->Branch("jetAK8puppi_e_3_JER_down"          ,&jetAK8puppi_e_3_JER_down         ,"jetAK8puppi_e_3_JER_down/D"         );
+    outTree_->Branch("jetAK8puppi_e_3_JER_up"          ,&jetAK8puppi_e_3_JER_up         ,"jetAK8puppi_e_3_JER_up/D"         );
 
-  outTree_->Branch("jetAK8puppi_ptJEC_6"          ,&jetAK8puppi_ptJEC_6         ,"jetAK8puppi_ptJEC_6/D"    );
-  outTree_->Branch("jetAK8puppi_eta_6"          ,&jetAK8puppi_eta_6         ,"jetAK8puppi_eta_6/D"         );
-  outTree_->Branch("jetAK8puppi_phi_6"          ,&jetAK8puppi_phi_6         ,"jetAK8puppi_phi_6/D"         );
-  outTree_->Branch("jetAK8puppi_tau1_6"          ,&jetAK8puppi_tau1_6         ,"jetAK8puppi_tau1_6/D"         );
-  outTree_->Branch("jetAK8puppi_tau2_6"          ,&jetAK8puppi_tau2_6         ,"jetAK8puppi_tau2_6/D"         );
-  outTree_->Branch("jetAK8puppi_tau3_6"          ,&jetAK8puppi_tau3_6         ,"jetAK8puppi_tau3_6/D"         );
-  outTree_->Branch("jetAK8puppi_tau21_6"          ,&jetAK8puppi_tau21_6         ,"jetAK8puppi_tau21_6/D"    );
-  outTree_->Branch("jetAK8puppi_tau4_6"          ,&jetAK8puppi_tau4_6         ,"jetAK8puppi_tau4_6/D"       );
-  outTree_->Branch("jetAK8puppi_tau42_6"          ,&jetAK8puppi_tau42_6         ,"jetAK8puppi_tau42_6/D"  );
-  outTree_->Branch("jetAK8puppi_sd_6"          ,&jetAK8puppi_sd_6         ,"jetAK8puppi_sd_6/D"         );
-  outTree_->Branch("jetAK8puppi_sdJEC_6"          ,&jetAK8puppi_sdJEC_6         ,"jetAK8puppi_sdJEC_6/D"   );
-  outTree_->Branch("jetAK8puppi_sdcorr_6"          ,&jetAK8puppi_sdcorr_6         ,"jetAK8puppi_sdcorr_6/D"  );
+    outTree_->Branch("jetAK8puppi_e_4"          ,&jetAK8puppi_e_4         ,"jetAK8puppi_e_4/D"         );
 
+    outTree_->Branch("jetAK8puppi_e_4_new"          ,&jetAK8puppi_e_4_new         ,"jetAK8puppi_e_4_new/D"         );
+    outTree_->Branch("jetAK8puppi_e_4_JEC_up"          ,&jetAK8puppi_e_4_JEC_up         ,"jetAK8puppi_e_4_JEC_up/D"         );
+    outTree_->Branch("jetAK8puppi_e_4_JEC_down"          ,&jetAK8puppi_e_4_JEC_down         ,"jetAK8puppi_e_4_JEC_down/D"         );
+    outTree_->Branch("jetAK8puppi_e_4_JER_down"          ,&jetAK8puppi_e_4_JER_down         ,"jetAK8puppi_e_4_JER_down/D"         );
+    outTree_->Branch("jetAK8puppi_e_4_JER_up"          ,&jetAK8puppi_e_4_JER_up         ,"jetAK8puppi_e_4_JER_up/D"         );
 
-  outTree_->Branch("jetAK8puppi_ptJEC_7"          ,&jetAK8puppi_ptJEC_7         ,"jetAK8puppi_ptJEC_7/D"    );
-  outTree_->Branch("jetAK8puppi_eta_7"          ,&jetAK8puppi_eta_7         ,"jetAK8puppi_eta_7/D"         );
-  outTree_->Branch("jetAK8puppi_phi_7"          ,&jetAK8puppi_phi_7         ,"jetAK8puppi_phi_7/D"         );
-  outTree_->Branch("jetAK8puppi_tau1_7"          ,&jetAK8puppi_tau1_7         ,"jetAK8puppi_tau1_7/D"         );
-  outTree_->Branch("jetAK8puppi_tau2_7"          ,&jetAK8puppi_tau2_7         ,"jetAK8puppi_tau2_7/D"         );
-  outTree_->Branch("jetAK8puppi_tau3_7"          ,&jetAK8puppi_tau3_7         ,"jetAK8puppi_tau3_7/D"         );
-  outTree_->Branch("jetAK8puppi_tau21_7"          ,&jetAK8puppi_tau21_7         ,"jetAK8puppi_tau21_7/D"    );
-  outTree_->Branch("jetAK8puppi_tau4_7"          ,&jetAK8puppi_tau4_7         ,"jetAK8puppi_tau4_7/D"       );
-  outTree_->Branch("jetAK8puppi_tau42_7"          ,&jetAK8puppi_tau42_7         ,"jetAK8puppi_tau42_7/D"  );
-  outTree_->Branch("jetAK8puppi_sd_7"          ,&jetAK8puppi_sd_7         ,"jetAK8puppi_sd_7/D"         );
-  outTree_->Branch("jetAK8puppi_sdJEC_7"          ,&jetAK8puppi_sdJEC_7         ,"jetAK8puppi_sdJEC_7/D"   );
-  outTree_->Branch("jetAK8puppi_sdcorr_7"          ,&jetAK8puppi_sdcorr_7         ,"jetAK8puppi_sdcorr_7/D"  );
-
-
-  outTree_->Branch("jetAK8puppi_ptJEC_8"          ,&jetAK8puppi_ptJEC_8         ,"jetAK8puppi_ptJEC_8/D"    );
-  outTree_->Branch("jetAK8puppi_eta_8"          ,&jetAK8puppi_eta_8         ,"jetAK8puppi_eta_8/D"         );
-  outTree_->Branch("jetAK8puppi_phi_8"          ,&jetAK8puppi_phi_8         ,"jetAK8puppi_phi_8/D"         );
-  outTree_->Branch("jetAK8puppi_tau1_8"          ,&jetAK8puppi_tau1_8         ,"jetAK8puppi_tau1_8/D"         );
-  outTree_->Branch("jetAK8puppi_tau2_8"          ,&jetAK8puppi_tau2_8         ,"jetAK8puppi_tau2_8/D"         );
-  outTree_->Branch("jetAK8puppi_tau3_8"          ,&jetAK8puppi_tau3_8         ,"jetAK8puppi_tau3_8/D"         );
-  outTree_->Branch("jetAK8puppi_tau21_8"          ,&jetAK8puppi_tau21_8         ,"jetAK8puppi_tau21_8/D"    );
-  outTree_->Branch("jetAK8puppi_tau4_8"          ,&jetAK8puppi_tau4_8         ,"jetAK8puppi_tau4_8/D"       );
-  outTree_->Branch("jetAK8puppi_tau42_8"          ,&jetAK8puppi_tau42_8         ,"jetAK8puppi_tau42_8/D"  );
-  outTree_->Branch("jetAK8puppi_sd_8"          ,&jetAK8puppi_sd_8         ,"jetAK8puppi_sd_8/D"         );
-  outTree_->Branch("jetAK8puppi_sdJEC_8"          ,&jetAK8puppi_sdJEC_8         ,"jetAK8puppi_sdJEC_8/D"   );
-  outTree_->Branch("jetAK8puppi_sdcorr_8"          ,&jetAK8puppi_sdcorr_8         ,"jetAK8puppi_sdcorr_8/D"  );
-*/
   /// Other quantities
   outTree_->Branch("theWeight", &theWeight, "theWeight/D");  
   outTreew_->Branch("theWeight", &theWeight, "theWeight/D");
@@ -832,16 +840,6 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("triggerWeight"   ,&triggerWeight  ,"triggerWeight/D"  );
   outTree_->Branch("lumiWeight"      ,&lumiWeight     ,"lumiWeight/D"     );
   outTree_->Branch("pileupWeight"    ,&pileupWeight   ,"pileupWeight/D"   );
-/*
-  outTree_->Branch("delPhijetmet"    ,&delPhijetmet   ,"delPhijetmet/D"   );
-  outTree_->Branch("delPhijetmet_2"    ,&delPhijetmet_2   ,"delPhijetmet_2/D"   );
-  outTree_->Branch("delPhijetmet_3"    ,&delPhijetmet_3   ,"delPhijetmet_3/D"   );
-  outTree_->Branch("delPhijetmet_4"    ,&delPhijetmet_4   ,"delPhijetmet_4/D"   );
-  outTree_->Branch("delPhijetmet_5"    ,&delPhijetmet_5   ,"delPhijetmet_5/D"   );
-  outTree_->Branch("delPhijetmet_6"    ,&delPhijetmet_6   ,"delPhijetmet_6/D"   );
-  outTree_->Branch("delPhijetmet_7"    ,&delPhijetmet_7   ,"delPhijetmet_7/D"   );
-  outTree_->Branch("delPhijetmet_8"    ,&delPhijetmet_8   ,"delPhijetmet_8/D"   );
-*/
 //after JEC varible
   outTree_->Branch("met"             ,&met            ,"met/D"            );
   outTree_->Branch("metPhi"          ,&metPhi         ,"metPhi/D"         );
@@ -851,6 +849,22 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("MET_et",&MET_et,"MET_et/D");
   outTree_->Branch("MET_phi",&MET_phi,"MET_phi/D");
   outTree_->Branch("MET_sumEt",&MET_sumEt,"MET_sumEt/D");
+
+    outTree_->Branch("MET_et_new", &MET_et_new, "MET_et_new/D");
+   outTree_->Branch("MET_et_JEC_up", &MET_et_JEC_up, "MET_et_JEC_up/D");
+    outTree_->Branch("MET_et_JEC_down", &MET_et_JEC_down, "MET_et_JEC_down/D");
+    outTree_->Branch("MET_et_JER_up", &MET_et_JER_up, "MET_et_JER_up/D");
+    outTree_->Branch("MET_et_JER_down", &MET_et_JER_down, "MET_et_JER_down/D");
+
+   outTree_->Branch("MET_et_m", &MET_et_m, "MET_et_m/D");
+    outTree_->Branch("MET_et_old", &MET_et_old, "MET_et_old/D");
+    outTree_->Branch("MET_phi_m", &MET_phi_m, "MET_phi_m/D");
+
+    outTree_->Branch("MET_phi_new", &MET_phi_new, "MET_phi_new/D");
+    outTree_->Branch("MET_phi_JEC_up", &MET_phi_JEC_up, "MET_phi_JEC_up/D");
+    outTree_->Branch("MET_phi_JEC_down", &MET_phi_JEC_down, "MET_phi_JEC_down/D");
+    outTree_->Branch("MET_phi_JER_up", &MET_phi_JER_up, "MET_phi_JER_up/D");
+    outTree_->Branch("MET_phi_JER_down", &MET_phi_JER_down, "MET_phi_JER_down/D");
 
   outTree_->Branch("jetAK8_pt",&jetAK8_pt,"jetAK8_pt/D");
   outTree_->Branch("jetAK8_mass",&jetAK8_mass,"jetAK8_mass/D");
@@ -867,7 +881,18 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("candMasspuppiJEC",&candMasspuppiJEC,"candMasspuppiJEC/D");
   outTree_->Branch("massww",&massww,"massww[3]/D");
 
+    outTree_->Branch("candMasspuppiJEC_new",&candMasspuppiJEC_new,"candMasspuppiJEC_new/D");
+    outTree_->Branch("MJJ_new",&MJJ_new,"MJJ_new/D");
  
+    outTree_->Branch("candMasspuppiJEC_JEC_up",&candMasspuppiJEC_JEC_up,"candMasspuppiJEC_JEC_up/D");
+    outTree_->Branch("MJJ_JEC_up",&MJJ_JEC_up,"MJJ_JEC_up/D");
+    outTree_->Branch("candMasspuppiJEC_JEC_down",&candMasspuppiJEC_JEC_down,"candMasspuppiJEC_JEC_down/D");
+    outTree_->Branch("MJJ_JEC_down",&MJJ_JEC_down,"MJJ_JEC_down/D");
+    outTree_->Branch("candMasspuppiJEC_JER_down",&candMasspuppiJEC_JER_down,"candMasspuppiJEC_JER_down/D");
+    outTree_->Branch("MJJ_JER_down",&MJJ_JER_down,"MJJ_JER_down/D");
+    outTree_->Branch("candMasspuppiJEC_JER_up",&candMasspuppiJEC_JER_up,"candMasspuppiJEC_JER_up/D");
+    outTree_->Branch("MJJ_JER_up",&MJJ_JER_up,"MJJ_JER_up/D");
+
   ///HLT bits
   outTree_->Branch("HLT_Mu1"   ,&HLT_Mu1  ,"HLT_Mu1/I"  );
   outTree_->Branch("HLT_Mu2"   ,&HLT_Mu2  ,"HLT_Mu2/I"  );
@@ -887,33 +912,33 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("HLT_Mu16"   ,&HLT_Mu16  ,"HLT_Mu16/I"  );
   outTree_->Branch("HLT_Mu17"   ,&HLT_Mu17  ,"HLT_Mu17/I"  );
 // filter
-  outTree_->Branch("passFilter_HBHE"                 ,&passFilter_HBHE_                ,"passFilter_HBHE_/O");
-  outTree_->Branch("passFilter_HBHEIso"                 ,&passFilter_HBHEIso_                ,"passFilter_HBHEIso_/O");
-  outTree_->Branch("passFilter_GlobalHalo"              ,&passFilter_GlobalHalo_             ,"passFilter_GlobalHalo_/O");
-  outTree_->Branch("passFilter_ECALDeadCell"         ,&passFilter_ECALDeadCell_        ,"passFilter_ECALDeadCell_/O");
-  outTree_->Branch("passFilter_GoodVtx"              ,&passFilter_GoodVtx_             ,"passFilter_GoodVtx_/O");
-  outTree_->Branch("passFilter_EEBadSc"              ,&passFilter_EEBadSc_             ,"passFilter_EEBadSc_/O");
-  outTree_->Branch("passFilter_badMuon"                 ,&passFilter_badMuon_                ,"passFilter_badMuon_/O");
-  outTree_->Branch("passFilter_badChargedHadron"                 ,&passFilter_badChargedHadron_                ,"passFilter_badChargedHadron_/O");
+//  outTree_->Branch("passFilter_HBHE"                 ,&passFilter_HBHE_                ,"passFilter_HBHE_/O");
+//  outTree_->Branch("passFilter_HBHEIso"                 ,&passFilter_HBHEIso_                ,"passFilter_HBHEIso_/O");
+ // outTree_->Branch("passFilter_GlobalHalo"              ,&passFilter_GlobalHalo_             ,"passFilter_GlobalHalo_/O");
+ // outTree_->Branch("passFilter_ECALDeadCell"         ,&passFilter_ECALDeadCell_        ,"passFilter_ECALDeadCell_/O");
+//  outTree_->Branch("passFilter_GoodVtx"              ,&passFilter_GoodVtx_             ,"passFilter_GoodVtx_/O");
+//  outTree_->Branch("passFilter_EEBadSc"              ,&passFilter_EEBadSc_             ,"passFilter_EEBadSc_/O");
+ // outTree_->Branch("passFilter_badMuon"                 ,&passFilter_badMuon_                ,"passFilter_badMuon_/O");
+//  outTree_->Branch("passFilter_badChargedHadron"                 ,&passFilter_badChargedHadron_                ,"passFilter_badChargedHadron_/O");
 
   /// AK4 Jets Info
-  outTree_->Branch("ak4jet_hf"        , ak4jet_hf       ,"ak4jet_hf[8]/I"       );
-  outTree_->Branch("ak4jet_pf"        , ak4jet_pf       ,"ak4jet_pf[8]/I"       );
-  outTree_->Branch("ak4jet_pt"        , ak4jet_pt       ,"ak4jet_pt[8]/D"       );
-  outTree_->Branch("ak4jet_pt_uncorr"        , ak4jet_pt_uncorr       ,"ak4jet_pt_uncorr[8]/D"       );
-  outTree_->Branch("ak4jet_eta"        , ak4jet_eta       ,"ak4jet_eta[8]/D"       );
-  outTree_->Branch("ak4jet_phi"        , ak4jet_phi       ,"ak4jet_phi[8]/D"       );
-  outTree_->Branch("ak4jet_e"        , ak4jet_e       ,"ak4jet_e[8]/D"       );
-  outTree_->Branch("ak4jet_dr"        , ak4jet_dr       ,"ak4jet_dr[8]/D"       );
-  outTree_->Branch("ak4jet_csv"        , ak4jet_csv       ,"ak4jet_csv[8]/D"       );
-  outTree_->Branch("ak4jet_icsv"        , ak4jet_icsv       ,"ak4jet_icsv[8]/D"       );
-  outTree_->Branch("ak4jet_IDLoose"        , ak4jet_IDLoose       ,"ak4jet_IDLoose[8]/D"       );
-  outTree_->Branch("ak4jet_IDTight"        , ak4jet_IDTight       ,"ak4jet_IDTight[8]/D"       );
-  outTree_->Branch("ak4jet_deepcsvudsg"        , ak4jet_deepcsvudsg       ,"ak4jet_deepcsvudsg[8]/D"       );
-  outTree_->Branch("ak4jet_deepcsvb"        , ak4jet_deepcsvb       ,"ak4jet_deepcsvb[8]/D"       );
-  outTree_->Branch("ak4jet_deepcsvc"        , ak4jet_deepcsvc       ,"ak4jet_deepcsvc[8]/D"       );
-  outTree_->Branch("ak4jet_deepcsvbb"        , ak4jet_deepcsvbb       ,"ak4jet_deepcsvbb[8]/D"       );
-  outTree_->Branch("ak4jet_deepcsvcc"        , ak4jet_deepcsvcc       ,"ak4jet_deepcsvcc[8]/D"       );
+  outTree_->Branch("ak4jet_hf"        , ak4jet_hf       ,"ak4jet_hf[15]/I"       );
+  outTree_->Branch("ak4jet_pf"        , ak4jet_pf       ,"ak4jet_pf[15]/I"       );
+  outTree_->Branch("ak4jet_pt"        , ak4jet_pt       ,"ak4jet_pt[15]/D"       );
+  outTree_->Branch("ak4jet_pt_uncorr"        , ak4jet_pt_uncorr       ,"ak4jet_pt_uncorr[15]/D"       );
+  outTree_->Branch("ak4jet_eta"        , ak4jet_eta       ,"ak4jet_eta[15]/D"       );
+  outTree_->Branch("ak4jet_phi"        , ak4jet_phi       ,"ak4jet_phi[15]/D"       );
+  outTree_->Branch("ak4jet_e"        , ak4jet_e       ,"ak4jet_e[15]/D"       );
+  outTree_->Branch("ak4jet_dr"        , ak4jet_dr       ,"ak4jet_dr[15]/D"       );
+  outTree_->Branch("ak4jet_csv"        , ak4jet_csv       ,"ak4jet_csv[15]/D"       );
+  outTree_->Branch("ak4jet_icsv"        , ak4jet_icsv       ,"ak4jet_icsv[15]/D"       );
+  outTree_->Branch("ak4jet_IDLoose"        , ak4jet_IDLoose       ,"ak4jet_IDLoose[15]/D"       );
+  outTree_->Branch("ak4jet_IDTight"        , ak4jet_IDTight       ,"ak4jet_IDTight[15]/D"       );
+  outTree_->Branch("ak4jet_deepcsvudsg"        , ak4jet_deepcsvudsg       ,"ak4jet_deepcsvudsg[15]/D"       );
+  outTree_->Branch("ak4jet_deepcsvb"        , ak4jet_deepcsvb       ,"ak4jet_deepcsvb[15]/D"       );
+  outTree_->Branch("ak4jet_deepcsvc"        , ak4jet_deepcsvc       ,"ak4jet_deepcsvc[15]/D"       );
+  outTree_->Branch("ak4jet_deepcsvbb"        , ak4jet_deepcsvbb       ,"ak4jet_deepcsvbb[15]/D"       );
+  outTree_->Branch("ak4jet_deepcsvcc"        , ak4jet_deepcsvcc       ,"ak4jet_deepcsvcc[15]/D"       );
 
   /// Gen Level quantities
   /*
@@ -996,6 +1021,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("egenq5f"        ,&egenq5f       ,"egenq5f[5]/D"       );
   */
     if (RunOnMC_){
+        outTree_->Branch("psweight"           ,psweight         ,"psweight[46]/D"          );
         outTree_->Branch("gent_b_pt"           ,&gent_b_pt         ,"gent_b_pt/D"          );
         outTree_->Branch("gent_b_eta"           ,&gent_b_eta         ,"gent_b_eta/D"          );
         outTree_->Branch("gent_b_phi"           ,&gent_b_phi         ,"gent_b_phi/D"          );
@@ -1280,7 +1306,7 @@ EDBRTreeMaker::EDBRTreeMaker(const edm::ParameterSet& iConfig):
   outTree_->Branch("status_1"           ,&status_1         ,"status_1/I"          );
   outTree_->Branch("status_2"           ,&status_2         ,"status_2/I"          );
   outTree_->Branch("status_3"           ,&status_3         ,"status_3/I"          );
-  outTree_->Branch("pweight" ,pweight ,"pweight[211]/D" );
+  outTree_->Branch("pweight" ,pweight ,"pweight[2]/D" );
   }
 }
 /*
@@ -1338,9 +1364,9 @@ EDBRTreeMaker::~EDBRTreeMaker()
    // (e.g. close files, deallocate resources etc.)
 }
 
+// refer to https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
 bool
 EDBRTreeMaker::looseJetID( const pat::Jet& j ) {
-// refer to https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
         if(j.pt()>170.){
 	double NHF = j.neutralHadronEnergyFraction();
 	double NEMF = j.neutralEmEnergyFraction();
@@ -1359,23 +1385,55 @@ return (0);
 
 bool
 EDBRTreeMaker::tightJetID( const pat::Jet& j ) {
-// refer to https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
-         if(j.pt()>170.){
-                 double NHF = j.neutralHadronEnergyFraction();
-                 double NEMF = j.neutralEmEnergyFraction();
-                 double CHF = j.chargedHadronEnergyFraction();
-                 double MUF  = j.muonEnergyFraction();
-                 double CEMF = j.chargedEmEnergyFraction();
-                 int NumConst = j.chargedMultiplicity()+j.neutralMultiplicity();
-                 int NumNeutralParticle =j.neutralMultiplicity();
-                 int CHM = j.chargedMultiplicity();
-                 double eta = j.eta();
-                 return ( (abs(eta)<=2.4 && NHF<0.9 && NEMF<0.9 && NumConst>1 && MUF<0.8 && CHF>0 && CHM>0 && CEMF<0.8) || (abs(eta)>2.4 && abs(eta)<=2.7 && NHF<0.9 && NEMF<0.9 && NumConst>1 && MUF<0.8) || (abs(eta)>2.7 && abs(eta)<=3.0 && NEMF<0.99) || (abs(eta)>3.0 && NEMF<0.90 && NHF>0.02 && NumNeutralParticle>2 && NumNeutralParticle<15) );
-                        }
-         else{
-                 return (0);
-             }
-                                               }
+    if(j.pt()>170.){
+    double NHF = j.neutralHadronEnergyFraction();
+    double NEMF = j.neutralEmEnergyFraction();
+    double CHF = j.chargedHadronEnergyFraction();
+    int NumConst = j.chargedMultiplicity()+j.neutralMultiplicity();
+    int NumNeutralParticle =j.neutralMultiplicity();
+    int CHM = j.chargedMultiplicity();
+    double eta = j.eta();
+    return ((  (NHF<0.90 && NEMF<0.90 && NumConst>1) && CHF>0 && CHM>0  && abs(eta)<=2.6 ) || (  (NHF<0.90 && NEMF<0.99 )   && abs(eta)>2.6 && abs(eta)<=2.7 ) ||(   NHF<0.99  && abs(eta)>2.7 && abs(eta)<=3.0 ) ||(  (NHF>0.02 && NEMF<0.9 ) && NumNeutralParticle>2&& NumNeutralParticle<15 && abs(eta)>3.0 && abs(eta)<=5.0 ));
+}
+else{
+return (0);
+    }
+}
+
+bool
+EDBRTreeMaker::looseJetID_ak4( const pat::Jet& j ) {
+        if(j.pt()>0.){
+        double NHF = j.neutralHadronEnergyFraction();
+        double NEMF = j.neutralEmEnergyFraction();
+        double CHF = j.chargedHadronEnergyFraction();
+        double CEMF = j.chargedEmEnergyFraction();
+        int NumConst = j.chargedMultiplicity()+j.neutralMultiplicity();
+        int NumNeutralParticle =j.neutralMultiplicity();
+        int CHM = j.chargedMultiplicity();
+        double eta = j.eta();
+          return ((  (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(eta)>2.4) && abs(eta)<=2.7 ) || (NHF<0.98 && NEMF>0.01 && NumNeutralParticle>2 && abs(eta)>2.7 && abs(eta)<=3.0 ) || (NEMF<0.90 && NumNeutralParticle>10 && abs(eta)>3.0) ) ;
+}
+else{
+return (0);
+    }
+}
+
+bool
+EDBRTreeMaker::tightJetID_ak4( const pat::Jet& j ) {
+    if(j.pt()>0.){
+    double NHF = j.neutralHadronEnergyFraction();
+    double NEMF = j.neutralEmEnergyFraction();
+    double CHF = j.chargedHadronEnergyFraction();
+    int NumConst = j.chargedMultiplicity()+j.neutralMultiplicity();
+    int NumNeutralParticle =j.neutralMultiplicity();
+    int CHM = j.chargedMultiplicity();
+    double eta = j.eta();
+    return ((  (NHF<0.90 && NEMF<0.90 && NumConst>1) && CHF>0 && CHM>0  && abs(eta)<=2.6 ) || (  (NHF<0.90 && NEMF<0.99 && CHM>0 )   && abs(eta)>2.6 && abs(eta)<=2.7 ) ||(   NEMF<0.99 && NEMF>0.02  && abs(eta)>2.7 && abs(eta)<=3.0 ) ||(  (NHF>0.2 && NEMF<0.9 ) && NumNeutralParticle>10 && abs(eta)>3.0 && abs(eta)<=5.0 ));
+}
+else{
+return (0);
+    }
+}
 
 float
 EDBRTreeMaker::dEtaInSeed( const pat::Electron*  ele ){
@@ -1521,6 +1579,70 @@ void EDBRTreeMaker::addTypeICorr( edm::Event const & event ){
  TypeICorrMap_["corrSumEt"] = corrSumEt;
 }
 
+void EDBRTreeMaker::addTypeICorr_user(edm::Event const& event) {
+    TypeICorrMap_user_.clear();
+    edm::Handle<pat::JetCollection> jets_;
+    event.getByToken(t1jetSrc_userak4_, jets_);
+    double corrEx_JEC         = 0;
+    double corrEy_JEC         = 0;
+    double corrSumEt_JEC      = 0;
+    double corrEx_JEC_up      = 0;
+    double corrEy_JEC_up      = 0;
+    double corrSumEt_JEC_up   = 0;
+    double corrEx_JEC_down    = 0;
+    double corrEy_JEC_down    = 0;
+    double corrSumEt_JEC_down = 0;
+    
+    double corrEx_JER         = 0;
+    double corrEy_JER         = 0;
+    double corrSumEt_JER      = 0;
+    double corrEx_JER_up      = 0;
+    double corrEy_JER_up      = 0;
+    double corrSumEt_JER_up   = 0;
+    double corrEx_JER_down    = 0;
+    double corrEy_JER_down    = 0;
+    double corrSumEt_JER_down = 0;
+    for (const pat::Jet& jet : *jets_) {
+        corrEx_JEC += jet.userFloat("corrEx_MET_JEC");
+        corrEy_JEC += jet.userFloat("corrEy_MET_JEC");
+        corrSumEt_JEC += jet.userFloat("corrSumEt_MET_JEC");
+        corrEx_JEC_up += jet.userFloat("corrEx_MET_JEC_up");
+        corrEy_JEC_up += jet.userFloat("corrEy_MET_JEC_up");
+        corrSumEt_JEC_up += jet.userFloat("corrSumEt_MET_JEC_up");
+        corrEx_JEC_down += jet.userFloat("corrEx_MET_JEC_down");
+        corrEy_JEC_down += jet.userFloat("corrEy_MET_JEC_down");
+        corrSumEt_JEC_down += jet.userFloat("corrSumEt_MET_JEC_down");
+        corrEx_JER += jet.userFloat("corrEx_MET_JER");
+        corrEy_JER += jet.userFloat("corrEy_MET_JER");
+        corrSumEt_JER += jet.userFloat("corrSumEt_MET_JER");
+        corrEx_JER_up += jet.userFloat("corrEx_MET_JER_up");
+        corrEy_JER_up += jet.userFloat("corrEy_MET_JER_up");
+        corrSumEt_JER_up += jet.userFloat("corrSumEt_MET_JER_up");
+        corrEx_JER_down += jet.userFloat("corrEx_MET_JER_down");
+        corrEy_JER_down += jet.userFloat("corrEy_MET_JER_down");
+        corrSumEt_JER_down += jet.userFloat("corrSumEt_MET_JER_down");
+    }
+    TypeICorrMap_user_["corrEx_JEC"]         = corrEx_JEC;
+    TypeICorrMap_user_["corrEy_JEC"]         = corrEy_JEC;
+    TypeICorrMap_user_["corrSumEt_JEC"]      = corrSumEt_JEC;
+    TypeICorrMap_user_["corrEx_JEC_up"]      = corrEx_JEC_up;
+    TypeICorrMap_user_["corrEy_JEC_up"]      = corrEy_JEC_up;
+    TypeICorrMap_user_["corrSumEt_JEC_up"]   = corrSumEt_JEC_up;
+    TypeICorrMap_user_["corrEx_JEC_down"]    = corrEx_JEC_down;
+    TypeICorrMap_user_["corrEy_JEC_down"]    = corrEy_JEC_down;
+    TypeICorrMap_user_["corrSumEt_JEC_down"] = corrSumEt_JEC_down;
+    
+    TypeICorrMap_user_["corrEx_JER"]         = corrEx_JER;
+    TypeICorrMap_user_["corrEy_JER"]         = corrEy_JER;
+    TypeICorrMap_user_["corrSumEt_JER"]      = corrSumEt_JER;
+    TypeICorrMap_user_["corrEx_JER_up"]      = corrEx_JER_up;
+    TypeICorrMap_user_["corrEy_JER_up"]      = corrEy_JER_up;
+    TypeICorrMap_user_["corrSumEt_JER_up"]   = corrSumEt_JER_up;
+    TypeICorrMap_user_["corrEx_JER_down"]    = corrEx_JER_down;
+    TypeICorrMap_user_["corrEy_JER_down"]    = corrEy_JER_down;
+    TypeICorrMap_user_["corrSumEt_JER_down"] = corrSumEt_JER_down;
+}
+
 //-------------------------------------------------------------------------------------------------------------------------------------//
 math::XYZTLorentzVector
 EDBRTreeMaker::getNeutrinoP4(double& MetPt, double& MetPhi, TLorentzVector& lep, int lepType){
@@ -1597,11 +1719,6 @@ EDBRTreeMaker::getNeutrinoP4(double& MetPt, double& MetPhi, TLorentzVector& lep,
 void
 EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-    // DeepAK8
-         fatjetNN_->readEvent(iEvent, iSetup);
-            
-                // Decorrelated DeepAK8
-         decorrNN_->readEvent(iEvent, iSetup);
     
    using namespace edm;
    setDummyValues(); //Initalize variables with dummy values
@@ -1736,18 +1853,32 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    edm::Handle<edm::View<reco::GenParticle> > genParticles;//define genParticle
    iEvent.getByToken(genSrc_, genParticles);
    if (RunOnSig_||RunOnMC_){
-     // edm::Handle<LHEEventProduct> wgtsource;
-     // iEvent.getByLabel("externalLHEProducer", wgtsource);
-     // iEvent.getByLabel("source", wgtsource);
-     edm::Handle<LHEEventProduct> wgtsource;
-     iEvent.getByToken(LheToken_, wgtsource);
 
+   edm::Handle< double > theprefweight;
+   iEvent.getByToken(prefweight_token, theprefweight ) ;
+   L1prefiring =(*theprefweight);
+
+   edm::Handle< double > theprefweightup;
+   iEvent.getByToken(prefweightup_token, theprefweightup ) ;
+   L1prefiringup =(*theprefweightup);
+
+   edm::Handle< double > theprefweightdown;
+   iEvent.getByToken(prefweightdown_token, theprefweightdown ) ;
+   L1prefiringdown =(*theprefweightdown);
+
+      edm::Handle<LHEEventProduct> wgtsource;
+      iEvent.getByLabel("externalLHEProducer", wgtsource);
+      iEvent.getByLabel("source", wgtsource);
+     //edm::Handle<LHEEventProduct> wgtsource;
+      iEvent.getByToken(LheToken_, wgtsource);
+int wid[2]={1,2};
+//int wid[1080]={1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067, 2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083, 2084, 2085, 2086, 2087, 2088, 2089, 2090, 2091, 2092, 2093, 2094, 2095, 2096, 2097, 2098, 2099, 2100, 2101, 2102, 2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 3000, 3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010, 3011, 3012, 3013, 3014, 3015, 3016, 3017, 3018, 3019, 3020, 3021, 3022, 3023, 3024, 3025, 3026, 3027, 3028, 3029, 3030, 3031, 3032, 3033, 3034, 3035, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3045, 3046, 3047, 3048, 3049, 3050, 3051, 3052, 3053, 3054, 3055, 3056, 3057, 3058, 3059, 3060, 3061, 3062, 3063, 3064, 3065, 3066, 3067, 3068, 3069, 3070, 3071, 3072, 3073, 3074, 3075, 3076, 3077, 3078, 3079, 3080, 3081, 3082, 3083, 3084, 3085, 3086, 3087, 3088, 3089, 3090, 3091, 3092, 3093, 3094, 3095, 3096, 3097, 3098, 3099, 3100, 3101, 3102, 5000, 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010, 5011, 5012, 5013, 5014, 5015, 5016, 5017, 5018, 5019, 5020, 5021, 5022, 5023, 5024, 5025, 5026, 5027, 5028, 5029, 5030, 5031, 5032, 5033, 5034, 5035, 5036, 5037, 5038, 5039, 5040, 5041, 5042, 5043, 5044, 5045, 5046, 5047, 5048, 5049, 5050, 5051, 5052, 5053, 5054, 5055, 5056, 5060, 5070, 4000, 4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022, 4023, 4024, 4025, 4026, 4027, 4028, 4029, 4030, 4031, 4032, 4033, 4034, 4035, 4036, 4037, 4038, 4039, 4040, 4041, 4042, 4043, 4044, 4045, 4046, 4047, 4048, 4049, 4050, 4051, 4052, 4053, 4054, 4055, 4056, 4060, 4070, 4080, 6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010, 6011, 6012, 6013, 6014, 6015, 6016, 6017, 6018, 6019, 6020, 6021, 6022, 6023, 6024, 6025, 6026, 6027, 6028, 6029, 6030, 6031, 6032, 6033, 6034, 6035, 6036, 6037, 6038, 6039, 6040, 6041, 6042, 6043, 6044, 6045, 6046, 6047, 6048, 6049, 6050, 7000, 7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7011, 7012, 7013, 7014, 7015, 7016, 7017, 7018, 7019, 7020, 7021, 7022, 7023, 7024, 7025, 7026, 7027, 7028, 7029, 7030, 7031, 7032, 7033, 7034, 7035, 7036, 7037, 7038, 7039, 7040, 7041, 7042, 7043, 7044, 7045, 7046, 7047, 7048, 7049, 7050, 7060, 8000, 8001, 8002, 8003, 8004, 8005, 8006, 8007, 8008, 8009, 8010, 8011, 8012, 8013, 8014, 8015, 8016, 8017, 8018, 8019, 8020, 8021, 8022, 8023, 8024, 8025, 8026, 8027, 8028, 8029, 8500, 8501, 8502, 8503, 8504, 8505, 8506, 8507, 8508, 8509, 8510, 8511, 8512, 8513, 8514, 8515, 8516, 8517, 8518, 8519, 8520, 8521, 8522, 8523, 8524, 8525, 8526, 8527, 8528, 8529, 8530, 8531, 8532, 8533, 8534, 8535, 8536, 8537, 8538, 8539, 8540, 8541, 8542, 8543, 8544, 8545, 8546, 8547, 8548, 8549, 8550, 8551, 8552, 8553, 8554, 8555, 8556, 8557, 8558, 8559, 8560, 8561, 8562, 8563, 8564, 8565, 8566, 8567, 8568, 8569, 8570, 8571, 8572, 8573, 8574, 8575, 8576, 8577, 8578, 8579, 8580, 8581, 8582, 8583, 8584, 8585, 8586, 8587, 8588, 8589, 8590, 8591, 8592, 8593, 8594, 8595, 8596, 8597, 8598, 8599, 8600, 8601, 8602, 9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9020, 9021, 9022, 9023, 9024, 9025, 9026, 9027, 9028, 9029, 9030, 9031, 9032, 9033, 9034, 9035, 9036, 9037, 9038, 9039, 9040, 9041, 9042, 9043, 9044, 9045, 9046, 9047, 9048, 9049, 9050, 9051, 9052, 9053, 9054, 9055, 9056, 9057, 9058, 9059, 9060, 9061, 9062, 9063, 9064, 9065, 9066, 9067, 9068, 9069, 9070, 9071, 9072, 9073, 9074, 9075, 9076, 9077, 9078, 9079, 9080, 9081, 9082, 9083, 9084, 9085, 9086, 9087, 9088, 9089, 9090, 9091, 9092, 9093, 9094, 9095, 9096, 9097, 9098, 9099, 9100, 9101, 9102, 10000, 10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009, 10010, 10011, 10012, 10013, 10014, 10015, 10016, 10017, 10018, 10019, 10020, 10021, 10022, 10023, 10024, 10025, 10026, 10027, 10028, 10029, 10030, 10031, 10032, 11000, 11001, 11002, 11003, 11004, 11005, 11006, 11007, 11008, 11009, 11010, 11011, 11012, 11013, 11014, 11015, 11016, 11017, 11018, 11019, 11020, 11021, 11022, 11023, 11024, 11025, 11026, 11027, 11028, 11029, 11030, 11031, 11032, 12000, 12001, 12002, 12003, 12004, 12005, 12006, 12007, 12008, 12009, 12010, 12011, 12012, 12013, 12014, 12015, 12016, 12017, 12018, 12019, 12020, 12021, 12022, 12023, 12024, 12025, 12026, 12027, 12028, 12050, 12051, 12052, 12053, 12054, 12055, 12056, 12057, 12058, 12059, 12060, 12061, 12062, 12063, 13000, 13001, 13002, 13003, 13004, 13005, 13006, 13007, 13008, 13009, 13010, 13011, 13012, 13013, 13014, 13015, 13016, 13017, 13018, 13019, 13020, 13021, 13022, 13023, 13024, 13025, 13026, 13027, 13028, 13050, 13051, 13052, 13053, 13054, 13055, 13056, 13057, 13058, 13059, 13060, 13061, 13062, 13063, 14000, 14001, 14002, 14003, 14004, 14005, 14006, 14007, 14008, 14009, 14010, 14011, 14012, 14013, 14014, 14015, 14016, 14017, 14018, 14019, 14020, 14021, 14022, 14023, 14024, 14025, 14026, 14027, 14028, 14029, 14030, 15000, 15001, 15002, 15003, 15004, 15005, 15006, 15007, 15008, 15009, 15010, 15011, 15012, 15013, 15014, 15015, 15016, 15017, 15018, 15019, 15020, 15021, 15022, 15023, 15024, 15025, 15026, 15027, 15028, 15029, 15030, 15031, 15032, 15033, 15034, 15035, 15036, 15037, 15038, 15039, 15040, 15041, 15042, 15043, 15044, 15045, 15046, 15047, 15048, 15049, 15050, 15051, 15052, 15053, 15054, 15055, 15056, 15057, 15058, 15059, 15060, 15061, 15062, 15063, 15064, 15065, 15066, 15067, 15068, 15069, 15070, 15071, 15072, 15073, 15074, 15075, 15076, 15077, 15078, 15079, 15080, 15081, 15082, 15083, 15084, 15085, 15086, 15087, 15088, 15089, 15090, 15091, 15092, 15093, 15094, 15095, 15096, 15097, 15098, 15099, 15100, 15101, 15102, 15103, 15104, 15105, 15106, 15107, 1500, 1501, 1502, 1503, 1504, 1505, 1506, 1507, 1508, 1509, 1510, 1511, 1512, 1513, 1514, 1515, 1516, 1517, 1518, 1519, 1520, 1521, 1522, 1523, 1524, 1525, 1526, 1527, 1528, 1529, 1530, 1531, 1532, 1533, 1534, 1535, 1536, 1537, 1538, 1539, 1540, 1541, 1542, 1543, 1544, 1545, 1546, 1547, 1548, 1549, 1550, 1551, 1552, 1553, 1554, 1555, 1556, 1557, 1558, 1559, 1560, 1561, 1562, 1563, 1564, 1565, 1566, 1567, 1568, 1569, 1570, 1571, 1572, 1573, 1574, 1575, 1576, 1577, 1578, 1579, 1580, 1581, 1582, 1583, 1584, 1585, 1586, 1587, 1588, 1589, 1590, 1591, 1592, 1593, 1594, 1595, 1596, 1597, 1598, 1599, 1600, 1601, 1602, 1700, 1800, 1850, 1900, 1950};
 //std::cout<<"weight number "<<wgtsource->weights().size()<<std::endl;
-     for ( int i=0; i<211; ++i) {
+     for ( int i=0; i<2; ++i) {
        pweight[i]= -99;//
-     //  pweight[i]= wgtsource->weights()[i].wgt/wgtsource->originalXWGTUP();
-////cout<<wgtsource->weights()[i].id<<" "<<pweight[i]<<endl;
-                              }
+       pweight[i]= wgtsource->weights()[wid[i]].wgt/wgtsource->originalXWGTUP();
+cout<<"i:  "<<i<<endl;
+                                }
   //   for ( int i=9; i<110; ++i) {
     //    pweight[i]= wgtsource->weights()[i+101].wgt/wgtsource->originalXWGTUP();
 ////cout<<wgtsource->weights()[i].id<<" "<<pweight[i]<<endl;
@@ -1755,6 +1886,11 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
      edm::Handle<GenEventInfoProduct> genEvtInfo;
      iEvent.getByToken(GenToken_,genEvtInfo);
      theWeight = genEvtInfo->weight();
+
+        for(unsigned int ips=0;ips<genEvtInfo->weights().size();ips++){
+                psweight[ips]=genEvtInfo->weights().at(ips);
+        }
+
      if(theWeight>0) nump = nump+1;
      if(theWeight<0) numm = numm+1;
 
@@ -1788,10 +1924,13 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
      edm::Handle<bool> badMuonResultHandle;
      edm::Handle<bool> badChargedHadronResultHandle;
+     edm::Handle<bool> ecalBadCalibReducedResultHandle;
      iEvent.getByToken(badMuonNoiseFilter_Selector_, badMuonResultHandle);
      iEvent.getByToken(badChargedHadronNoiseFilter_Selector_, badChargedHadronResultHandle);
+     iEvent.getByToken(ecalBadCalibFilterUpdate_token, ecalBadCalibReducedResultHandle);
      passFilter_badMuon_ = *badMuonResultHandle;
      passFilter_badChargedHadron_ = *badChargedHadronResultHandle;
+     passFilter_ecalBadCalibReduced_ = *ecalBadCalibReducedResultHandle;
 
    numCands = gravitons->size();
 // ************************* Gen Level Information******************//
@@ -1969,7 +2108,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                              for(int ii=0;pw->daughter(ii)!=NULL;ii++){
                                 const reco::Candidate* pl = pw->daughter(ii);
-                               if(abs(pl->pdgId())<6)
+                               if(abs(pl->pdgId())<6||abs(pl->pdgId())==11||abs(pl->pdgId())==12||abs(pl->pdgId())==13||abs(pl->pdgId())==14||abs(pl->pdgId())==15||abs(pl->pdgId())==16)
                                {
                               if(qnumber==1)
                                  {
@@ -2053,9 +2192,10 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                     }
                 }//end of if lep-w
 
-                             for(int ii=0;pw->daughter(ii)!=NULL;ii++){
-                                const reco::Candidate* pl = pw->daughter(ii);
-                               if(abs(pl->pdgId())<6)
+                             for(int ii=0;pw1->daughter(ii)!=NULL;ii++){
+                                const reco::Candidate* pl = pw1->daughter(ii);
+                           //    if(abs(pl->pdgId())<6)
+                                if(abs(pl->pdgId())<6||abs(pl->pdgId())==11||abs(pl->pdgId())==12||abs(pl->pdgId())==13||abs(pl->pdgId())==14||abs(pl->pdgId())==15||abs(pl->pdgId())==16)
                                {
                               if(qnumber==1)
                                  {
@@ -2074,7 +2214,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                                  qnumber=qnumber+1;
                                }
                                                                      }
-                             pl = pw->daughter(0);
+                          //   pl = pw1->daughter(0);
 
 
                 if(abs(pl->pdgId())<6)
@@ -2148,7 +2288,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                              for(int ii=0;pw->daughter(ii)!=NULL;ii++){
                                 const reco::Candidate* pl = pw->daughter(ii);
-                               if(abs(pl->pdgId())<6)
+                            //   if(abs(pl->pdgId())<6)
+                               if(abs(pl->pdgId())<6||abs(pl->pdgId())==11||abs(pl->pdgId())==12||abs(pl->pdgId())==13||abs(pl->pdgId())==14||abs(pl->pdgId())==15||abs(pl->pdgId())==16)
                                {
                                 if(qnumber2==1)
                                  {
@@ -2167,7 +2308,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                                  qnumber2=qnumber2+1;                               
                                }
                                                                      }
-                             pl = pw->daughter(0);
+                //             pl = pw->daughter(0);
 
         		     if(abs(pl->pdgId())<6) 
                              {
@@ -2230,7 +2371,8 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                              for(int ii=0;pw->daughter(ii)!=NULL;ii++){
                                 const reco::Candidate* pl = pw->daughter(ii);
-                               if(abs(pl->pdgId())<6)
+                           //    if(abs(pl->pdgId())<6)
+                               if(abs(pl->pdgId())<6||abs(pl->pdgId())==11||abs(pl->pdgId())==12||abs(pl->pdgId())==13||abs(pl->pdgId())==14||abs(pl->pdgId())==15||abs(pl->pdgId())==16)
                                {
                                 if(qnumber3==1)
                                  {
@@ -2249,7 +2391,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                                  qnumber3=qnumber3+1;
                                }
                                                                       }
-                             pl = pw->daughter(0);
+               //              pl = pw->daughter(0);
 
 
         		     if(abs(pl->pdgId())<6) 
@@ -2586,36 +2728,106 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
            // ************************* MET ********************** //
-              iEvent.getByToken(metInputToken_ , METs_ );
-               // addTypeICorr(iEvent);
-                for (const pat::MET &met : *METs_) {
-                    const float rawPt        = met.corPt();
-                    const float rawPhi   = met.corPhi();
-                    //  const float rawSumEt = met.uncorSumEt();
-                        TVector2 rawMET_;
-                        rawMET_.SetMagPhi (rawPt, rawPhi );
-                        Double_t rawPx = rawMET_.Px();
-                        Double_t rawPy = rawMET_.Py();
-                        Double_t rawEt = std::hypot(rawPx,rawPy);
-                        MET_et = rawEt;
-                    /*  METraw_phi = rawPhi;
-                        METraw_sumEt = rawSumEt;
-                        double pxcorr = rawPx+TypeICorrMap_["corrEx"];
-                        double pycorr = rawPy+TypeICorrMap_["corrEy"];
-                        double et     = std::hypot(pxcorr,pycorr);
-                        double sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
-                        TLorentzVector corrmet; corrmet.SetPxPyPzE(pxcorr,pycorr,0.,et);
-                    useless = sumEtcorr;
-                    useless = rawEt;
-                    MET_et = et;
-                    */
-                    MET_phi = corrmet.Phi();
-                    //MET_sumEt = sumEtcorr;
-                    /*
-                    MET_corrPx = TypeICorrMap_["corrEx"];
-                    MET_corrPy = TypeICorrMap_["corrEy"];
-                    */
-                }
+        iEvent.getByToken(metInputToken_ , METs_ );
+        addTypeICorr(iEvent);
+	if (RunOnMC_) addTypeICorr_user(iEvent);
+        for (const pat::MET &met : *METs_) {   
+         const float rawPt = met.uncorPt();
+            const float rawPhi = met.uncorPhi();
+            const float rawSumEt = met.uncorSumEt();
+            TVector2 rawMET_;
+            rawMET_.SetMagPhi (rawPt, rawPhi );
+            Double_t rawPx = rawMET_.Px();
+            Double_t rawPy = rawMET_.Py();
+            Double_t rawEt = std::hypot(rawPx,rawPy);
+            METraw_et = rawEt;
+            METraw_phi = rawPhi;
+            METraw_sumEt = rawSumEt;
+            
+            double pxcorr = rawPx+TypeICorrMap_["corrEx"];
+            double pycorr = rawPy+TypeICorrMap_["corrEy"];
+            double et     = std::hypot(pxcorr,pycorr);
+            double sumEtcorr = rawSumEt+TypeICorrMap_["corrSumEt"];
+            
+            TLorentzVector corrmet;
+
+            corrmet.SetPxPyPzE(pxcorr,pycorr,0.,et);
+            MET_et = et;
+            MET_phi = corrmet.Phi();
+            MET_sumEt = sumEtcorr;
+            useless = sumEtcorr;
+            useless = rawEt;
+            MET_corrPx = TypeICorrMap_["corrEx"];
+            MET_corrPy = TypeICorrMap_["corrEy"];
+
+            Double_t rawPtc       = met.corPt();
+            Double_t rawPhic   = met.corPhi();
+            Double_t rawSumEtc = met.corSumEt();
+            TVector2 rawMET_c;
+            rawMET_c.SetMagPhi (rawPtc, rawPhic );
+            Double_t rawPxc = rawMET_c.Px();
+            Double_t rawPyc = rawMET_c.Py();
+            Double_t rawEtc = std::hypot(rawPxc,rawPyc);
+            MET_et_m = rawEtc;
+            MET_phi_m = rawPhic;
+            MET_sumEt_m = rawSumEtc;
+            MET_corrPx = TypeICorrMap_["corrEx"];
+            MET_corrPy = TypeICorrMap_["corrEy"];
+
+            if (RunOnMC_){ 
+            double pxcorr_newo= rawPx+TypeICorrMap_user_["corrEx_JEC"];
+            double pycorr_newo= rawPy+TypeICorrMap_user_["corrEy_JEC"];
+            double et_newo     = std::hypot(pxcorr_newo,pycorr_newo);
+	    MET_et_old=et_newo;
+            //------------------central value, correction from JetuserDataak4---------------------
+                    double pxcorr_new= rawPx+TypeICorrMap_user_["corrEx_JEC"]+TypeICorrMap_user_["corrEx_JER"];
+            double pycorr_new= rawPy+TypeICorrMap_user_["corrEy_JEC"]+TypeICorrMap_user_["corrEy_JER"];
+            double et_new     = std::hypot(pxcorr_new,pycorr_new);
+            double sumEtcorr_new = rawSumEt+TypeICorrMap_user_["corrSumEt_JEC"]+TypeICorrMap_user_["corrSumEt_JER"];
+            //----for JEC uncertainty study
+                       double pxcorr_JEC_up = rawPx+TypeICorrMap_user_["corrEx_JEC_up"]+TypeICorrMap_user_["corrEx_JER"];
+            double pycorr_JEC_up = rawPy+TypeICorrMap_user_["corrEy_JEC_up"]+TypeICorrMap_user_["corrEy_JER"];
+            double et_JEC_up     = std::hypot(pxcorr_JEC_up, pycorr_JEC_up);
+            double sumEtcorr_JEC_up = rawSumEt+TypeICorrMap_user_["corrSumEt_JEC_up"]+TypeICorrMap_user_["corrSumEt_JER"];
+            double pxcorr_JEC_down = rawPx+TypeICorrMap_user_["corrEx_JEC_down"]+TypeICorrMap_user_["corrEx_JER"];
+            double pycorr_JEC_down = rawPy+TypeICorrMap_user_["corrEy_JEC_down"]+TypeICorrMap_user_["corrEy_JER"];
+            double et_JEC_down     = std::hypot(pxcorr_JEC_down, pycorr_JEC_down);
+            double sumEtcorr_JEC_down = rawSumEt+TypeICorrMap_user_["corrSumEt_JEC_down"]+TypeICorrMap_user_["corrSumEt_JER"];
+            //----for JER uncertainty study
+           double pxcorr_JER_up = rawPx+TypeICorrMap_user_["corrEx_JEC"]+TypeICorrMap_user_["corrEx_JER_up"];
+            double pycorr_JER_up = rawPy+TypeICorrMap_user_["corrEy_JEC"]+TypeICorrMap_user_["corrEy_JER_up"];
+            double et_JER_up     = std::hypot(pxcorr_JER_up, pycorr_JER_up);
+            double sumEtcorr_JER_up = rawSumEt+TypeICorrMap_user_["corrSumEt_JEC"]+TypeICorrMap_user_["corrSumEt_JER_up"];
+            double pxcorr_JER_down = rawPx+TypeICorrMap_user_["corrEx_JEC"]+TypeICorrMap_user_["corrEx_JER_down"];
+            double pycorr_JER_down = rawPy+TypeICorrMap_user_["corrEy_JEC"]+TypeICorrMap_user_["corrEy_JER_down"];
+            double et_JER_down     = std::hypot(pxcorr_JER_down,pycorr_JER_down);
+            double sumEtcorr_JER_down = rawSumEt+TypeICorrMap_user_["corrSumEt_JEC"]+TypeICorrMap_user_["corrSumEt_JER_down"];
+            //------------ 
+                     MET_et_new= et_new;
+            MET_et_JEC_up = et_JEC_up;
+            MET_et_JEC_down = et_JEC_down;
+            MET_et_JER_up = et_JER_up;
+            MET_et_JER_down = et_JER_down;
+            
+            corrmet.SetPxPyPzE(pxcorr_new,pycorr_new,0.,et_new);
+            MET_phi_new = corrmet.Phi();
+            corrmet.SetPxPyPzE(pxcorr_JEC_up,pycorr_JEC_up,0.,et_JEC_up);
+            MET_phi_JEC_up = corrmet.Phi();
+            corrmet.SetPxPyPzE(pxcorr_JEC_down,pycorr_JEC_down,0.,et_JEC_down);
+            MET_phi_JEC_down = corrmet.Phi();
+            corrmet.SetPxPyPzE(pxcorr_JER_up,pycorr_JER_up,0.,et_JER_up);
+            MET_phi_JER_up = corrmet.Phi();
+            corrmet.SetPxPyPzE(pxcorr_JER_down,pycorr_JER_down,0.,et_JER_down);
+            MET_phi_JER_down = corrmet.Phi();
+            
+            MET_sumEt_new = sumEtcorr_new;
+            MET_sumEt_JEC_up = sumEtcorr_JEC_up;
+            MET_sumEt_JEC_down = sumEtcorr_JEC_down;
+            MET_sumEt_JER_up = sumEtcorr_JER_up;
+            MET_sumEt_JER_down = sumEtcorr_JER_down;
+            }// Marked for debug
+            
+        }
 
            // ***************************************************************** //  
  
@@ -2709,13 +2921,27 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
               corr_AK8puppiSD[ij] = jecAK8puppiGroomed_->getCorrection();
            }
            else{uncorrJet = hadronicVa.p4();}
-           if(ij<8){
+           if(ij<4){
               jetAK8puppi_pt1[ij] = corr_AK8puppi[ij]*uncorrJet.pt();
               jetAK8puppi_mass1[ij] = corr_AK8puppi[ij]*uncorrJet.mass();
               jetAK8puppi_eta1[ij] = uncorrJet.eta();
               jetAK8puppi_jec1[ij] = corr_AK8puppi[ij];
               jetAK8puppiSD_jec1[ij] = corr_AK8puppiSD[ij];
            }
+		jetAK8puppi_pt1_m[ij]=hadronicVa.p4().pt();
+   	if (RunOnMC_){ 
+                jetAK8puppi_pt1_newnew[ij]=(*puppijets_)[ij].userFloat("SmearedPt_JEC_central");
+                jetAK8puppi_pt1_new[ij]=(*puppijets_)[ij].userFloat("SmearedPt");
+                jetAK8puppi_pt1_JEC_up[ij]=(*puppijets_)[ij].userFloat("SmearedPt_JEC_up");
+                jetAK8puppi_pt1_JEC_down[ij]=(*puppijets_)[ij].userFloat("SmearedPt_JEC_down");
+                jetAK8puppi_pt1_JER_up[ij]=(*puppijets_)[ij].userFloat("SmearedPt_JER_up");
+                jetAK8puppi_pt1_JER_down[ij]=(*puppijets_)[ij].userFloat("SmearedPt_JER_down");
+                jetAK8puppi_e1_new[ij]=(*puppijets_)[ij].userFloat("SmearedE");
+                jetAK8puppi_e1_JEC_up[ij]=(*puppijets_)[ij].userFloat("SmearedE_JEC_up");
+                jetAK8puppi_e1_JEC_down[ij]=(*puppijets_)[ij].userFloat("SmearedE_JEC_down");
+                jetAK8puppi_e1_JER_up[ij]=(*puppijets_)[ij].userFloat("SmearedE_JER_up");
+                jetAK8puppi_e1_JER_down[ij]=(*puppijets_)[ij].userFloat("SmearedE_JER_down");
+                }
          }
          int usenumber3 = -1; double pt_larger=0;
          int numvhad = puppijets_->size();
@@ -2728,47 +2954,57 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         }
        if (usenumber3>-1) {//2
         const pat::Jet& hadronicVpuppi = puppijets_->at(usenumber3);
+                // DeepAK8
+                jetAK8puppi_dnnTop       = hadronicVpuppi.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:TvsQCD"); 
+                jetAK8puppi_dnnW         = hadronicVpuppi.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:WvsQCD"); 
+                jetAK8puppi_dnnH4q       = hadronicVpuppi.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:H4qvsQCD"); 
+                jetAK8puppi_dnnZ         = hadronicVpuppi.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:ZvsQCD"); 
+                jetAK8puppi_dnnZbb       = hadronicVpuppi.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:ZbbvsQCD"); 
+                jetAK8puppi_dnnHbb       = hadronicVpuppi.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:HbbvsQCD"); 
+                jetAK8puppi_dnnqcd       = hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probQCDbb")+hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probQCDcc")+hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probQCDb")+hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probQCDc")+hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probQCDothers"); 
+                jetAK8puppi_dnntop       = hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probTbcq")+hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probTbqq"); 
+                jetAK8puppi_dnnw         = hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probWcq")+hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probWqq"); 
+                jetAK8puppi_dnnz         = hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probZbb")+hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probZcc")+hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probZqq"); 
+                jetAK8puppi_dnnzbb       = hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probZbb"); 
+                jetAK8puppi_dnnhbb       = hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probHbb"); 
+                jetAK8puppi_dnnh4q       = hadronicVpuppi.bDiscriminator("pfDeepBoostedJetTags:probHqqqq"); 
                 // Decorrelated DeepAK8
-                JetHelper jet_helper(&hadronicVpuppi);
-                //jet_helper.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8, only for 80X 
-                const auto& nnpreds = fatjetNN_->predict(jet_helper);
-                FatJetNNHelper nn(nnpreds);
-                jetAK8puppi_dnnTop       = nn.get_binarized_score_top();
-                jetAK8puppi_dnnW         = nn.get_binarized_score_w();
-                jetAK8puppi_dnnH4q       = nn.get_binarized_score_h4q();
-                jetAK8puppi_dnnZ         = nn.get_binarized_score_z();
-                jetAK8puppi_dnnZbb       = nn.get_binarized_score_zbb();
-                jetAK8puppi_dnnHbb       = nn.get_binarized_score_hbb();
-                jetAK8puppi_dnnqcd       = nn.get_raw_score_qcd();
-                jetAK8puppi_dnntop       = nn.get_raw_score_top();
-                jetAK8puppi_dnnw         = nn.get_raw_score_w();
-                jetAK8puppi_dnnz         = nn.get_raw_score_z();
-                jetAK8puppi_dnnzbb         = nn.get_raw_score_zbb();
-                jetAK8puppi_dnnhbb         = nn.get_raw_score_hbb();
-                jetAK8puppi_dnnh4q         = nn.get_raw_score_h4q();
-                // Decorrelated DeepAK8
-                const auto& mdpreds = decorrNN_->predict(jet_helper);
-                FatJetNNHelper md(mdpreds);
-                jetAK8puppi_dnnDecorrTop       = md.get_binarized_score_top();
-                jetAK8puppi_dnnDecorrW         = md.get_binarized_score_w();
-                jetAK8puppi_dnnDecorrH4q       = md.get_binarized_score_h4q();
-                jetAK8puppi_dnnDecorrZ         = md.get_binarized_score_z();
-                jetAK8puppi_dnnDecorrZbb       = md.get_binarized_score_zbb();
-                jetAK8puppi_dnnDecorrHbb       = md.get_binarized_score_hbb();
-                jetAK8puppi_dnnDecorrbb        = md.get_flavor_score_bb();
-                jetAK8puppi_dnnDecorrcc        = md.get_flavor_score_cc();
-                jetAK8puppi_dnnDecorrbbnog        = md.get_flavor_score_bb_no_gluon();
-                jetAK8puppi_dnnDecorrbbnog        = md.get_flavor_score_cc_no_gluon();
-                jetAK8puppi_dnnDecorrqcd       = md.get_raw_score_qcd();
-                jetAK8puppi_dnnDecorrtop       = md.get_raw_score_top();
-                jetAK8puppi_dnnDecorrw         = md.get_raw_score_w();
-                jetAK8puppi_dnnDecorrz         = md.get_raw_score_z();
-                jetAK8puppi_dnnDecorrzbb         = md.get_raw_score_zbb();
-                jetAK8puppi_dnnDecorrhbb         = md.get_raw_score_hbb();
-                jetAK8puppi_dnnDecorrh4q         = md.get_raw_score_h4q();
+                                jetAK8puppi_dnnDecorrTop       = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD"); 
+                jetAK8puppi_dnnDecorrW         = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD"); 
+                jetAK8puppi_dnnDecorrH4q       = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:H4qvsQCD"); 
+                jetAK8puppi_dnnDecorrZ         = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZvsQCD"); 
+                jetAK8puppi_dnnDecorrZbb       = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZbbvsQCD"); 
+                jetAK8puppi_dnnDecorrHbb       = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:HbbvsQCD"); 
+                jetAK8puppi_dnnDecorrqcd       = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers"); 
+                jetAK8puppi_dnnDecorrbb        = (hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb"))/(hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd); 
+                jetAK8puppi_dnnDecorrcc        = (hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc"))/(hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd); 
+                jetAK8puppi_dnnDecorrbbnog     = (hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb"))/(hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd); 
+                jetAK8puppi_dnnDecorrccnog     = (hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc"))/(hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd); 
+                jetAK8puppi_dnnDecorrtop       = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq"); 
+                jetAK8puppi_dnnDecorrw         = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq"); 
+                jetAK8puppi_dnnDecorrz         = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq"); 
+                jetAK8puppi_dnnDecorrzbb       = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb"); 
+                jetAK8puppi_dnnDecorrhbb       = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb"); 
+                jetAK8puppi_dnnDecorrh4q       = hadronicVpuppi.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq"); 
+
                 IDLoose = looseJetID(hadronicVpuppi);
                 IDTight = tightJetID(hadronicVpuppi);
                 jetAK8puppi_ptJEC       = jetAK8puppi_pt1[usenumber3]; // unpruned corrected jet pt
+        jetAK8puppi_ptJEC_m       = jetAK8puppi_pt1_m[usenumber3];
+        	if (RunOnMC_){ 
+                jetAK8puppi_ptJEC_new       = jetAK8puppi_pt1_new[usenumber3];
+                jetAK8puppi_ptJEC_newnew       = jetAK8puppi_pt1_newnew[usenumber3];
+                jetAK8puppi_ptJEC_JEC_up       = jetAK8puppi_pt1_JEC_up[usenumber3];
+                jetAK8puppi_ptJEC_JEC_down       = jetAK8puppi_pt1_JEC_down[usenumber3];
+                jetAK8puppi_ptJEC_JER_up       = jetAK8puppi_pt1_JER_up[usenumber3];
+                jetAK8puppi_ptJEC_JER_down       = jetAK8puppi_pt1_JER_down[usenumber3];
+                jetAK8puppi_e_new       = jetAK8puppi_e1_new[usenumber3];
+                jetAK8puppi_e_JEC_up       = jetAK8puppi_e1_JEC_up[usenumber3];
+                jetAK8puppi_e_JEC_down       = jetAK8puppi_e1_JEC_down[usenumber3];
+                jetAK8puppi_e_JER_up       = jetAK8puppi_e1_JER_up[usenumber3];
+                jetAK8puppi_e_JER_down       = jetAK8puppi_e1_JER_down[usenumber3];
+		}
+
                 jetAK8puppi_eta     = jetAK8puppi_eta1[usenumber3]; // unpruned (w/o jec) jet eta
                 jetAK8puppi_phi      = hadronicVpuppi.phi(); // unpruned (w/o jec) jet phi
                 jetAK8puppi_tau1         = hadronicVpuppi.userFloat("NjettinessAK8Puppi:tau1");
@@ -2797,47 +3033,54 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
           if(usenumber2>-1)  {
                const pat::Jet& hadronicVpuppi_2 = puppijets_->at(usenumber2);
                 // DeepAK8
-                JetHelper jet_helper_2(&hadronicVpuppi_2);
-                // jet_helper_2.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
-                const auto& nnpreds_2 = fatjetNN_->predict(jet_helper_2);
-                FatJetNNHelper nn_2(nnpreds_2);
-                jetAK8puppi_dnnTop_2       = nn_2.get_binarized_score_top();
-                jetAK8puppi_dnnW_2         = nn_2.get_binarized_score_w();
-                jetAK8puppi_dnnH4q_2       = nn_2.get_binarized_score_h4q();
-                jetAK8puppi_dnnZ_2         = nn_2.get_binarized_score_z();
-                jetAK8puppi_dnnZbb_2       = nn_2.get_binarized_score_zbb();
-                jetAK8puppi_dnnHbb_2       = nn_2.get_binarized_score_hbb();
-                jetAK8puppi_dnnqcd_2       = nn_2.get_raw_score_qcd();
-                jetAK8puppi_dnntop_2       = nn_2.get_raw_score_top();
-                jetAK8puppi_dnnw_2         = nn_2.get_raw_score_w();
-                jetAK8puppi_dnnz_2         = nn_2.get_raw_score_z();
-                jetAK8puppi_dnnzbb_2         = nn_2.get_raw_score_zbb();
-                jetAK8puppi_dnnhbb_2         = nn_2.get_raw_score_hbb();
-                jetAK8puppi_dnnh4q_2         = nn_2.get_raw_score_h4q();
+             jetAK8puppi_dnnTop_2       = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:TvsQCD"); 
+                jetAK8puppi_dnnW_2         = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:WvsQCD"); 
+                jetAK8puppi_dnnH4q_2       = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:H4qvsQCD"); 
+                jetAK8puppi_dnnZ_2         = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:ZvsQCD"); 
+                jetAK8puppi_dnnZbb_2       = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:ZbbvsQCD"); 
+                jetAK8puppi_dnnHbb_2       = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:HbbvsQCD"); 
+                jetAK8puppi_dnnqcd_2       = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probQCDbb")+hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probQCDcc")+hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probQCDb")+hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probQCDc")+hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probQCDothers"); 
+                jetAK8puppi_dnntop_2       = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probTbcq")+hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probTbqq"); 
+                jetAK8puppi_dnnw_2         = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probWcq")+hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probWqq"); 
+                jetAK8puppi_dnnz_2         = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probZbb")+hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probZcc")+hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probZqq"); 
+                jetAK8puppi_dnnzbb_2       = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probZbb"); 
+                jetAK8puppi_dnnhbb_2       = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probHbb"); 
+                jetAK8puppi_dnnh4q_2       = hadronicVpuppi_2.bDiscriminator("pfDeepBoostedJetTags:probHqqqq"); 
                 // Decorrelated DeepAK8
-                const auto& mdpreds_2 = decorrNN_->predict(jet_helper_2);
-                FatJetNNHelper md_2(mdpreds_2);
-                jetAK8puppi_dnnDecorrTop_2       = md_2.get_binarized_score_top();
-                jetAK8puppi_dnnDecorrW_2         = md_2.get_binarized_score_w();
-                jetAK8puppi_dnnDecorrH4q_2       = md_2.get_binarized_score_h4q();
-                jetAK8puppi_dnnDecorrZ_2         = md_2.get_binarized_score_z();
-                jetAK8puppi_dnnDecorrZbb_2       = md_2.get_binarized_score_zbb();
-                jetAK8puppi_dnnDecorrHbb_2       = md_2.get_binarized_score_hbb();
-                jetAK8puppi_dnnDecorrbb_2        = md_2.get_flavor_score_bb();
-                jetAK8puppi_dnnDecorrcc_2        = md_2.get_flavor_score_cc();
-                jetAK8puppi_dnnDecorrbbnog_2        = md_2.get_flavor_score_bb_no_gluon();
-                jetAK8puppi_dnnDecorrbbnog_2        = md_2.get_flavor_score_cc_no_gluon();
-                jetAK8puppi_dnnDecorrqcd_2       = md_2.get_raw_score_qcd();
-                jetAK8puppi_dnnDecorrtop_2       = md_2.get_raw_score_top();
-                jetAK8puppi_dnnDecorrw_2         = md_2.get_raw_score_w();
-                jetAK8puppi_dnnDecorrz_2         = md_2.get_raw_score_z();
-                jetAK8puppi_dnnDecorrzbb_2         = md_2.get_raw_score_zbb();
-                jetAK8puppi_dnnDecorrhbb_2         = md_2.get_raw_score_hbb();
-                jetAK8puppi_dnnDecorrh4q_2         = md_2.get_raw_score_h4q();
+                             jetAK8puppi_dnnDecorrTop_2       = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD"); 
+                jetAK8puppi_dnnDecorrW_2         = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD"); 
+                jetAK8puppi_dnnDecorrH4q_2       = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:H4qvsQCD"); 
+                jetAK8puppi_dnnDecorrZ_2         = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZvsQCD"); 
+                jetAK8puppi_dnnDecorrZbb_2       = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZbbvsQCD"); 
+                jetAK8puppi_dnnDecorrHbb_2       = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:HbbvsQCD"); 
+                jetAK8puppi_dnnDecorrqcd_2       = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers"); 
+                jetAK8puppi_dnnDecorrbb_2        = (hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb"))/(hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_2); 
+                jetAK8puppi_dnnDecorrcc_2        = (hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc"))/(hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_2); 
+                jetAK8puppi_dnnDecorrbbnog_2     = (hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb"))/(hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_2); 
+                jetAK8puppi_dnnDecorrccnog_2     = (hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc"))/(hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_2); 
+                jetAK8puppi_dnnDecorrtop_2       = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq"); 
+                jetAK8puppi_dnnDecorrw_2         = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq"); 
+                jetAK8puppi_dnnDecorrz_2         = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq"); 
+                jetAK8puppi_dnnDecorrzbb_2       = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb"); 
+                jetAK8puppi_dnnDecorrhbb_2       = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb"); 
+                jetAK8puppi_dnnDecorrh4q_2       = hadronicVpuppi_2.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq"); 
 
                 IDLoose_2 = looseJetID(hadronicVpuppi_2);
                 IDTight_2 = tightJetID(hadronicVpuppi_2);
                jetAK8puppi_ptJEC_2       = jetAK8puppi_pt1[usenumber2]; // unpruned corrected jet pt
+     	if (RunOnMC_){ 
+                jetAK8puppi_ptJEC_2_new       = jetAK8puppi_pt1_new[usenumber2];
+                jetAK8puppi_ptJEC_2_JEC_up       = jetAK8puppi_pt1_JEC_up[usenumber2];
+                jetAK8puppi_ptJEC_2_JEC_down       = jetAK8puppi_pt1_JEC_down[usenumber2];
+                jetAK8puppi_ptJEC_2_JER_up       = jetAK8puppi_pt1_JER_up[usenumber2];
+                jetAK8puppi_ptJEC_2_JER_down       = jetAK8puppi_pt1_JER_down[usenumber2];
+                jetAK8puppi_e_2_new       = jetAK8puppi_e1_new[usenumber2];
+                jetAK8puppi_e_2_JEC_up       = jetAK8puppi_e1_JEC_up[usenumber2];
+                jetAK8puppi_e_2_JEC_down       = jetAK8puppi_e1_JEC_down[usenumber2];
+                jetAK8puppi_e_2_JER_up       = jetAK8puppi_e1_JER_up[usenumber2];
+                jetAK8puppi_e_2_JER_down       = jetAK8puppi_e1_JER_down[usenumber2];
+		}
+
                jetAK8puppi_eta_2     = jetAK8puppi_eta1[usenumber2]; // unpruned (w/o jec) jet eta
                jetAK8puppi_phi_2      = hadronicVpuppi_2.phi(); // unpruned (w/o jec) jet phi
                jetAK8puppi_tau1_2         = hadronicVpuppi_2.userFloat("NjettinessAK8Puppi:tau1");
@@ -2858,8 +3101,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                if (fabs(jetAK8puppi_eta_2)<=1.3){jetAK8puppi_sdcorr_2=jetAK8puppi_sd_2*gencorrect*recocorrect_0eta1p3;}
                else if (fabs(jetAK8puppi_eta_2)<2.5 && fabs(jetAK8puppi_eta_2)>1.3){jetAK8puppi_sdcorr_2=jetAK8puppi_sd_2*gencorrect*recocorrect_1p3eta2p5;}
            }
-           
-
 
            int usenumber1 = -1; double pt_larger3=0;
            for( int inum = 0; inum< numvhad; inum++){
@@ -2872,47 +3113,54 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
           if(usenumber1>-1)  {
                const pat::Jet& hadronicVpuppi_3 = puppijets_->at(usenumber1);
                 // DeepAK8
-                JetHelper jet_helper_3(&hadronicVpuppi_3);
-                // jet_helper_3.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
-                const auto& nnpreds_3 = fatjetNN_->predict(jet_helper_3);
-                FatJetNNHelper nn_3(nnpreds_3);
-                jetAK8puppi_dnnTop_3       = nn_3.get_binarized_score_top();
-                jetAK8puppi_dnnW_3         = nn_3.get_binarized_score_w();
-                jetAK8puppi_dnnH4q_3       = nn_3.get_binarized_score_h4q();
-                jetAK8puppi_dnnZ_3         = nn_3.get_binarized_score_z();
-                jetAK8puppi_dnnZbb_3       = nn_3.get_binarized_score_zbb();
-                jetAK8puppi_dnnHbb_3       = nn_3.get_binarized_score_hbb();
-                jetAK8puppi_dnnqcd_3       = nn_3.get_raw_score_qcd();
-                jetAK8puppi_dnntop_3       = nn_3.get_raw_score_top();
-                jetAK8puppi_dnnw_3         = nn_3.get_raw_score_w();
-                jetAK8puppi_dnnz_3         = nn_3.get_raw_score_z();
-                jetAK8puppi_dnnzbb_3         = nn_3.get_raw_score_zbb();
-                jetAK8puppi_dnnhbb_3         = nn_3.get_raw_score_hbb();
-                jetAK8puppi_dnnh4q_3         = nn_3.get_raw_score_h4q();
+                jetAK8puppi_dnnTop_3       = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:TvsQCD"); 
+                jetAK8puppi_dnnW_3         = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:WvsQCD"); 
+                jetAK8puppi_dnnH4q_3       = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:H4qvsQCD"); 
+                jetAK8puppi_dnnZ_3         = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:ZvsQCD"); 
+                jetAK8puppi_dnnZbb_3       = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:ZbbvsQCD"); 
+                jetAK8puppi_dnnHbb_3       = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:HbbvsQCD"); 
+                jetAK8puppi_dnnqcd_3       = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probQCDbb")+hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probQCDcc")+hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probQCDb")+hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probQCDc")+hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probQCDothers"); 
+                jetAK8puppi_dnntop_3       = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probTbcq")+hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probTbqq"); 
+                jetAK8puppi_dnnw_3         = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probWcq")+hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probWqq"); 
+                jetAK8puppi_dnnz_3         = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probZbb")+hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probZcc")+hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probZqq"); 
+                jetAK8puppi_dnnzbb_3       = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probZbb"); 
+                jetAK8puppi_dnnhbb_3       = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probHbb"); 
+                jetAK8puppi_dnnh4q_3       = hadronicVpuppi_3.bDiscriminator("pfDeepBoostedJetTags:probHqqqq"); 
                 // Decorrelated DeepAK8
-                const auto& mdpreds_3 = decorrNN_->predict(jet_helper_3);
-                FatJetNNHelper md_3(mdpreds_3);
-                jetAK8puppi_dnnDecorrTop_3       = md_3.get_binarized_score_top();
-                jetAK8puppi_dnnDecorrW_3         = md_3.get_binarized_score_w();
-                jetAK8puppi_dnnDecorrH4q_3       = md_3.get_binarized_score_h4q();
-                jetAK8puppi_dnnDecorrZ_3         = md_3.get_binarized_score_z();
-                jetAK8puppi_dnnDecorrZbb_3       = md_3.get_binarized_score_zbb();
-                jetAK8puppi_dnnDecorrHbb_3       = md_3.get_binarized_score_hbb();
-                jetAK8puppi_dnnDecorrbb_3        = md_3.get_flavor_score_bb();
-                jetAK8puppi_dnnDecorrcc_3        = md_3.get_flavor_score_cc();
-                jetAK8puppi_dnnDecorrbbnog_3        = md_3.get_flavor_score_bb_no_gluon();
-                jetAK8puppi_dnnDecorrbbnog_3        = md_3.get_flavor_score_cc_no_gluon();
-                jetAK8puppi_dnnDecorrqcd_3       = md_3.get_raw_score_qcd();
-                jetAK8puppi_dnnDecorrtop_3       = md_3.get_raw_score_top();
-                jetAK8puppi_dnnDecorrw_3         = md_3.get_raw_score_w();
-                jetAK8puppi_dnnDecorrz_3         = md_3.get_raw_score_z();
-                jetAK8puppi_dnnDecorrzbb_3         = md_3.get_raw_score_zbb();
-                jetAK8puppi_dnnDecorrhbb_3         = md_3.get_raw_score_hbb();
-                jetAK8puppi_dnnDecorrh4q_3         = md_3.get_raw_score_h4q();
+                jetAK8puppi_dnnDecorrTop_3       = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD"); 
+                jetAK8puppi_dnnDecorrW_3         = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD"); 
+                jetAK8puppi_dnnDecorrH4q_3       = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:H4qvsQCD"); 
+                jetAK8puppi_dnnDecorrZ_3         = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZvsQCD"); 
+                jetAK8puppi_dnnDecorrZbb_3       = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZbbvsQCD"); 
+                jetAK8puppi_dnnDecorrHbb_3       = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:HbbvsQCD"); 
+                jetAK8puppi_dnnDecorrqcd_3       = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers"); 
+                jetAK8puppi_dnnDecorrbb_3        = (hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb"))/(hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_3); 
+                jetAK8puppi_dnnDecorrcc_3        = (hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc"))/(hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_3); 
+                jetAK8puppi_dnnDecorrbbnog_3     = (hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb"))/(hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_3); 
+                jetAK8puppi_dnnDecorrccnog_3     = (hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc"))/(hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_3); 
+                jetAK8puppi_dnnDecorrtop_3       = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq"); 
+                jetAK8puppi_dnnDecorrw_3         = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq"); 
+                jetAK8puppi_dnnDecorrz_3         = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq"); 
+                jetAK8puppi_dnnDecorrzbb_3       = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb"); 
+                jetAK8puppi_dnnDecorrhbb_3       = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb"); 
+                jetAK8puppi_dnnDecorrh4q_3       = hadronicVpuppi_3.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq"); 
 
                 IDLoose_3 = looseJetID(hadronicVpuppi_3);
                 IDTight_3 = tightJetID(hadronicVpuppi_3);
                jetAK8puppi_ptJEC_3       = jetAK8puppi_pt1[usenumber1]; // unpruned corrected jet pt
+        	if (RunOnMC_){ 
+                jetAK8puppi_ptJEC_3_new       = jetAK8puppi_pt1_new[usenumber1];
+                jetAK8puppi_ptJEC_3_JEC_up       = jetAK8puppi_pt1_JEC_up[usenumber1];
+                jetAK8puppi_ptJEC_3_JEC_down       = jetAK8puppi_pt1_JEC_down[usenumber1];
+                jetAK8puppi_ptJEC_3_JER_up       = jetAK8puppi_pt1_JER_up[usenumber1];
+                jetAK8puppi_ptJEC_3_JER_down       = jetAK8puppi_pt1_JER_down[usenumber1];
+                jetAK8puppi_e_3_new       = jetAK8puppi_e1_new[usenumber1];
+                jetAK8puppi_e_3_JEC_up       = jetAK8puppi_e1_JEC_up[usenumber1];
+                jetAK8puppi_e_3_JEC_down       = jetAK8puppi_e1_JEC_down[usenumber1];
+                jetAK8puppi_e_3_JER_up       = jetAK8puppi_e1_JER_up[usenumber1];
+                jetAK8puppi_e_3_JER_down       = jetAK8puppi_e1_JER_down[usenumber1];
+		}
+
                jetAK8puppi_eta_3     = jetAK8puppi_eta1[usenumber1]; // unpruned (w/o jec) jet eta
                jetAK8puppi_phi_3      = hadronicVpuppi_3.phi(); // unpruned (w/o jec) jet phi
                jetAK8puppi_tau1_3         = hadronicVpuppi_3.userFloat("NjettinessAK8Puppi:tau1");
@@ -2946,43 +3194,37 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
           if(usenumber4>-1)  {
                 const pat::Jet& hadronicVpuppi_4 = puppijets_->at(usenumber4);
                 // DeepAK8
-                JetHelper jet_helper_4(&hadronicVpuppi_4);
-                //  jet_helper_4.setSubjets(*hadronicVSoftDrop, 0.8); // jetR=0.8
-                const auto& nnpreds_4 = fatjetNN_->predict(jet_helper_4);
-                FatJetNNHelper nn_4(nnpreds_4);
-                jetAK8puppi_dnnTop_4       = nn_4.get_binarized_score_top();
-                jetAK8puppi_dnnW_4         = nn_4.get_binarized_score_w();
-                jetAK8puppi_dnnH4q_4       = nn_4.get_binarized_score_h4q();
-                jetAK8puppi_dnnZ_4         = nn_4.get_binarized_score_z();
-                jetAK8puppi_dnnZbb_4       = nn_4.get_binarized_score_zbb();
-                jetAK8puppi_dnnHbb_4       = nn_4.get_binarized_score_hbb();
-                jetAK8puppi_dnnqcd_4       = nn_4.get_raw_score_qcd();
-                jetAK8puppi_dnntop_4       = nn_4.get_raw_score_top();
-                jetAK8puppi_dnnw_4         = nn_4.get_raw_score_w();
-                jetAK8puppi_dnnz_4         = nn_4.get_raw_score_z();
-                jetAK8puppi_dnnzbb_4         = nn_4.get_raw_score_zbb();
-                jetAK8puppi_dnnhbb_4         = nn_4.get_raw_score_hbb();
-                jetAK8puppi_dnnh4q_4         = nn_4.get_raw_score_h4q();
-                // Decorrelated DeepAK8
-                const auto& mdpreds_4 = decorrNN_->predict(jet_helper_4);
-                FatJetNNHelper md_4(mdpreds_4);
-                jetAK8puppi_dnnDecorrTop_4       = md_4.get_binarized_score_top();
-                jetAK8puppi_dnnDecorrW_4         = md_4.get_binarized_score_w();
-                jetAK8puppi_dnnDecorrH4q_4       = md_4.get_binarized_score_h4q();
-                jetAK8puppi_dnnDecorrZ_4         = md_4.get_binarized_score_z();
-                jetAK8puppi_dnnDecorrZbb_4       = md_4.get_binarized_score_zbb();
-                jetAK8puppi_dnnDecorrHbb_4       = md_4.get_binarized_score_hbb();
-                jetAK8puppi_dnnDecorrbb_4        = md_4.get_flavor_score_bb();
-                jetAK8puppi_dnnDecorrcc_4        = md_4.get_flavor_score_cc();
-                jetAK8puppi_dnnDecorrbbnog_4        = md_4.get_flavor_score_bb_no_gluon();
-                jetAK8puppi_dnnDecorrbbnog_4        = md_4.get_flavor_score_cc_no_gluon();
-                jetAK8puppi_dnnDecorrqcd_4       = md_4.get_raw_score_qcd();
-                jetAK8puppi_dnnDecorrtop_4       = md_4.get_raw_score_top();
-                jetAK8puppi_dnnDecorrw_4         = md_4.get_raw_score_w();
-                jetAK8puppi_dnnDecorrz_4         = md_4.get_raw_score_z();
-                jetAK8puppi_dnnDecorrzbb_4         = md_4.get_raw_score_zbb();
-                jetAK8puppi_dnnDecorrhbb_4         = md_4.get_raw_score_hbb();
-                jetAK8puppi_dnnDecorrh4q_4         = md_4.get_raw_score_h4q();
+                jetAK8puppi_dnnTop_4       = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:TvsQCD");
+                jetAK8puppi_dnnW_4         = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:WvsQCD");
+                jetAK8puppi_dnnH4q_4       = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:H4qvsQCD");
+                jetAK8puppi_dnnZ_4         = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:ZvsQCD");
+                jetAK8puppi_dnnZbb_4       = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:ZbbvsQCD");
+                jetAK8puppi_dnnHbb_4       = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedDiscriminatorsJetTags:HbbvsQCD");
+                jetAK8puppi_dnnqcd_4       = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probQCDbb")+hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probQCDcc")+hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probQCDb")+hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probQCDc")+hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
+                jetAK8puppi_dnntop_4       = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probTbcq")+hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probTbqq");
+                jetAK8puppi_dnnw_4         = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probWcq")+hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probWqq");
+                jetAK8puppi_dnnz_4         = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probZbb")+hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probZcc")+hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probZqq");
+                jetAK8puppi_dnnzbb_4       = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probZbb");
+                jetAK8puppi_dnnhbb_4       = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probHbb");
+                jetAK8puppi_dnnh4q_4       = hadronicVpuppi_4.bDiscriminator("pfDeepBoostedJetTags:probHqqqq");
+
+                jetAK8puppi_dnnDecorrTop_4       = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD");
+                jetAK8puppi_dnnDecorrW_4         = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD");
+                jetAK8puppi_dnnDecorrH4q_4       = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:H4qvsQCD");
+                jetAK8puppi_dnnDecorrZ_4         = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZvsQCD");
+                jetAK8puppi_dnnDecorrZbb_4       = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZbbvsQCD");
+                jetAK8puppi_dnnDecorrHbb_4       = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:HbbvsQCD");
+                jetAK8puppi_dnnDecorrqcd_4       = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers");
+                jetAK8puppi_dnnDecorrbb_4        = (hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb"))/(hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_4);
+                jetAK8puppi_dnnDecorrcc_4        = (hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc"))/(hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_4);
+                jetAK8puppi_dnnDecorrbbnog_4     = (hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb"))/(hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_4);
+                jetAK8puppi_dnnDecorrccnog_4     = (hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc"))/(hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+jetAK8puppi_dnnDecorrqcd_4);
+                jetAK8puppi_dnnDecorrtop_4       = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq");
+                jetAK8puppi_dnnDecorrw_4         = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq");
+                jetAK8puppi_dnnDecorrz_4         = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc")+hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq");
+                jetAK8puppi_dnnDecorrzbb_4       = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb");
+                jetAK8puppi_dnnDecorrhbb_4       = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb");
+                jetAK8puppi_dnnDecorrh4q_4       = hadronicVpuppi_4.bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq");
 
                 IDLoose_4 = looseJetID(hadronicVpuppi_4);
                 IDTight_4 = tightJetID(hadronicVpuppi_4);
@@ -3008,138 +3250,6 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                else if (fabs(jetAK8puppi_eta_4)<2.5 && fabs(jetAK8puppi_eta_4)>1.3){jetAK8puppi_sdcorr_4=jetAK8puppi_sd_4*gencorrect*recocorrect_1p3eta2p5;}
            }
 
-
-           int usenumber5 = -1; double pt_larger5=0;
-           for( int inum = 0; inum< numvhad; inum++){
-               const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(tightJetID(Vpuppi)<1) continue;
-               if(jetAK8puppi_pt1[inum] > pt_larger5 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber4 && inum != usenumber3 && inum != usenumber2 && inum != usenumber1 && inum<8) {pt_larger5 = jetAK8puppi_pt1[inum]; usenumber5 = inum; continue;}
-           }
-
-
-          if(usenumber5>-1)  {
-               const pat::Jet& hadronicVpuppi_5 = puppijets_->at(usenumber5);
-               jetAK8puppi_ptJEC_5       = jetAK8puppi_pt1[usenumber5]; // unpruned corrected jet pt
-               jetAK8puppi_eta_5     = jetAK8puppi_eta1[usenumber5]; // unpruned (w/o jec) jet eta
-               jetAK8puppi_phi_5      = hadronicVpuppi_5.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_5         = hadronicVpuppi_5.userFloat("NjettinessAK8Puppi:tau1");
-               jetAK8puppi_tau2_5         = hadronicVpuppi_5.userFloat("NjettinessAK8Puppi:tau2");
-               jetAK8puppi_tau3_5         = hadronicVpuppi_5.userFloat("NjettinessAK8Puppi:tau3");
-               jetAK8puppi_tau21_5        = jetAK8puppi_tau2_5/jetAK8puppi_tau1_5;
-               jetAK8puppi_tau4_5         = hadronicVpuppi_5.userFloat("NjettinessAK8Puppi:tau4");
-               jetAK8puppi_tau42_5        = jetAK8puppi_tau4_5/jetAK8puppi_tau2_5;
-
-               jetAK8puppi_sd_5       =  hadronicVpuppi_5.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
-               jetAK8puppi_sdJEC_5  =corr_AK8puppiSD[usenumber5]*jetAK8puppi_sd_5;
-               Double_t gencorrect=1.0;
-               Double_t recocorrect_0eta1p3=1.0;
-               Double_t recocorrect_1p3eta2p5=1.0;
-               gencorrect=1.006-1.062*pow(jetAK8puppi_ptJEC_5*0.08,-1.2);
-               recocorrect_0eta1p3=1.093-1.501e-04*jetAK8puppi_ptJEC_5+3.449e-07*pow(jetAK8puppi_ptJEC_5,2)-2.681e-10*pow(jetAK8puppi_ptJEC_5,3)+8.674e-14*pow(jetAK8puppi_ptJEC_5,4)-1.001e-17*pow(jetAK8puppi_ptJEC_5,5);
-               recocorrect_1p3eta2p5=1.272-5.72e-04*jetAK8puppi_ptJEC_5+8.37e-07*pow(jetAK8puppi_ptJEC_5,2)-5.204e-10*pow(jetAK8puppi_ptJEC_5,3)+1.454e-13*pow(jetAK8puppi_ptJEC_5,4)-1.504e-17*pow(jetAK8puppi_ptJEC_5,5);
-               if (fabs(jetAK8puppi_eta_5)<=1.3){jetAK8puppi_sdcorr_5=jetAK8puppi_sd_5*gencorrect*recocorrect_0eta1p3;}
-               else if (fabs(jetAK8puppi_eta_5)<2.5 && fabs(jetAK8puppi_eta_5)>1.3){jetAK8puppi_sdcorr_5=jetAK8puppi_sd_5*gencorrect*recocorrect_1p3eta2p5;}
-           }
-
-
-
-           int usenumber6 = -1; double pt_larger6=0;
-           for( int inum = 0; inum< numvhad; inum++){
-               const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(tightJetID(Vpuppi)<1) continue;
-               if(jetAK8puppi_pt1[inum] > pt_larger6 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber5 && inum != usenumber4 && inum != usenumber3 && inum != usenumber2 && inum != usenumber1 && inum<8) {pt_larger6 = jetAK8puppi_pt1[inum]; usenumber6 = inum; continue;}
-           }
-
-
-          if(usenumber6>-1)  {
-               const pat::Jet& hadronicVpuppi_6 = puppijets_->at(usenumber6);
-               jetAK8puppi_ptJEC_6       = jetAK8puppi_pt1[usenumber6]; // unpruned corrected jet pt
-               jetAK8puppi_eta_6     = jetAK8puppi_eta1[usenumber6]; // unpruned (w/o jec) jet eta
-               jetAK8puppi_phi_6      = hadronicVpuppi_6.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_6         = hadronicVpuppi_6.userFloat("NjettinessAK8Puppi:tau1");
-               jetAK8puppi_tau2_6         = hadronicVpuppi_6.userFloat("NjettinessAK8Puppi:tau2");
-               jetAK8puppi_tau3_6         = hadronicVpuppi_6.userFloat("NjettinessAK8Puppi:tau3");
-               jetAK8puppi_tau21_6        = jetAK8puppi_tau2_6/jetAK8puppi_tau1_6;
-               jetAK8puppi_tau4_6         = hadronicVpuppi_6.userFloat("NjettinessAK8Puppi:tau4");
-               jetAK8puppi_tau42_6        = jetAK8puppi_tau4_6/jetAK8puppi_tau2_6;
-
-               jetAK8puppi_sd_6       =  hadronicVpuppi_6.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
-               jetAK8puppi_sdJEC_6  =corr_AK8puppiSD[usenumber6]*jetAK8puppi_sd_6;
-               Double_t gencorrect=1.0;
-               Double_t recocorrect_0eta1p3=1.0;
-               Double_t recocorrect_1p3eta2p5=1.0;
-               gencorrect=1.006-1.062*pow(jetAK8puppi_ptJEC_6*0.08,-1.2);
-               recocorrect_0eta1p3=1.093-1.501e-04*jetAK8puppi_ptJEC_6+3.449e-07*pow(jetAK8puppi_ptJEC_6,2)-2.681e-10*pow(jetAK8puppi_ptJEC_6,3)+8.674e-14*pow(jetAK8puppi_ptJEC_6,4)-1.001e-17*pow(jetAK8puppi_ptJEC_6,5);
-               recocorrect_1p3eta2p5=1.272-5.72e-04*jetAK8puppi_ptJEC_6+8.37e-07*pow(jetAK8puppi_ptJEC_6,2)-5.204e-10*pow(jetAK8puppi_ptJEC_6,3)+1.454e-13*pow(jetAK8puppi_ptJEC_6,4)-1.504e-17*pow(jetAK8puppi_ptJEC_6,5);
-               if (fabs(jetAK8puppi_eta_6)<=1.3){jetAK8puppi_sdcorr_6=jetAK8puppi_sd_6*gencorrect*recocorrect_0eta1p3;}
-               else if (fabs(jetAK8puppi_eta_6)<2.5 && fabs(jetAK8puppi_eta_6)>1.3){jetAK8puppi_sdcorr_6=jetAK8puppi_sd_6*gencorrect*recocorrect_1p3eta2p5;}
-           }
-
-
-           int usenumber7 = -1; double pt_larger7=0;
-           for( int inum = 0; inum< numvhad; inum++){
-               const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(tightJetID(Vpuppi)<1) continue;
-               if(jetAK8puppi_pt1[inum] > pt_larger7 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber6 && inum != usenumber5 && inum != usenumber4 && inum != usenumber3 && inum != usenumber2 && inum != usenumber1 && inum<8) {pt_larger7 = jetAK8puppi_pt1[inum]; usenumber7 = inum; continue;}
-           }
-
-
-          if(usenumber7>-1)  {
-               const pat::Jet& hadronicVpuppi_7 = puppijets_->at(usenumber7);
-               jetAK8puppi_ptJEC_7       = jetAK8puppi_pt1[usenumber7]; // unpruned corrected jet pt
-               jetAK8puppi_eta_7     = jetAK8puppi_eta1[usenumber7]; // unpruned (w/o jec) jet eta
-               jetAK8puppi_phi_7      = hadronicVpuppi_7.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_7         = hadronicVpuppi_7.userFloat("NjettinessAK8Puppi:tau1");
-               jetAK8puppi_tau2_7         = hadronicVpuppi_7.userFloat("NjettinessAK8Puppi:tau2");
-               jetAK8puppi_tau3_7         = hadronicVpuppi_7.userFloat("NjettinessAK8Puppi:tau3");
-               jetAK8puppi_tau21_7        = jetAK8puppi_tau2_7/jetAK8puppi_tau1_7;
-               jetAK8puppi_tau4_7         = hadronicVpuppi_7.userFloat("NjettinessAK8Puppi:tau4");
-               jetAK8puppi_tau42_7        = jetAK8puppi_tau4_7/jetAK8puppi_tau2_7;
-
-               jetAK8puppi_sd_7       =  hadronicVpuppi_7.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
-               jetAK8puppi_sdJEC_7  =corr_AK8puppiSD[usenumber7]*jetAK8puppi_sd_7;
-               Double_t gencorrect=1.0;
-               Double_t recocorrect_0eta1p3=1.0;
-               Double_t recocorrect_1p3eta2p5=1.0;
-               gencorrect=1.006-1.062*pow(jetAK8puppi_ptJEC_7*0.08,-1.2);
-               recocorrect_0eta1p3=1.093-1.501e-04*jetAK8puppi_ptJEC_7+3.449e-07*pow(jetAK8puppi_ptJEC_7,2)-2.681e-10*pow(jetAK8puppi_ptJEC_7,3)+8.674e-14*pow(jetAK8puppi_ptJEC_7,4)-1.001e-17*pow(jetAK8puppi_ptJEC_7,5);
-               recocorrect_1p3eta2p5=1.272-5.72e-04*jetAK8puppi_ptJEC_7+8.37e-07*pow(jetAK8puppi_ptJEC_7,2)-5.204e-10*pow(jetAK8puppi_ptJEC_7,3)+1.454e-13*pow(jetAK8puppi_ptJEC_7,4)-1.504e-17*pow(jetAK8puppi_ptJEC_7,5);
-               if (fabs(jetAK8puppi_eta_7)<=1.3){jetAK8puppi_sdcorr_7=jetAK8puppi_sd_7*gencorrect*recocorrect_0eta1p3;}
-               else if (fabs(jetAK8puppi_eta_7)<2.5 && fabs(jetAK8puppi_eta_7)>1.3){jetAK8puppi_sdcorr_7=jetAK8puppi_sd_7*gencorrect*recocorrect_1p3eta2p5;}
-           }
-
-
-           int usenumber8 = -1; double pt_larger8=0;
-           for( int inum = 0; inum< numvhad; inum++){
-               const pat::Jet& Vpuppi = puppijets_->at(inum);
-               if(tightJetID(Vpuppi)<1) continue;
-               if(jetAK8puppi_pt1[inum] > pt_larger8 && fabs(jetAK8puppi_eta1[inum])<2.4 && inum != usenumber7 && inum != usenumber6 && inum != usenumber5 && inum != usenumber4 && inum != usenumber3 && inum != usenumber2 && inum != usenumber1 && inum<8) {pt_larger8 = jetAK8puppi_pt1[inum]; usenumber8 = inum; continue;}
-           }
-
-
-          if(usenumber8>-1)  {
-               const pat::Jet& hadronicVpuppi_8 = puppijets_->at(usenumber8);
-               jetAK8puppi_ptJEC_8       = jetAK8puppi_pt1[usenumber8]; // unpruned corrected jet pt
-               jetAK8puppi_eta_8     = jetAK8puppi_eta1[usenumber8]; // unpruned (w/o jec) jet eta
-               jetAK8puppi_phi_8      = hadronicVpuppi_8.phi(); // unpruned (w/o jec) jet phi
-               jetAK8puppi_tau1_8         = hadronicVpuppi_8.userFloat("NjettinessAK8Puppi:tau1");
-               jetAK8puppi_tau2_8         = hadronicVpuppi_8.userFloat("NjettinessAK8Puppi:tau2");
-               jetAK8puppi_tau3_8         = hadronicVpuppi_8.userFloat("NjettinessAK8Puppi:tau3");
-               jetAK8puppi_tau21_8        = jetAK8puppi_tau2_8/jetAK8puppi_tau1_8;
-               jetAK8puppi_tau4_8         = hadronicVpuppi_8.userFloat("NjettinessAK8Puppi:tau4");
-               jetAK8puppi_tau42_8        = jetAK8puppi_tau4_8/jetAK8puppi_tau2_8;
-
-               jetAK8puppi_sd_8       =  hadronicVpuppi_8.userFloat("ak8PFJetsPuppiSoftDropMass"); // uncorrected pruned mass
-               jetAK8puppi_sdJEC_8  =corr_AK8puppiSD[usenumber8]*jetAK8puppi_sd_8;
-               Double_t gencorrect=1.0;
-               Double_t recocorrect_0eta1p3=1.0;
-               Double_t recocorrect_1p3eta2p5=1.0;
-               gencorrect=1.006-1.062*pow(jetAK8puppi_ptJEC_8*0.08,-1.2);
-               recocorrect_0eta1p3=1.093-1.501e-04*jetAK8puppi_ptJEC_8+3.449e-07*pow(jetAK8puppi_ptJEC_8,2)-2.681e-10*pow(jetAK8puppi_ptJEC_8,3)+8.674e-14*pow(jetAK8puppi_ptJEC_8,4)-1.001e-17*pow(jetAK8puppi_ptJEC_8,5);
-               recocorrect_1p3eta2p5=1.272-5.72e-04*jetAK8puppi_ptJEC_8+8.37e-07*pow(jetAK8puppi_ptJEC_8,2)-5.204e-10*pow(jetAK8puppi_ptJEC_8,3)+1.454e-13*pow(jetAK8puppi_ptJEC_8,4)-1.504e-17*pow(jetAK8puppi_ptJEC_8,5);
-               if (fabs(jetAK8puppi_eta_8)<=1.3){jetAK8puppi_sdcorr_8=jetAK8puppi_sd_8*gencorrect*recocorrect_0eta1p3;}
-               else if (fabs(jetAK8puppi_eta_8)<2.5 && fabs(jetAK8puppi_eta_8)>1.3){jetAK8puppi_sdcorr_8=jetAK8puppi_sd_8*gencorrect*recocorrect_1p3eta2p5;}
-           }
 	int nak4 = 0;
         double tj1=-10.0, tj2=-10.0; 
         for (size_t ik=0; ik<ak4jets->size();ik++)
@@ -3156,7 +3266,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
               jecAK4_->setJetA ( (*ak4jets)[ik].jetArea() );
               corr = jecAK4_->getCorrection();
 	    } else {uncorrJet = (*ak4jets)[ik].p4();}
-            if( (corr*uncorrJet.pt())>20 && (fabs((*ak4jets)[ik].eta()) < 5.0) && tightJetID((*ak4jets)[ik])>0 && nak4<8){
+            if( (corr*uncorrJet.pt())>20 && (fabs((*ak4jets)[ik].eta()) < 5.0) && tightJetID_ak4((*ak4jets)[ik])>0 && nak4<15){
                 ak4jet_hf[nak4]=(*ak4jets)[ik].hadronFlavour();
                 ak4jet_pf[nak4]=(*ak4jets)[ik].partonFlavour();
                 ak4jet_pt[nak4] =  corr*uncorrJet.pt();
@@ -3166,25 +3276,29 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 ak4jet_e[nak4] =   corr*uncorrJet.energy();
                 ak4jet_csv[nak4] = (*ak4jets)[ik].bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
                 ak4jet_icsv[nak4] = (*ak4jets)[ik].bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");   
-                ak4jet_IDLoose[nak4] = looseJetID((*ak4jets)[ik]); 
-                ak4jet_IDTight[nak4] = tightJetID((*ak4jets)[ik]);
+                ak4jet_IDLoose[nak4] = looseJetID_ak4((*ak4jets)[ik]); 
+                ak4jet_IDTight[nak4] = tightJetID_ak4((*ak4jets)[ik]);
              //   cout<<"Run:"<<RunOnSig_<<endl;
                 if(!RunOnSig_){
-                        ak4jet_deepcsvudsg[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probudsg");
-                        ak4jet_deepcsvb[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probb");
-                        ak4jet_deepcsvc[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probc");
-                        ak4jet_deepcsvbb[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probbb");
-                        ak4jet_deepcsvcc[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probcc");}
+                    ak4jet_deepcsvudsg[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probudsg");
+                    ak4jet_deepcsvb[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probb");
+                    ak4jet_deepcsvc[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probc");
+                    ak4jet_deepcsvbb[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probbb");
+                    ak4jet_deepcsvcc[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probcc");}
+                    //    ak4jet_deepcsvudsg[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probudsg");
+                    //    ak4jet_deepcsvb[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probb");
+                    //    ak4jet_deepcsvc[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probc");
+                    //    ak4jet_deepcsvbb[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probbb");
+                    //    ak4jet_deepcsvcc[nak4] = (*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probcc");}
                 else{ 
                     ak4jet_deepcsvudsg[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probudsg");
-                    //cout<<(*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probudsg")<<"   "<<(*ak4jets)[ik].bDiscriminator("deepFlavourJetTags:probudsg")<<endl;
                     ak4jet_deepcsvb[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probb");
                     ak4jet_deepcsvc[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probc");
                     ak4jet_deepcsvbb[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probbb");
                     ak4jet_deepcsvcc[nak4] = (*ak4jets)[ik].bDiscriminator("pfDeepCSVJetTags:probcc");
                     }
-                    ak4jet_IDLoose[nak4] = looseJetID((*ak4jets)[ik]);
-                    ak4jet_IDTight[nak4] = tightJetID((*ak4jets)[ik]);
+                    ak4jet_IDLoose[nak4] = looseJetID_ak4((*ak4jets)[ik]);
+                    ak4jet_IDTight[nak4] = tightJetID_ak4((*ak4jets)[ik]);
                     if(ak4jet_pt[nak4]>tj1 ) {
                         if(tj1>tj2) {tj2=tj1; nj2=nj1;}
                         tj1=ak4jet_pt[nak4]; nj1=nak4;
@@ -3223,9 +3337,75 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
            bool IDTight_4 = tightJetID(hadronicVpuppi_4);
 */
            TLorentzVector lvw[3];
+           if (RunOnMC_){ 
+            TLorentzVector ghadronicVpuppi_new, gravitonpuppiJEC_new,ghadronicVpuppi_2_new,ghadronicVpuppi_3_new;
+            ghadronicVpuppi_new.SetPtEtaPhiM(jetAK8puppi_ptJEC_new, jetAK8puppi_eta, jetAK8puppi_phi, jetAK8puppi_sd);
+            ghadronicVpuppi_2_new.SetPtEtaPhiM(jetAK8puppi_ptJEC_2_new, jetAK8puppi_eta_2, jetAK8puppi_phi_2, jetAK8puppi_sd_2);
+            ghadronicVpuppi_3_new.SetPtEtaPhiM(jetAK8puppi_ptJEC_3_new, jetAK8puppi_eta_3, jetAK8puppi_phi_3, jetAK8puppi_sd_3);
+            gravitonpuppiJEC_new = ghadronicVpuppi_3_new + ghadronicVpuppi_new+ ghadronicVpuppi_2_new;
+            candMasspuppiJEC_new     = gravitonpuppiJEC_new.Mag();
+            MJJ_new     = (ghadronicVpuppi_2_new + ghadronicVpuppi_new).Mag();
+            TLorentzVector ghadronicVpuppi_JEC_up, gravitonpuppiJEC_JEC_up,ghadronicVpuppi_2_JEC_up, ghadronicVpuppi_3_JEC_up;
+            ghadronicVpuppi_JEC_up.SetPtEtaPhiM(jetAK8puppi_ptJEC_JEC_up, jetAK8puppi_eta, jetAK8puppi_phi,jetAK8puppi_sd);
+            ghadronicVpuppi_2_JEC_up.SetPtEtaPhiM(jetAK8puppi_ptJEC_2_JEC_up, jetAK8puppi_eta_2, jetAK8puppi_phi_2, jetAK8puppi_sd_2);
+            ghadronicVpuppi_3_JEC_up.SetPtEtaPhiM(jetAK8puppi_ptJEC_3_JEC_up, jetAK8puppi_eta_3, jetAK8puppi_phi_3, jetAK8puppi_sd_3);
+
+            gravitonpuppiJEC_JEC_up = ghadronicVpuppi_3_JEC_up + ghadronicVpuppi_JEC_up+ ghadronicVpuppi_2_JEC_up;
+            candMasspuppiJEC_JEC_up     = gravitonpuppiJEC_JEC_up.Mag();
+            MJJ_JEC_up     = (ghadronicVpuppi_2_JEC_up + ghadronicVpuppi_JEC_up).Mag();
+            TLorentzVector ghadronicVpuppi_JEC_down, gravitonpuppiJEC_JEC_down,ghadronicVpuppi_2_JEC_down, ghadronicVpuppi_3_JEC_down;
+            ghadronicVpuppi_JEC_down.SetPtEtaPhiM(jetAK8puppi_ptJEC_JEC_down, jetAK8puppi_eta, jetAK8puppi_phi, jetAK8puppi_sd);
+            ghadronicVpuppi_2_JEC_down.SetPtEtaPhiM(jetAK8puppi_ptJEC_2_JEC_down, jetAK8puppi_eta_2, jetAK8puppi_phi_2, jetAK8puppi_sd_2);
+            ghadronicVpuppi_3_JEC_down.SetPtEtaPhiM(jetAK8puppi_ptJEC_3_JEC_down, jetAK8puppi_eta_3, jetAK8puppi_phi_3, jetAK8puppi_sd_3);
+            gravitonpuppiJEC_JEC_down = ghadronicVpuppi_3_JEC_down + ghadronicVpuppi_JEC_down+ ghadronicVpuppi_2_JEC_down;
+            candMasspuppiJEC_JEC_down     = gravitonpuppiJEC_JEC_down.Mag();
+            MJJ_JEC_down     = (ghadronicVpuppi_2_JEC_down + ghadronicVpuppi_JEC_down).Mag();
+            
+            TLorentzVector ghadronicVpuppi_JER_up, gravitonpuppiJEC_JER_up,ghadronicVpuppi_2_JER_up,ghadronicVpuppi_3_JER_up;
+            ghadronicVpuppi_JER_up.SetPtEtaPhiM(jetAK8puppi_ptJEC_JER_up, jetAK8puppi_eta, jetAK8puppi_phi, jetAK8puppi_sd);
+            ghadronicVpuppi_2_JER_up.SetPtEtaPhiM(jetAK8puppi_ptJEC_2_JER_up, jetAK8puppi_eta_2, jetAK8puppi_phi_2, jetAK8puppi_sd_2);
+            ghadronicVpuppi_3_JER_up.SetPtEtaPhiM(jetAK8puppi_ptJEC_3_JER_up, jetAK8puppi_eta_3, jetAK8puppi_phi_3, jetAK8puppi_sd_3);
+
+            gravitonpuppiJEC_JER_up = ghadronicVpuppi_3_JER_up + ghadronicVpuppi_JER_up+ ghadronicVpuppi_2_JER_up;
+            candMasspuppiJEC_JER_up     = gravitonpuppiJEC_JER_up.Mag();
+            MJJ_JER_up     = (ghadronicVpuppi_2_JER_up + ghadronicVpuppi_JER_up).Mag();
+            
+            TLorentzVector ghadronicVpuppi_JER_down, gravitonpuppiJEC_JER_down,ghadronicVpuppi_2_JER_down,ghadronicVpuppi_3_JER_down;
+            ghadronicVpuppi_JER_down.SetPtEtaPhiM(jetAK8puppi_ptJEC_JER_down, jetAK8puppi_eta, jetAK8puppi_phi, jetAK8puppi_sd);
+            ghadronicVpuppi_2_JER_down.SetPtEtaPhiM(jetAK8puppi_ptJEC_2_JER_down, jetAK8puppi_eta_2, jetAK8puppi_phi_2,jetAK8puppi_sd_2);
+            ghadronicVpuppi_3_JER_down.SetPtEtaPhiM(jetAK8puppi_ptJEC_3_JER_down, jetAK8puppi_eta_3, jetAK8puppi_phi_3,jetAK8puppi_sd_3);
+
+            gravitonpuppiJEC_JER_down = ghadronicVpuppi_3_JER_down + ghadronicVpuppi_JER_down+ ghadronicVpuppi_2_JER_down;
+            candMasspuppiJEC_JER_down     = gravitonpuppiJEC_JER_down.Mag();
+            MJJ_JER_down     = (ghadronicVpuppi_2_JER_down + ghadronicVpuppi_JER_down).Mag();
+
+	    //swap var and var_new
+	              double jetAK8puppi_ptJEC_tmp = jetAK8puppi_ptJEC ; jetAK8puppi_ptJEC = jetAK8puppi_ptJEC_new ; jetAK8puppi_ptJEC_new = jetAK8puppi_ptJEC_tmp;
+            double jetAK8puppi_ptJEC_2_tmp = jetAK8puppi_ptJEC_2 ; jetAK8puppi_ptJEC_2 = jetAK8puppi_ptJEC_2_new ; jetAK8puppi_ptJEC_2_new = jetAK8puppi_ptJEC_2_tmp;
+            double jetAK8puppi_ptJEC_3_tmp = jetAK8puppi_ptJEC_3 ; jetAK8puppi_ptJEC_3 = jetAK8puppi_ptJEC_3_new ; jetAK8puppi_ptJEC_3_new = jetAK8puppi_ptJEC_3_tmp;
+            double jetAK8puppi_e_tmp = jetAK8puppi_e ; jetAK8puppi_e = jetAK8puppi_e_new ; jetAK8puppi_e_new = jetAK8puppi_e_tmp;
+            double jetAK8puppi_e_2_tmp = jetAK8puppi_e_2 ; jetAK8puppi_e_2 = jetAK8puppi_e_2_new ; jetAK8puppi_e_2_new = jetAK8puppi_e_2_tmp;
+            double jetAK8puppi_e_3_tmp = jetAK8puppi_e_3 ; jetAK8puppi_e_3 = jetAK8puppi_e_3_new ; jetAK8puppi_e_3_new = jetAK8puppi_e_3_tmp;
+         //   double ptVlepJEC_tmp = ptVlepJEC ; ptVlepJEC = ptVlepJEC_new ; ptVlepJEC_new = ptVlepJEC_tmp;
+        //    double yVlepJEC_tmp = yVlepJEC ; yVlepJEC = yVlepJEC_new ; yVlepJEC_new = yVlepJEC_tmp;
+        //    double phiVlepJEC_tmp = phiVlepJEC ; phiVlepJEC = phiVlepJEC_new ; phiVlepJEC_new = phiVlepJEC_tmp;
+        //    double massVlepJEC_tmp = massVlepJEC ; massVlepJEC = massVlepJEC_new ; massVlepJEC_new = massVlepJEC_tmp;
+        //    double mtVlepJEC_tmp = mtVlepJEC ; mtVlepJEC = mtVlepJEC_new ; mtVlepJEC_new = mtVlepJEC_tmp;
+            double MET_et_tmp = MET_et ; MET_et = MET_et_new ; MET_et_new = MET_et_tmp;
+            double MET_phi_tmp = MET_phi ; MET_phi = MET_phi_new ; MET_phi_new = MET_phi_tmp;
+       //     double MJJ_tmp = MJJ ; MJJ = MJJ_new ; MJJ_new = MJJ_tmp;
+       //     double candMasspuppiJEC_tmp = candMasspuppiJEC ; candMasspuppiJEC = candMasspuppiJEC_new ; candMasspuppiJEC_new = candMasspuppiJEC_tmp;
+
+            lvw[0] = ghadronicVpuppi_new;
+            lvw[1] = ghadronicVpuppi_2_new;
+            lvw[2] = ghadronicVpuppi_3_new;
+	    }
+
+            if (!RunOnMC_){ 
            lvw[0] = ghadronicVpuppi;
            lvw[1] = ghadronicVpuppi_2;
            lvw[2] = ghadronicVpuppi_3;
+             }
            Double_t Wpt[3];
            Wpt[0]=jetAK8puppi_ptJEC;
            Wpt[1]=jetAK8puppi_ptJEC_2;
@@ -3306,7 +3486,7 @@ EDBRTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                }
          }//2
         }//1
-Int_t Nj8=(jetAK8puppi_ptJEC>0)+(jetAK8puppi_ptJEC_2>0)+(jetAK8puppi_ptJEC_3>0)+(jetAK8puppi_ptJEC_4>0)+(jetAK8puppi_ptJEC_5>0)+(jetAK8puppi_ptJEC_6>0)+(jetAK8puppi_ptJEC_7>0)+(jetAK8puppi_ptJEC_8>0);
+Int_t Nj8=(jetAK8puppi_ptJEC>0)+(jetAK8puppi_ptJEC_2>0)+(jetAK8puppi_ptJEC_3>0)+(jetAK8puppi_ptJEC_4>0);
 
 TLorentzVector AK81,AK82,AK83,AK84;
 AK81.SetPtEtaPhiM(0,-99,-99,-99);
@@ -3317,20 +3497,27 @@ Double_t MJJ=-99;
 Double_t MJJJ=-99;
 Double_t MJJJJ=-99;
 if(Nj8==2){
-AK81.SetPtEtaPhiM(jetAK8puppi_ptJEC,jetAK8puppi_eta,jetAK8puppi_phi,jetAK8puppi_sdcorr);
-AK82.SetPtEtaPhiM(jetAK8puppi_ptJEC_2,jetAK8puppi_eta_2,jetAK8puppi_phi_2,jetAK8puppi_sdcorr_2);
+AK81.SetPtEtaPhiM(jetAK8puppi_ptJEC,jetAK8puppi_eta,jetAK8puppi_phi,jetAK8puppi_sd);
+AK82.SetPtEtaPhiM(jetAK8puppi_ptJEC_2,jetAK8puppi_eta_2,jetAK8puppi_phi_2,jetAK8puppi_sd_2);
 MJJ=(AK81+AK82).M();
           }
 if(Nj8==3){
 MJJJ=candMasspuppiJEC;
           }
 if(Nj8==4){
-AK81.SetPtEtaPhiM(jetAK8puppi_ptJEC,jetAK8puppi_eta,jetAK8puppi_phi,jetAK8puppi_sdcorr);
-AK82.SetPtEtaPhiM(jetAK8puppi_ptJEC_2,jetAK8puppi_eta_2,jetAK8puppi_phi_2,jetAK8puppi_sdcorr_2);
-AK83.SetPtEtaPhiM(jetAK8puppi_ptJEC_3,jetAK8puppi_eta_3,jetAK8puppi_phi_3,jetAK8puppi_sdcorr_3);
-AK84.SetPtEtaPhiM(jetAK8puppi_ptJEC_4,jetAK8puppi_eta_4,jetAK8puppi_phi_4,jetAK8puppi_sdcorr_4);
+AK81.SetPtEtaPhiM(jetAK8puppi_ptJEC,jetAK8puppi_eta,jetAK8puppi_phi,jetAK8puppi_sd);
+AK82.SetPtEtaPhiM(jetAK8puppi_ptJEC_2,jetAK8puppi_eta_2,jetAK8puppi_phi_2,jetAK8puppi_sd_2);
+AK83.SetPtEtaPhiM(jetAK8puppi_ptJEC_3,jetAK8puppi_eta_3,jetAK8puppi_phi_3,jetAK8puppi_sd_3);
+AK84.SetPtEtaPhiM(jetAK8puppi_ptJEC_4,jetAK8puppi_eta_4,jetAK8puppi_phi_4,jetAK8puppi_sd_4);
 MJJJJ=(AK81+AK82+AK83+AK84).M();
           }
+
+            double MJJ_tmp = MJJ ; MJJ = MJJ_new ; MJJ_new = MJJ_tmp;
+            double candMasspuppiJEC_tmp = candMasspuppiJEC ; candMasspuppiJEC = candMasspuppiJEC_new ; candMasspuppiJEC_new = candMasspuppiJEC_tmp;
+//         if(Nj8==3){
+  //           MJJJ=candMasspuppiJEC;
+    //               }
+
 
 //cout<<passFilter_EEBadSc_<<"  "<<passFilter_badMuon_<<" "<<passFilter_badChargedHadron_<<endl;
 //cout<<"IDLoose:"<<IDLoose<<endl;
@@ -3342,12 +3529,16 @@ MJJJJ=(AK81+AK82+AK83+AK84).M();
          if(RunOnMC_){
               passFilter_EEBadSc_=true;//Only used for Data
                      }
-         if(nVetoEle==0&&nVetoMu==0&&((Nj8==2&&MJJ>-1000&&IDTight>0&&IDTight_2>0)||(Nj8==3&&MJJJ>-1000&&IDTight>0&&IDTight_2>0&&IDTight_3>0&&fabs(jetAK8puppi_eta_3)<2.4)||(Nj8==4&&MJJJJ>-1000&&IDTight>0&&IDTight_2>0&&IDTight_3>0&&IDTight_4>0&&fabs(jetAK8puppi_eta_4)<2.4)) && jetAK8puppi_ptJEC>400 && jetAK8puppi_ptJEC_2>200 && jetAK8puppi_sdcorr>40 && jetAK8puppi_sdcorr_2>40&& (HLT_Mu1>0 || HLT_Mu2>0 || HLT_Mu3>0 || HLT_Mu4>0 || HLT_Mu5>0 || HLT_Mu6>0 || HLT_Mu7>0 || HLT_Mu8>0 || HLT_Mu9>0 || HLT_Mu17>0) && fabs(jetAK8puppi_eta)<2.4&& fabs(jetAK8puppi_eta_2)<2.4 && passFilter_HBHE_>0 && passFilter_GlobalHalo_>0 && passFilter_HBHEIso_>0 && passFilter_ECALDeadCell_>0 && passFilter_GoodVtx_>0 && passFilter_badMuon_>0 && passFilter_EEBadSc_>0){
+    //     if(MJJ>-1000&&MJJJ>-1000&&MJJJJ>-1000){
+         //if(nVetoEle==0&&nVetoMu==0&&((Nj8==2&&MJJ>-1000&&IDTight>0&&IDTight_2>0)||(Nj8==3&&MJJJ>-1000&&IDTight>0&&IDTight_2>0&&IDTight_3>0&&fabs(jetAK8puppi_eta_3)<2.4)||(Nj8==4&&MJJJJ>-1000&&IDTight>0&&IDTight_2>0&&IDTight_3>0&&IDTight_4>0&&fabs(jetAK8puppi_eta_4)<2.4)) && jetAK8puppi_ptJEC>400 && jetAK8puppi_ptJEC_2>200 && jetAK8puppi_sdcorr>40 && jetAK8puppi_sdcorr_2>40&& (HLT_Mu1>0 || HLT_Mu2>0 || HLT_Mu3>0 || HLT_Mu4>0 || HLT_Mu5>0 || HLT_Mu6>0 || HLT_Mu7>0 || HLT_Mu8>0 || HLT_Mu9>0 || HLT_Mu17>0) && fabs(jetAK8puppi_eta)<2.4&& fabs(jetAK8puppi_eta_2)<2.4 && passFilter_HBHE_>0 && passFilter_GlobalHalo_>0 && passFilter_HBHEIso_>0 && passFilter_ECALDeadCell_>0 && passFilter_GoodVtx_>0 && passFilter_badMuon_>0 && passFilter_EEBadSc_>0 && passFilter_ecalBadCalibReduced_>0){
+         if(nVetoEle==0&&nVetoMu==0&&((Nj8==2&&MJJ>900&&IDTight>0&&IDTight_2>0&&(jetAK8puppi_ptJEC+jetAK8puppi_ptJEC_2)>1100)||(Nj8==3&&MJJJ>900&&IDTight>0&&IDTight_2>0&&IDTight_3>0&&fabs(jetAK8puppi_eta_3)<2.4&&jetAK8puppi_ptJEC_3>200&&(jetAK8puppi_ptJEC+jetAK8puppi_ptJEC_2+jetAK8puppi_ptJEC_3)>1100)||(Nj8==4&&MJJJJ>900&&IDTight>0&&IDTight_2>0&&IDTight_3>0&&IDTight_4>0&&fabs(jetAK8puppi_eta_4)<2.4&&jetAK8puppi_ptJEC_3>200&&jetAK8puppi_ptJEC_4>200&&(jetAK8puppi_ptJEC+jetAK8puppi_ptJEC_2+jetAK8puppi_ptJEC_3+jetAK8puppi_ptJEC_4)>1100)) && jetAK8puppi_ptJEC>400 && jetAK8puppi_ptJEC_2>200 && jetAK8puppi_sdcorr>40 && jetAK8puppi_sdcorr_2>40 && fabs(jetAK8puppi_eta)<2.4&& fabs(jetAK8puppi_eta_2)<2.4 && passFilter_HBHE_>0 && passFilter_GlobalHalo_>0 && passFilter_HBHEIso_>0 && passFilter_ECALDeadCell_>0 && passFilter_GoodVtx_>0 && passFilter_badMuon_>0 && passFilter_EEBadSc_>0 && passFilter_ecalBadCalibReduced_>0){
               outTree_->Fill();
                      }
        outTreew_->Fill();
    }
    else {
+    //   outTree_->Fill();  //add
+
        outTreew_->Fill();
         }
 }
@@ -3374,10 +3565,32 @@ void EDBRTreeMaker::setDummyValues() {
     ak8sj25.SetPtEtaPhiM(0,-99,-99,-99);
     ak8sj35.SetPtEtaPhiM(0,-99,-99,-99);
 
-    for(int p=0;p<211;p++){
+    for(int i=0;i<4;i++){
+       jetAK8puppi_mass1[i] = -99;
+        jetAK8puppi_pt1[i] = -99;
+        jetAK8puppi_eta1[i] = -99;
+        jetAK8puppi_pt1_new[i] = -99;
+        jetAK8puppi_pt1_m[i] = -99;
+        jetAK8puppi_pt1_newnew[i] = -99;
+        jetAK8puppi_pt1_JEC_up[i] = -99;
+        jetAK8puppi_pt1_JEC_down[i] = -99;
+        jetAK8puppi_pt1_JER_up[i] = -99;
+        jetAK8puppi_pt1_JER_down[i] = -99;
+        jetAK8puppi_e1_new[i] = -99;
+        jetAK8puppi_e1_JEC_up[i] = -99;
+        jetAK8puppi_e1_JEC_down[i] = -99;
+        jetAK8puppi_e1_JER_up[i] = -99;
+        jetAK8puppi_e1_JER_down[i] = -99;
+
+    }
+
+    L1prefiring = -99;
+    L1prefiringup = -99;
+    L1prefiringdown = -99;
+    for(int p=0;p<2;p++){
                 pweight[p]=-99; 
                           }
-    for(Int_t ii=0;ii<8;ii++){
+    for(Int_t ii=0;ii<15;ii++){
         ak4jet_hf[ii] = -99;
         ak4jet_pf[ii] = -99;
         ak4jet_pt[ii] = -99;
@@ -3620,57 +3833,53 @@ void EDBRTreeMaker::setDummyValues() {
      jetAK8puppi_sdJEC_4         = -99;
      jetAK8puppi_sdcorr_4         = -99;
 
-     jetAK8puppi_ptJEC_5         = -99;
-     jetAK8puppi_eta_5         = -99;
-     jetAK8puppi_phi_5         = -99;
-     jetAK8puppi_tau1_5         = -99;
-     jetAK8puppi_tau2_5         = -99;
-     jetAK8puppi_tau3_5         = -99;
-     jetAK8puppi_tau21_5         = -99;
-     jetAK8puppi_tau4_5         = -99;
-     jetAK8puppi_tau42_5         = -99;
-     jetAK8puppi_sd_5         = -99;
-     jetAK8puppi_sdJEC_5         = -99;
-     jetAK8puppi_sdcorr_5         = -99;
+   jetAK8puppi_ptJEC_new         = -99;
+    jetAK8puppi_ptJEC_newnew         = -99;
+    jetAK8puppi_ptJEC_m         = -99;
+    jetAK8puppi_ptJEC_JEC_up         = -99;
+    jetAK8puppi_ptJEC_JEC_down         = -99;
+    jetAK8puppi_ptJEC_JER_up         = -99;
+    jetAK8puppi_ptJEC_JER_down         = -99;
+    jetAK8puppi_ptJEC_2_new         = -99;
+    jetAK8puppi_ptJEC_2_JEC_up         = -99;
+    jetAK8puppi_ptJEC_2_JEC_down         = -99;
+    jetAK8puppi_ptJEC_2_JER_up         = -99;
+    jetAK8puppi_ptJEC_2_JER_down         = -99;
+    jetAK8puppi_ptJEC_3_new         = -99;
+    jetAK8puppi_ptJEC_3_JEC_up         = -99;
+    jetAK8puppi_ptJEC_3_JEC_down         = -99;
+    jetAK8puppi_ptJEC_3_JER_up         = -99;
+    jetAK8puppi_ptJEC_3_JER_down         = -99;
+    jetAK8puppi_ptJEC_4_new         = -99;
+    jetAK8puppi_ptJEC_4_JEC_up         = -99;
+    jetAK8puppi_ptJEC_4_JEC_down         = -99;
+    jetAK8puppi_ptJEC_4_JER_up         = -99;
+    jetAK8puppi_ptJEC_4_JER_down         = -99;
 
-     jetAK8puppi_ptJEC_6         = -99;
-     jetAK8puppi_eta_6         = -99;
-     jetAK8puppi_phi_6         = -99;
-     jetAK8puppi_tau1_6         = -99;
-     jetAK8puppi_tau2_6         = -99;
-     jetAK8puppi_tau3_6         = -99;
-     jetAK8puppi_tau21_6         = -99;
-     jetAK8puppi_tau4_6         = -99;
-     jetAK8puppi_tau42_6         = -99;
-     jetAK8puppi_sd_6         = -99;
-     jetAK8puppi_sdJEC_6         = -99;
-     jetAK8puppi_sdcorr_6         = -99;
-
-     jetAK8puppi_ptJEC_7         = -99;
-     jetAK8puppi_eta_7         = -99;
-     jetAK8puppi_phi_7         = -99;
-     jetAK8puppi_tau1_7         = -99;
-     jetAK8puppi_tau2_7         = -99;
-     jetAK8puppi_tau3_7         = -99;
-     jetAK8puppi_tau21_7         = -99;
-     jetAK8puppi_tau4_7         = -99;
-     jetAK8puppi_tau42_7         = -99;
-     jetAK8puppi_sd_7         = -99;
-     jetAK8puppi_sdJEC_7         = -99;
-     jetAK8puppi_sdcorr_7         = -99;
-
-     jetAK8puppi_ptJEC_8         = -99;
-     jetAK8puppi_eta_8         = -99;
-     jetAK8puppi_phi_8         = -99;
-     jetAK8puppi_tau1_8         = -99;
-     jetAK8puppi_tau2_8         = -99;
-     jetAK8puppi_tau3_8         = -99;
-     jetAK8puppi_tau21_8         = -99;
-     jetAK8puppi_tau4_8         = -99;
-     jetAK8puppi_tau42_8         = -99;
-     jetAK8puppi_sd_8         = -99;
-     jetAK8puppi_sdJEC_8         = -99;
-     jetAK8puppi_sdcorr_8         = -99;
+    jetAK8puppi_e         = -99;
+    jetAK8puppi_e_new         = -99;
+    jetAK8puppi_e_JEC_up         = -99;
+    jetAK8puppi_e_JEC_down         = -99;
+    jetAK8puppi_e_JER_up         = -99;
+    jetAK8puppi_e_JER_down         = -99;
+    jetAK8puppi_e_2         = -99;
+    jetAK8puppi_e_2_new         = -99;
+    jetAK8puppi_e_2_JEC_up         = -99;
+    jetAK8puppi_e_2_JEC_down         = -99;
+    jetAK8puppi_e_2_JER_up         = -99;
+    jetAK8puppi_e_2_JER_down         = -99;
+    jetAK8puppi_e_3         = -99;
+    jetAK8puppi_e_3_new         = -99;
+    jetAK8puppi_e_3_JEC_up         = -99;
+    jetAK8puppi_e_3_JEC_down         = -99;
+    jetAK8puppi_e_3_JER_up         = -99;
+    jetAK8puppi_e_3_JER_down         = -99;
+    jetAK8puppi_e_4         = -99;
+    jetAK8puppi_e_4_new         = -99;
+    jetAK8puppi_e_4_JEC_up         = -99;
+    jetAK8puppi_e_4_JEC_down         = -99;
+    jetAK8puppi_e_4_JER_up         = -99;
+    jetAK8puppi_e_4_JER_down         = -99;
 
      met            = -99;
      metPhi         = -99;
@@ -3784,7 +3993,11 @@ void EDBRTreeMaker::setDummyValues() {
      status_2       =  -1;
      status_3       =  -1;
 
-     for(Int_t ii=0;ii<8;ii++){
+    for(int j=0; j<46; j++){
+        psweight[j]=0.0;
+    }
+
+     for(Int_t ii=0;ii<15;ii++){
         ak4jet_hf[ii] = -99;
         ak4jet_pf[ii] = -99;
         ak4jet_pt[ii] = -99;
@@ -3836,7 +4049,42 @@ void EDBRTreeMaker::setDummyValues() {
      MET_corrPx = -99;
      MET_corrPy = -99;
 
+    MET_et_m = -99;
+    MET_et_old = -99;
+    MET_phi_m = -99;
+    MET_sumEt = -99;
+    MET_corrPx = -99;
+    MET_corrPy = -99;
+    MET_et_new=-99;
+    MET_et_JEC_up=-99;
+    MET_et_JEC_down=-99;
+    MET_et_JER_up=-99;
+    MET_et_JER_down=-99;
+    MET_phi_new=-99;
+    MET_phi_JEC_up=-99;
+    MET_phi_JEC_down=-99;
+    MET_phi_JER_up=-99;
+    MET_phi_JER_down=-99;
+    MET_sumEt_new=-99;
+    MET_sumEt_JEC_up=-99;
+    MET_sumEt_JEC_down=-99;
+    MET_sumEt_JER_up=-99;
+    MET_sumEt_JER_down=-99;
+
      candMasspuppiJEC     =  -99;
+
+    candMasspuppiJEC_new     =  -99;
+    MJJ_new     =  -99;
+    
+    candMasspuppiJEC_JEC_up     =  -99;
+    MJJ_JEC_up     =  -99;
+    candMasspuppiJEC_JEC_down     =  -99;
+    MJJ_JEC_down     =  -99;
+    candMasspuppiJEC_JER_up     =  -99;
+    MJJ_JER_up     =  -99;
+    candMasspuppiJEC_JER_down     =  -99;
+    MJJ_JER_down     =  -99;
+
      massww[0] = -99;
      massww[1] = -99;
      massww[2] = -99;
@@ -3870,7 +4118,7 @@ void EDBRTreeMaker::setDummyValues() {
      passFilter_EEBadSc_               = false;
      passFilter_badMuon_               = false;
      passFilter_badChargedHadron_      = false;
-
+     passFilter_ecalBadCalibReduced_   = false;
 }
 
 // ------------ method called once each job just before starting event loop  ------------
@@ -4105,6 +4353,20 @@ void EDBRTreeMaker::beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup
 
 void EDBRTreeMaker::endRun(const edm::Run& iRun, const edm::EventSetup& iSetup)
 {
+/*edm::Handle<LHERunInfoProduct> runw;
+        typedef std::vector<LHERunInfoProduct::Header>::const_iterator headers_const_iterator;
+        
+        iRun.getByToken(LhestrToken_,runw);
+        LHERunInfoProduct myLHERunInfoProduct = *(runw.product());
+        
+        for (headers_const_iterator iter=myLHERunInfoProduct.headers_begin(); iter!=myLHERunInfoProduct.headers_end(); iter++){
+            std::cout << iter->tag() << std::endl;
+            std::vector<std::string> lines = iter->lines();
+            for (unsigned int iLine = 0; iLine<lines.size(); iLine++) {
+                std::cout << lines.at(iLine);
+            }
+        }
+*/
 std::cout << "EDBRTreeMaker endJob()... endRun" << std::endl;
 }
 

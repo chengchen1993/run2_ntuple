@@ -1,0 +1,20 @@
+CRAB project directory:		/afs/cern.ch/work/h/huangh/VVV_had18/MC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_WJetsHT800toInf
+Task name:			200314_013549:huangh_crab_WJetsHT800toInf
+Grid scheduler - Task Worker:	crab3@vocms0122.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/200314_013549%3Ahuangh_crab_WJetsHT800toInf
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=huangh&var-task=200314_013549%3Ahuangh_crab_WJetsHT800toInf
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	COMPLETED
+
+Jobs status:                    finished     		100.0% (218/218)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Summary of run jobs:
+ * Memory: 1275MB min, 2957MB max, 1597MB ave
+ * Runtime: 0:19:03 min, 20:35:45 max, 9:40:04 ave
+ * CPU eff: 45% min, 99% max, 95% ave
+ * Waste: 137:27:00 (6% of total)
+
+Log file is /afs/cern.ch/work/h/huangh/VVV_had18/MC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_WJetsHT800toInf/crab.log

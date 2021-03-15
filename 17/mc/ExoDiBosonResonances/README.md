@@ -1,2 +1,2 @@
 #ExoDiBosonResonances
-for 94X
+for 80X

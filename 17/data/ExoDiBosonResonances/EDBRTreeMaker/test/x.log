@@ -1,0 +1,27 @@
+CRAB project directory:		/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleData/CMSSW_9_4_11/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_B
+Task name:			191113_121035:chench_crab_B
+Grid scheduler - Task Worker:	crab3@vocms0106.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/191113_121035%3Achench_crab_B
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=chench&var-task=191113_121035%3Achench_crab_B
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	FAILED
+
+Jobs status:                    failed       		  0.2% (  1/600)
+				finished     		 99.8% (599/600)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Error Summary: (use crab status --verboseErrors for details about the errors)
+
+  1 jobs failed with exit code 50664
+
+Have a look at https://twiki.cern.ch/twiki/bin/viewauth/CMSPublic/JobExitCodes for a description of the exit codes.
+
+Summary of run jobs:
+ * Memory: 1237MB min, 2246MB max, 1195MB ave
+ * Runtime: 0:23:42 min, 13:24:00 max, 2:55:50 ave
+ * CPU eff: 64% min, 100% max, 94% ave
+ * Waste: 60:37:34 (3% of total)
+
+Log file is /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleData/CMSSW_9_4_11/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_B/crab.log

@@ -1,0 +1,10 @@
+CRAB project directory:		/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_ST_tW_antitop_5f_inclusiveDecays
+Task name:			200303_151202:chench_crab_ST_tW_antitop_5f_inclusiveDecays
+Grid scheduler - Task Worker:	crab3@vocms0137.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/200303_151202%3Achench_crab_ST_tW_antitop_5f_inclusiveDecays
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=chench&var-task=200303_151202%3Achench_crab_ST_tW_antitop_5f_inclusiveDecays
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+(35, 'OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to cmsweb.cern.ch:443 ')
+It seems the CMSWEB frontend is not responding. Please check: https://twiki.cern.ch/twiki/bin/viewauth/CMS/ScheduledInterventions?sortcol=3;table=1;up=2#sorted_table
+Log file is /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_ST_tW_antitop_5f_inclusiveDecays/crab.log

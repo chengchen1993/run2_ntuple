@@ -1,0 +1,6 @@
+Keyboard Interrupted
+ERROR: KeyboardInterrupt: 
+
+	Please email hn-cms-computing-tools@cern.ch for support with the crab.log file or crab.log URL.
+	Client Version: 3.3.2001
+	Please use 'crab uploadlog' to upload the log file /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_9_4_11/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_M2000_R0-5_off/crab.log to the CRAB cache.

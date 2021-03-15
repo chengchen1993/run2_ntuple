@@ -1,0 +1,32 @@
+CRAB project directory:		/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_TT_TuneCUETP8M1
+Task name:			200508_093232:chench_crab_TT_TuneCUETP8M1
+Grid scheduler - Task Worker:	crab3@vocms0106.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/200508_093232%3Achench_crab_TT_TuneCUETP8M1
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=chench&var-task=200508_093232%3Achench_crab_TT_TuneCUETP8M1
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	FAILED
+
+The job splitting of this task is 'Automatic', please refer to this FAQ for a description of the jobs status summary:
+https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3FAQ#What_is_the_Automatic_splitting
+
+Jobs status:                    failed       		  0.0% (   3/9427)
+				finished     		100.0% (9424/9427)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Error Summary: (use crab status --verboseErrors for details about the errors)
+
+    3 jobs failed in postprocessing step
+
+Have a look at https://twiki.cern.ch/twiki/bin/viewauth/CMSPublic/JobExitCodes for a description of the exit codes.
+
+Warning: the max jobs runtime is less than 30% of the task requested value (1250 min), please consider to request a lower value for failed jobs (allowed through crab resubmit) and/or improve the jobs splitting (e.g. config.Data.splitting = 'Automatic') in a new task.
+
+Summary of run jobs:
+ * Memory: 50MB min, 2650MB max, 1353MB ave
+ * Runtime: 0:01:01 min, 3:54:33 max, 1:21:31 ave
+ * CPU eff: 0% min, 99% max, 89% ave
+ * Waste: 1850:27:17 (11% of total)
+
+Log file is /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_TT_TuneCUETP8M1/crab.log

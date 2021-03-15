@@ -1,0 +1,20 @@
+CRAB project directory:		/afs/cern.ch/work/h/huangh/VVV_had18/MC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_QCD2000toInf
+Task name:			200314_015744:huangh_crab_QCD2000toInf
+Grid scheduler - Task Worker:	crab3@vocms0195.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/200314_015744%3Ahuangh_crab_QCD2000toInf
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=huangh&var-task=200314_015744%3Ahuangh_crab_QCD2000toInf
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	COMPLETED
+
+Jobs status:                    finished     		100.0% (83/83)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Summary of run jobs:
+ * Memory: 1896MB min, 3726MB max, 1739MB ave
+ * Runtime: 1:12:58 min, 20:34:11 max, 10:27:07 ave
+ * CPU eff: 49% min, 99% max, 97% ave
+ * Waste: 162:35:36 (16% of total)
+
+Log file is /afs/cern.ch/work/h/huangh/VVV_had18/MC/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_QCD2000toInf/crab.log

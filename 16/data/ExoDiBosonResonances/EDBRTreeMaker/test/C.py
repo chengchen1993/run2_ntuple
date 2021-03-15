@@ -8,7 +8,7 @@ config.section_("JobType")
 config.JobType.pluginName='Analysis'
 #config.JobType.sendExternalFolder=True#  = 'Analysis'
 config.JobType.sendExternalFolder = True
-config.JobType.inputFiles = ['Summer16_23Sep2016BCDV4_DATA_L1FastJet_AK4PFPuppi.txt','Summer16_23Sep2016BCDV4_DATA_L2Relative_AK4PFPuppi.txt','Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK4PFPuppi.txt','Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK4PFPuppi.txt','Summer16_23Sep2016BCDV4_DATA_L1FastJet_AK8PFchs.txt','Summer16_23Sep2016BCDV4_DATA_L2Relative_AK8PFchs.txt','Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK8PFchs.txt','Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK8PFchs.txt','Summer16_23Sep2016BCDV4_DATA_L1FastJet_AK8PFPuppi.txt','Summer16_23Sep2016BCDV4_DATA_L2Relative_AK8PFPuppi.txt','Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK8PFPuppi.txt','Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK8PFPuppi.txt']
+config.JobType.inputFiles = ['Summer16_07Aug2017BCD_V11_DATA_L1FastJet_AK4PFchs.txt','Summer16_07Aug2017BCD_V11_DATA_L2Relative_AK4PFchs.txt','Summer16_07Aug2017BCD_V11_DATA_L3Absolute_AK4PFchs.txt','Summer16_07Aug2017BCD_V11_DATA_L2L3Residual_AK4PFchs.txt','Summer16_07Aug2017BCD_V11_DATA_L1FastJet_AK8PFchs.txt','Summer16_07Aug2017BCD_V11_DATA_L2Relative_AK8PFchs.txt','Summer16_07Aug2017BCD_V11_DATA_L3Absolute_AK8PFchs.txt','Summer16_07Aug2017BCD_V11_DATA_L2L3Residual_AK8PFchs.txt','Summer16_07Aug2017BCD_V11_DATA_L1FastJet_AK8PFPuppi.txt','Summer16_07Aug2017BCD_V11_DATA_L2Relative_AK8PFPuppi.txt','Summer16_07Aug2017BCD_V11_DATA_L3Absolute_AK8PFPuppi.txt','Summer16_07Aug2017BCD_V11_DATA_L2L3Residual_AK8PFPuppi.txt']
 # Name of the CMSSW configuration file
 #config.JobType.psetName    = 'bkg_ana.py'
 config.JobType.psetName    = 'analysis_B.py'
@@ -17,19 +17,19 @@ config.JobType.allowUndistributedCMSSW = True
 
 config.section_("Data")
 #config.Data.inputDataset = '/SingleMuon/Run2016C-03Feb2017-v1/MINIAOD'
-config.Data.inputDataset = '/JetHT/Run2016C-23Sep2016-v1/MINIAOD'
+config.Data.inputDataset = '/JetHT/Run2016C-17Jul2018-v1/MINIAOD'
 #config.Data.inputDataset = '/SingleMuon/Run2016B-PromptReco-v2/MINIAOD'#Run2015D-PromptReco-v3/MINIAOD'
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'LumiBased'
 config.Data.unitsPerJob = 40
-config.Data.lumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'#'Cert_246908-254879_13TeV_PromptReco_Collisions15_JSON.txt' #'Cert_246908-251883_13TeV_PromptReco_Collisions15_JSON.txt'#Cert_246908-251252_13TeV_PromptReco_Collisions15_JSON.txt'#'lumiSummary_13_07_2015_JSON.txt'#https://twiki.cern.ch/twiki/pub/CMS/ExoDijet13TeV/lumiSummary_13_07_2015_JetHT.json'#https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions12/8TeV/Prompt/Cert_190456-208686_8TeV_PromptReco_Collisions12_JSON.txt'
+config.Data.lumiMask = 'Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.txt'#'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'#'Cert_246908-254879_13TeV_PromptReco_Collisions15_JSON.txt' #'Cert_246908-251883_13TeV_PromptReco_Collisions15_JSON.txt'#Cert_246908-251252_13TeV_PromptReco_Collisions15_JSON.txt'#'lumiSummary_13_07_2015_JSON.txt'#https://twiki.cern.ch/twiki/pub/CMS/ExoDijet13TeV/lumiSummary_13_07_2015_JetHT.json'#https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions12/8TeV/Prompt/Cert_190456-208686_8TeV_PromptReco_Collisions12_JSON.txt'
 config.Data.runRange = ''#'250843-250932' # '193093-194075'
 #config.Data.runRange = '251244-251252'#'250843-250932' # '193093-194075'
 #config.Data.outLFNDirBase='/store/user/chench/'# = '/store/user/%s/' % (getUsernameFromSiteDB())
 name='WWW' 
 steam_dir='chench'
 #config.Data.outLFNDirBase='/store/user/chench/'#='/store/group/dpg_trigger/comm_trigger/TriggerStudiesGroup/STEAM/'+steam_dir+'/'+name+'/'
-config.Data.outLFNDirBase='/store/user/chench/'#='/store/user/chench/'
+config.Data.outLFNDirBase='/store/group/phys_b2g/chench/'#'/store/user/chench/'#='/store/user/chench/'
 config.Data.publication = False
 config.Data.outputDatasetTag = 'C'
 

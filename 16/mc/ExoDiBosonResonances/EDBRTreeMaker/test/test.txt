@@ -1,0 +1,13 @@
+        rec_tmp[i][0]=rec[i][0]*math.cos(rec[i][1])
+        rec_tmp[i][1]=rec[i][0]*math.sin(rec[i][1])
+        rec_tmp[i][2]=rec[i][2]
+        P_J1.SetPtEtaPhiE(rec[i][6],rec[i][4],rec[i][5],rec[i][3])
+        P_J2.SetPtEtaPhiE(rec[i][10],rec[i][8],rec[i][9],rec[i][7])
+        rec_tmp[i][3]=rec[i][3]
+        rec_tmp[i][4]=P_J1.Px()
+        rec_tmp[i][5]=P_J1.Py()
+        rec_tmp[i][6]=P_J1.Pz()
+        rec_tmp[i][7]=rec[i][7]
+        rec_tmp[i][8]=P_J2.Px()
+        rec_tmp[i][9]=P_J2.Py()
+        rec_tmp[i][10]=P_J2.Pz()

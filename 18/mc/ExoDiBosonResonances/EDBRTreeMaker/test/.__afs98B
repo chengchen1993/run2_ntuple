@@ -1,0 +1,23 @@
+CRAB project directory:		/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_10_2_10/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_ST_s-channel_4f
+Task name:			191204_203404:chench_crab_ST_s-channel_4f
+Grid scheduler - Task Worker:	crab3@vocms0119.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/191204_203404%3Achench_crab_ST_s-channel_4f
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=chench&var-task=191204_203404%3Achench_crab_ST_s-channel_4f
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	SUBMITTED
+
+Jobs status:                    finished     		 44.4% (12/27)
+				running      		 55.6% (15/27)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Warning: the max jobs runtime is less than 30% of the task requested value (1250 min), please consider to request a lower value for failed jobs (allowed through crab resubmit) and/or improve the jobs splitting (e.g. config.Data.splitting = 'Automatic') in a new task.
+
+Summary of run jobs:
+ * Memory: 1367MB min, 1464MB max, 1182MB ave
+ * Runtime: 0:10:08 min, 5:46:53 max, 4:50:19 ave
+ * CPU eff: 97% min, 99% max, 99% ave
+ * Waste: 85:47:59 (60% of total)
+
+Log file is /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/CMSSW_10_2_10/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_ST_s-channel_4f/crab.log

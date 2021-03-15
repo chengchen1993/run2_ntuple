@@ -16,7 +16,7 @@ goodElectrons = cms.EDProducer("PATElectronIdSelector",
     vertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
     idLabel = cms.string(tightEleIdLabel),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
-    effAreasConfigFile = cms.FileInPath("RecoEgamma/ElectronIdentification/data/Summer16/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_80X.txt")
+    effAreasConfigFile = cms.FileInPath("RecoEgamma/ElectronIdentification/data/Fall17/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_94X.txt")
 )
 
 looseElectrons = cms.EDProducer("PATElectronIdSelector",
@@ -26,7 +26,7 @@ looseElectrons = cms.EDProducer("PATElectronIdSelector",
     vertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
     idLabel = cms.string(looseEleIdLabel),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
-    effAreasConfigFile = cms.FileInPath("RecoEgamma/ElectronIdentification/data/Summer16/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_80X.txt")
+    effAreasConfigFile = cms.FileInPath("RecoEgamma/ElectronIdentification/data/Fall17/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_94X.txt")
 )
 
 vetoElectrons = cms.EDProducer("PATElectronIdSelector",
@@ -36,7 +36,7 @@ vetoElectrons = cms.EDProducer("PATElectronIdSelector",
     vertex = cms.InputTag("offlineSlimmedPrimaryVertices"),
     idLabel = cms.string(vetoEleIdLabel),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
-    effAreasConfigFile = cms.FileInPath("RecoEgamma/ElectronIdentification/data/Summer16/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_80X.txt")
+    effAreasConfigFile = cms.FileInPath("RecoEgamma/ElectronIdentification/data/Fall17/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_94X.txt")
 )
 #goodElectrons = cms.EDFilter("PATElectronIdSelector",
 #                             src = cms.InputTag("tightElectrons"),

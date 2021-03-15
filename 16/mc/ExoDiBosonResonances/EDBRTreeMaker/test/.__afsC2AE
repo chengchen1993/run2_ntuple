@@ -1,0 +1,24 @@
+CRAB project directory:		/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/16/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_QCDHT2000toInfext
+Task name:			200506_101224:chench_crab_QCDHT2000toInfext
+Grid scheduler - Task Worker:	crab3@vocms0155.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/200506_101224%3Achench_crab_QCDHT2000toInfext
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=chench&var-task=200506_101224%3Achench_crab_QCDHT2000toInfext
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Warning:			Task requests 14400 minutes of runtime, but only 2750 minutes are guaranteed to be available. Jobs may not find a site where to run. CRAB has changed this value to 2750 minutes.
+Status on the scheduler:	SUBMITTED
+
+Jobs status:                    finished     		 11.1% ( 4/36)
+				running      		 88.9% (32/36)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Warning: the max jobs runtime is less than 30% of the task requested value (14400 min), please consider to request a lower value for failed jobs (allowed through crab resubmit) and/or improve the jobs splitting (e.g. config.Data.splitting = 'Automatic') in a new task.
+
+Summary of run jobs:
+ * Memory: 0MB min, 1639MB max, 1504MB ave
+ * Runtime: 0:00:00 min, 31:44:45 max, 14:31:58 ave
+ * CPU eff: 23% min, 99% max, 57% ave
+ * Waste: 43:55:05 (43% of total)
+
+Log file is /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/16/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_QCDHT2000toInfext/crab.log

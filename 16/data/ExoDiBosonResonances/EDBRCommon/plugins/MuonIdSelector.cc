@@ -198,14 +198,14 @@ void MuonIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetup)
 //        d0vtx = mu.muonBestTrack()->dxy();
 //        dzvtx = mu.muonBestTrack()->dz();
 //}
-    isTight = mu.isHighPtMuon( *firstGoodVertex ) && (pt > 45) && (fabs(eta) < 2.4) && (trackIso/pt<0.1);//&& (trackIso/pt<0.1);// && (abs(eta)<2.4);//->position());
+    isTight = mu.isHighPtMuon( *firstGoodVertex ) && (pt > 55) && (fabs(eta) < 2.4) && (trackIso/pt<0.1);//&& (trackIso/pt<0.1);// && (abs(eta)<2.4);//->position());
     isMedium = mu.isHighPtMuon( *firstGoodVertex );
     isLoose = mu.isHighPtMuon( *firstGoodVertex ) && (pt > 20) && (fabs(eta) < 2.4) && (trackIso/pt<0.1);
 //    isVeto = mu.isGlobalMuon()&&mu.isPFMuon()&&(mu.globalTrack()->normalizedChi2() < 10.)&&(mu.globalTrack()->hitPattern().numberOfValidMuonHits() > 0)&&( mu.numberOfMatchedStations() > 1 )&&fabs(d0vtx < 0.2)&&fabs(dzvtx < 0.5)&&( mu.innerTrack()->hitPattern().numberOfValidPixelHits() > 0 )&&( mu.innerTrack()->hitPattern().trackerLayersWithMeasurement() > 5 ) && (pt > 30) && (fabs(eta) < 2.4) && (trackIso/pt<0.1);
     isVeto = mu.isHighPtMuon( *firstGoodVertex ) && (pt > 20) && (fabs(eta) < 2.4) && (trackIso/pt<0.1);
     // ---------- cut-based ID -----------------
 
-    isPassPteta = (pt > 45) && (fabs(eta) < 2.4) && (trackIso/pt<0.1);
+    isPassPteta = (pt > 55) && (fabs(eta) < 2.4) && (trackIso/pt<0.1);
     if(isPassPteta && isTight) nPassPteta_ = nPassPteta_ +1;
     /// ------- Finally apply smuction --------
     if(applyTightID_ && isTight)   isPassing[iMuon]= true;

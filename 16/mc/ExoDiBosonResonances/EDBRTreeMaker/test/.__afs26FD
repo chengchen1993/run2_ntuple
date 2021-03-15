@@ -1,0 +1,28 @@
+CRAB project directory:		/afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/16/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_TT_TuneCUETP8M1
+Task name:			200313_104206:chench_crab_TT_TuneCUETP8M1
+Grid scheduler - Task Worker:	crab3@vocms0121.cern.ch - crab-prod-tw01
+Status on the CRAB server:	SUBMITTED
+Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/200313_104206%3Achench_crab_TT_TuneCUETP8M1
+Dashboard monitoring URL:	https://monit-grafana.cern.ch/d/cmsTMDetail/cms-task-monitoring-task-view?orgId=11&var-user=chench&var-task=200313_104206%3Achench_crab_TT_TuneCUETP8M1
+In case of issues with the dashboard, please provide feedback to hn-cms-computing-tools@cern.ch
+Status on the scheduler:	SUBMITTED
+
+Jobs status:                    failed       		  0.5% (  1/197)
+				finished     		 98.5% (194/197)
+				running      		  1.0% (  2/197)
+
+No publication information (publication has been disabled in the CRAB configuration file)
+
+Error Summary: (use crab status --verboseErrors for details about the errors)
+
+  1 jobs failed with exit code 50664
+
+Have a look at https://twiki.cern.ch/twiki/bin/viewauth/CMSPublic/JobExitCodes for a description of the exit codes.
+
+Summary of run jobs:
+ * Memory: 1184MB min, 2490MB max, 1206MB ave
+ * Runtime: 5:35:50 min, 20:50:41 max, 18:07:31 ave
+ * CPU eff: 94% min, 99% max, 97% ave
+ * Waste: 5321:46:53 (60% of total)
+
+Log file is /afs/cern.ch/work/c/chench/private/DeepJet/2019-05-02/NtupleMC/16/CMSSW_10_2_18/src/ExoDiBosonResonances/EDBRTreeMaker/test/crab_TT_TuneCUETP8M1/crab.log

@@ -1,0 +1,15 @@
+crab status crab_pt1000to1400
+crab status crab_pt1400to1800
+crab status crab_pt1400to1800_ext
+crab status crab_pt170to300
+crab status crab_pt1800to2400
+crab status crab_pt1800to2400_ext
+crab status crab_pt2400to3200
+crab status crab_pt2400to3200_ext
+crab status crab_pt300to470
+crab status crab_pt3200toInf
+crab status crab_pt3200toInf_ext
+crab status crab_pt470to600
+crab status crab_pt470to600_ext
+crab status crab_pt600to800
+crab status crab_pt800to1000

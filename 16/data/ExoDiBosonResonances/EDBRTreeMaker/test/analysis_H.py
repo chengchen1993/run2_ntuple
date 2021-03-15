@@ -486,7 +486,7 @@ if option=='RECO':
 
 process.load("ExoDiBosonResonances.EDBRCommon.data.RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8")
 process.source.fileNames = [
-"/store/data/Run2016E/JetHT/MINIAOD/23Sep2016-v1/50000/483CEE4F-FB86-E611-94C8-0CC47A7C3572.root"
+"/store/data/Run2016H/JetHT/MINIAOD/PromptReco-v1/000/281/130/00000/A4836AAA-7880-E611-9974-02163E01472A.root"
 ]
 
 process.maxEvents.input = 2000

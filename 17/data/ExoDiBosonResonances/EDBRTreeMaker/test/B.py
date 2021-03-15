@@ -8,8 +8,8 @@ config.section_("JobType")
 config.JobType.pluginName='Analysis'
 #config.JobType.sendExternalFolder=True#  = 'Analysis'
 config.JobType.sendExternalFolder = True
-#config.JobType.inputFiles = ['Fall17_17Nov2017B_V6_DATA_L1FastJet_AK4PFchs.txt','Fall17_17Nov2017B_V6_DATA_L2Relative_AK4PFchs.txt','Fall17_17Nov2017B_V6_DATA_L3Absolute_AK4PFchs.txt','Fall17_17Nov2017B_V6_DATA_L2L3Residual_AK4PFchs.txt','Fall17_17Nov2017B_V6_DATA_L1FastJet_AK8PFchs.txt','Fall17_17Nov2017B_V6_DATA_L2Relative_AK8PFchs.txt','Fall17_17Nov2017B_V6_DATA_L3Absolute_AK8PFchs.txt','Fall17_17Nov2017B_V6_DATA_L2L3Residual_AK8PFchs.txt','Fall17_17Nov2017B_V6_DATA_L1FastJet_AK8PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L2Relative_AK8PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L3Absolute_AK8PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L2L3Residual_AK8PFPuppi.txt']
-config.JobType.inputFiles = ['Fall17_17Nov2017B_V6_DATA_L1FastJet_AK4PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L2Relative_AK4PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L3Absolute_AK4PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L2L3Residual_AK4PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L1FastJet_AK8PFchs.txt','Fall17_17Nov2017B_V6_DATA_L2Relative_AK8PFchs.txt','Fall17_17Nov2017B_V6_DATA_L3Absolute_AK8PFchs.txt','Fall17_17Nov2017B_V6_DATA_L2L3Residual_AK8PFchs.txt','Fall17_17Nov2017B_V6_DATA_L1FastJet_AK8PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L2Relative_AK8PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L3Absolute_AK8PFPuppi.txt','Fall17_17Nov2017B_V6_DATA_L2L3Residual_AK8PFPuppi.txt']
+#config.JobType.inputFiles = ['Fall17_17Nov2017B_V32_DATA_L1FastJet_AK4PFchs.txt','Fall17_17Nov2017B_V32_DATA_L2Relative_AK4PFchs.txt','Fall17_17Nov2017B_V32_DATA_L3Absolute_AK4PFchs.txt','Fall17_17Nov2017B_V32_DATA_L2L3Residual_AK4PFchs.txt','Fall17_17Nov2017B_V32_DATA_L1FastJet_AK8PFchs.txt','Fall17_17Nov2017B_V32_DATA_L2Relative_AK8PFchs.txt','Fall17_17Nov2017B_V32_DATA_L3Absolute_AK8PFchs.txt','Fall17_17Nov2017B_V32_DATA_L2L3Residual_AK8PFchs.txt','Fall17_17Nov2017B_V32_DATA_L1FastJet_AK8PFPuppi.txt','Fall17_17Nov2017B_V32_DATA_L2Relative_AK8PFPuppi.txt','Fall17_17Nov2017B_V32_DATA_L3Absolute_AK8PFPuppi.txt','Fall17_17Nov2017B_V32_DATA_L2L3Residual_AK8PFPuppi.txt']
+config.JobType.inputFiles = ['Fall17_17Nov2017B_V32_DATA_L1FastJet_AK4PFchs.txt','Fall17_17Nov2017B_V32_DATA_L2Relative_AK4PFchs.txt','Fall17_17Nov2017B_V32_DATA_L3Absolute_AK4PFchs.txt','Fall17_17Nov2017B_V32_DATA_L2L3Residual_AK4PFchs.txt','Fall17_17Nov2017B_V32_DATA_L1FastJet_AK8PFchs.txt','Fall17_17Nov2017B_V32_DATA_L2Relative_AK8PFchs.txt','Fall17_17Nov2017B_V32_DATA_L3Absolute_AK8PFchs.txt','Fall17_17Nov2017B_V32_DATA_L2L3Residual_AK8PFchs.txt','Fall17_17Nov2017B_V32_DATA_L1FastJet_AK8PFPuppi.txt','Fall17_17Nov2017B_V32_DATA_L2Relative_AK8PFPuppi.txt','Fall17_17Nov2017B_V32_DATA_L3Absolute_AK8PFPuppi.txt','Fall17_17Nov2017B_V32_DATA_L2L3Residual_AK8PFPuppi.txt']
 # Name of the CMSSW configuration file
 #config.JobType.psetName    = 'bkg_ana.py'
 config.JobType.psetName    = 'analysis_B.py'
@@ -21,9 +21,9 @@ config.section_("Data")
 config.Data.inputDataset = '/JetHT/Run2017B-31Mar2018-v1/MINIAOD'
 #config.Data.inputDataset = '/SingleMuon/Run2016B-PromptReco-v2/MINIAOD'#Run2015D-PromptReco-v3/MINIAOD'
 config.Data.inputDBS = 'global'
-config.Data.splitting = 'LumiBased'
-config.Data.unitsPerJob = 40
-config.Data.lumiMask = 'Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt'#'Cert_246908-254879_13TeV_PromptReco_Collisions15_JSON.txt' #'Cert_246908-251883_13TeV_PromptReco_Collisions15_JSON.txt'#Cert_246908-251252_13TeV_PromptReco_Collisions15_JSON.txt'#'lumiSummary_13_07_2015_JSON.txt'#https://twiki.cern.ch/twiki/pub/CMS/ExoDijet13TeV/lumiSummary_13_07_2015_JetHT.json'#https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions12/8TeV/Prompt/Cert_190456-208686_8TeV_PromptReco_Collisions12_JSON.txt'
+config.Data.splitting = 'Automatic'
+config.Data.unitsPerJob = 180
+config.Data.lumiMask = 'Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt'#'Cert_246908-254879_13TeV_PromptReco_Collisions15_JSON.txt' #'Cert_246908-251883_13TeV_PromptReco_Collisions15_JSON.txt'#Cert_246908-251252_13TeV_PromptReco_Collisions15_JSON.txt'#'lumiSummary_13_07_2015_JSON.txt'#https://twiki.cern.ch/twiki/pub/CMS/ExoDijet13TeV/lumiSummary_13_07_2015_JetHT.json'#https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions12/8TeV/Prompt/Cert_190456-208686_8TeV_PromptReco_Collisions12_JSON.txt'
 config.Data.runRange = ''#'250843-250932' # '193093-194075'
 #config.Data.runRange = '251244-251252'#'250843-250932' # '193093-194075'
 #config.Data.outLFNDirBase='/store/user/chench/'# = '/store/user/%s/' % (getUsernameFromSiteDB())
